@@ -1,0 +1,6 @@
+jwt:
+  secret_key: <SECRET_KEY>
+  access_expirations: 30000 # (배포 시 30분 -> 1800 설정)
+  refresh_expirations: 86400 # (배포 시 1일 -> 86400설정)
+  access_header: Authorization
+  refresh_header: RefreshToken

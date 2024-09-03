@@ -34,4 +34,11 @@ public class User extends BaseEntity {
     this.name = name;
     this.email = email;
   }
+
+  public static User createUser(String email, String name) {
+    return User.builder()
+               .email(email)
+               .name(name)
+               .build();
+  }
 }
