@@ -1,5 +1,5 @@
 jwt:
-  secret_key: <SECRET_KEY>
+  secret_key: f08df23bdf4edeaa8cacea5f78438d4bdc33500ba5ef25a16483f6c846c135809262b4814d40617fad44949b21d6c6279f55d33c8dd58c500f16abd57f0c82f6
   access_expirations: 30000 # (배포 시 30분 -> 1800 설정)
   refresh_expirations: 86400 # (배포 시 1일 -> 86400설정)
   access_header: Authorization
