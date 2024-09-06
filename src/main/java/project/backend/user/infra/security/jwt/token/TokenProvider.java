@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,13 +88,15 @@ public class TokenProvider {
                                                    .split(","));
 
     List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream()
-                                                                           .map(
-                                                                               SimpleGrantedAuthority::new)
-                                                                           .collect(Collectors.toList());
+                                                                           .map(SimpleGrantedAuthority::new)
+                                                                           .toList();
 
-    KakaoUserDetails principal = new KakaoUserDetails(Long.parseLong((String) claims.get(AUTH_ID)),
+    KakaoUserDetails principal = new KakaoUserDetails(
+        Long.parseLong((String) claims.get(AUTH_ID)),
         (String) claims.get(AUTH_EMAIL),
-        simpleGrantedAuthorities, Map.of());
+        simpleGrantedAuthorities,
+        Map.of()
+    );
 
     return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
   }
@@ -107,7 +108,7 @@ public class TokenProvider {
           .build()
           .parseClaimsJws(token);
       return true;
-    } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+    } catch (SecurityException | MalformedJwtException e) {
       return false;
     } catch (UnsupportedJwtException e) {
       return false;
