@@ -9,8 +9,8 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import project.backend.exception.UserNotAuthenticatedException;
-import project.backend.user.infra.security.oauth.KakaoUserDetails;
+import project.backend.global.error.exception.UserNotAuthenticatedException;
+import project.backend.global.auth.oauth.KakaoUserDetails;
 
 @Aspect
 @Component
