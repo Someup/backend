@@ -10,7 +10,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:h2:tcp://localhost/~/backend
+    url: jdbc:h2:mem:testdb
     username: sa
     driver-class-name: org.h2.Driver
 
@@ -27,4 +27,3 @@ spring:
     redis:
       host: localhost
       port: 6379
-      password: password
