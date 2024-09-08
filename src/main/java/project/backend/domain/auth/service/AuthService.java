@@ -23,7 +23,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import project.backend.domain.user.entity.User;
 import project.backend.domain.auth.repository.RefreshTokenRedisRepository;
-import project.backend.domain.user.repositoy.UserRepository;
+import project.backend.domain.user.repository.UserRepository;
 import project.backend.global.auth.token.RefreshToken;
 import project.backend.global.auth.token.TokenProvider;
 import project.backend.global.auth.token.TokenResponse;
