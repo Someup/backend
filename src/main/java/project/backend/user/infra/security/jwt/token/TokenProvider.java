@@ -78,7 +78,7 @@ public class TokenProvider {
 
   public Authentication getAuthentication(String token) {
     Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(secretKey)
+                        .setSigningKey(key)
                         .build()
                         .parseClaimsJws(token)
                         .getBody();
@@ -104,15 +104,11 @@ public class TokenProvider {
   public boolean validate(String token) {
     try {
       Jwts.parserBuilder()
-          .setSigningKey(secretKey)
+          .setSigningKey(key)
           .build()
           .parseClaimsJws(token);
       return true;
-    } catch (SecurityException | MalformedJwtException e) {
-      return false;
-    } catch (UnsupportedJwtException e) {
-      return false;
-    } catch (IllegalArgumentException e) {
+    } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
       return false;
     } catch (ExpiredJwtException e) {
       return true;
@@ -122,7 +118,7 @@ public class TokenProvider {
   public boolean validateExpired(String token) {
     try {
       Jwts.parserBuilder()
-          .setSigningKey(secretKey)
+          .setSigningKey(key)
           .build()
           .parseClaimsJws(token);
       return true;
