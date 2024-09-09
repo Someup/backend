@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.backend.dao.BaseEntity;
 import project.backend.dao.tag.entity.PostTag;
-import project.backend.dao.user.entity.PostType;
 import project.backend.dao.user.entity.User;
 
 import java.util.ArrayList;
@@ -34,8 +33,8 @@ public class Post extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Enumerated
     @Column(nullable = false)
+    @Convert(converter = PostTypeConverter.class)
     private PostType type;
 
     @Column(nullable = false, length = 2084)
