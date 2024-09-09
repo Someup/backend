@@ -3,7 +3,7 @@ version: '3'
 services:
   springboot:
     container_name: someup # ec2내에서 동작하는 컨테이너명
-    image: {docker-username}/{docker_repo}:latest
+    image: junseoplee/someup:latest
     ports:
       - 8080:8080
     environment:
