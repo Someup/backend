@@ -38,7 +38,7 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private PostType type;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2084)
     private String url;
 
     @Column
