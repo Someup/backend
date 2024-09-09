@@ -1,4 +1,4 @@
-package project.backend.dao.category.entity;
+package project.backend.dao.archive.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,34 +11,34 @@ import project.backend.dao.user.entity.User;
 
 @Entity
 @Getter
-@Table(name = "category")
+@Table(name = "archive")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Category extends BaseEntity {
+public class Archive extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
+    @Column
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Post post;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Builder
-    private Category(User user, Post post, String name) {
+    private Archive(User user, Post post, String name) {
         this.user = user;
         this.post = post;
         this.name = name;
     }
 
-    public static Category createCategory(User user, Post post, String name) {
-        return Category.builder()
+    public static Archive createArchive(User user, Post post, String name) {
+        return Archive.builder()
                 .user(user)
                 .post(post)
                 .name(name)
