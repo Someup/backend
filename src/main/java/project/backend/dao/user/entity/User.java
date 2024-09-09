@@ -20,13 +20,13 @@ public class User extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
+  @Column
   private Long id;
 
-  @Column(name = "user_name")
+  @Column
   private String name;
 
-  @Column(name = "user_email")
+  @Column
   private String email;
 
   @Builder
