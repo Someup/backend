@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.backend.dao.common.BaseEntity;
+import project.backend.dao.BaseEntity;
 
 @Entity
 @Getter
