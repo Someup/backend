@@ -64,7 +64,7 @@ jobs:
         run: |
           ./gradlew clean
           ./gradlew compileJava
-          ./gradlew build
+          ./gradlew build --info
       # Docker Build하고 DockerHub에 Push
       - name: Docker Build & Push to DockerHub
         run: |
