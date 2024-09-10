@@ -65,13 +65,13 @@ jobs:
           ./gradlew clean
           ./gradlew compileJava
           ./gradlew build
-          
+
       # Docker Build하고 DockerHub에 Push
       - name: Docker Build & Push to DockerHub
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+          docker push junseoplee/someup:latest
 
       # GitHub IP를 요청
       - name: Get GitHub IP
