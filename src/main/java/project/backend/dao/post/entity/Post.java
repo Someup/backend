@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.backend.dao.BaseEntity;
+import project.backend.dao.post.converter.PostStatusConverter;
+import project.backend.dao.post.converter.PostTypeConverter;
 import project.backend.dao.tag.entity.PostTag;
 import project.backend.dao.user.entity.User;
 
@@ -37,6 +39,10 @@ public class Post extends BaseEntity {
     @Convert(converter = PostTypeConverter.class)
     private PostType type;
 
+    @Column(nullable = false)
+    @Convert(converter = PostStatusConverter.class)
+    private PostStatus status;
+
     @Column(nullable = false, length = 2084)
     private String url;
 
@@ -47,20 +53,22 @@ public class Post extends BaseEntity {
     private List<PostTag> postTagList = new ArrayList<>();
 
     @Builder
-    private Post(User user, String title, String content, PostType type, String url) {
+    private Post(User user, String title, String content, PostStatus status, PostType type, String url) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.type = type;
+        this.status = status;
         this.url = url;
     }
 
-    public static Post createPost(User user, String title, String content, PostType type, String url) {
+    public static Post createPost(User user, String title, String content, PostStatus status, PostType type, String url) {
         return Post.builder()
                 .user(user)
                 .title(title)
                 .content(content)
                 .type(type)
+                .status(status)
                 .url(url)
                 .build();
     }
