@@ -78,7 +78,7 @@ public class TokenProvider {
 
   public Authentication getAuthentication(String token) {
     Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(secretKey)
+                        .setSigningKey(key)
                         .build()
                         .parseClaimsJws(token)
                         .getBody();
@@ -104,7 +104,7 @@ public class TokenProvider {
   public boolean validate(String token) {
     try {
       Jwts.parserBuilder()
-          .setSigningKey(secretKey)
+          .setSigningKey(key)
           .build()
           .parseClaimsJws(token);
       return true;
@@ -122,7 +122,7 @@ public class TokenProvider {
   public boolean validateExpired(String token) {
     try {
       Jwts.parserBuilder()
-          .setSigningKey(secretKey)
+          .setSigningKey(key)
           .build()
           .parseClaimsJws(token);
       return true;
