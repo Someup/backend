@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import project.backend.dao.user.entity.User;
 import project.backend.dao.user.repository.UserRepository;
 
-import java.util.Optional;
 
 @Component
 @AllArgsConstructor
