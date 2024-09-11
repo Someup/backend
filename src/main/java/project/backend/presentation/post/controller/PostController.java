@@ -26,8 +26,8 @@ public class PostController {
     public ResponseEntity<PostListResponse> getPosts() {
         log.info("PostController getPosts");
 
-        // TODO: 로그인 구현 이후 UserId 세팅
-        List<PostListDto> posts = postService.getPostList(1L);
+        // TODO: 로그인 구현 이후 User Email 세팅
+        List<PostListDto> posts = postService.getPostList("test1@test.com");
         PostListResponse response = new PostListResponse(posts);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

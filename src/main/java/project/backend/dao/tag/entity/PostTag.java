@@ -2,6 +2,7 @@ package project.backend.dao.tag.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.backend.dao.BaseEntity;
@@ -24,4 +25,17 @@ public class PostTag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, insertable=false, updatable=false)
     private Tag tag;
+
+    @Builder
+    private PostTag(Post post, Tag tag) {
+        this.post = post;
+        this.tag = tag;
+    }
+
+    public static PostTag addTag(Post post, Tag tag) {
+        return PostTag.builder()
+                .post(post)
+                .tag(tag)
+                .build();
+    }
 }
