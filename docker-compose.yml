@@ -1,13 +1,22 @@
-version: '3'
-
 services:
   springboot:
-    container_name: someup-dev # ec2내에서 동작하는 컨테이너명
-    image: junseoplee/someup:latest
+    container_name: someup # ec2내에서 동작하는 컨테이너명
+    image: someupsite/someup:latest
     ports:
       - 8080:8080
     environment:
       SPRING_PROFILES_ACTIVE : dev-env # 사용할 profile
+    networks:
+      - my_network
+
+  redis:
+    image: redis
+    container_name: redis-cache
+    environment:
+      REDIS_PASSWORD: password
+    command: ["redis-server", "--requirepass", "password", "--port", "6379"]
+    ports:
+      - 6379:6379
     networks:
       - my_network
 
