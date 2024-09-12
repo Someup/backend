@@ -16,9 +16,11 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
   public void handle(HttpServletRequest request, HttpServletResponse response,
       AccessDeniedException accessDeniedException) throws IOException {
     if (!request.isSecure()) {
-      String redirectUrl = "https://" + request.getServerName() + EXCEPTION_ACCESS_HANDLER;
+      String redirectUrl =
+          "https://" + request.getServerName() + EXCEPTION_ACCESS_HANDLER;
       response.sendRedirect(redirectUrl);
+    } else {
+      response.sendRedirect(EXCEPTION_ACCESS_HANDLER);
     }
-    response.sendRedirect(EXCEPTION_ACCESS_HANDLER);
   }
 }

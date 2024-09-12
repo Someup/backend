@@ -28,12 +28,12 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
 
     User user = userRepository.findByEmail(email)
                               .orElseGet(() -> userRepository.save(
-        User.createUser(email, PREFIX + email.split("@")[0])
-    ));
+                                  User.createUser(email, PREFIX + email.split("@")[0])
+                              ));
+
     log.info("카카오 유저 = {}", user);
     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(DEFAULT_ROLE);
 
-    return new KakaoUserDetails(user.getId(), email, List.of(authority),
-        oAuth2User.getAttributes());
+    return new KakaoUserDetails(user.getId(), email, List.of(authority), oAuth2User.getAttributes());
   }
 }

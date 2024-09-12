@@ -58,8 +58,7 @@ public class AuthService {
     User user = saveIfNonExist(email);
 
     TokenResponse tokenResponse = tokenProvider.createToken(
-        String.valueOf(user.getId()), user.getEmail(), "USER"
-    );
+        String.valueOf(user.getId()), user.getEmail(), "USER");
 
     saveRefreshTokenOnRedis(user, tokenResponse);
 
@@ -70,8 +69,7 @@ public class AuthService {
     refreshTokenRedisRepository.save(RefreshToken.builder()
                                                  .id(user.getId())
                                                  .email(user.getEmail())
-                                                 .authorities(
-                                                     Collections.singleton(new SimpleGrantedAuthority("USER")))
+                                                 .authorities(Collections.singleton(new SimpleGrantedAuthority("USER")))
                                                  .refreshToken(response.getRefreshToken())
                                                  .build());
   }
@@ -124,6 +122,7 @@ public class AuthService {
           String.class
       );
       String responseBody = response.getBody();
+      log.info(responseBody);
       ObjectMapper objectMapper = new ObjectMapper();
       JsonNode jsonNode = objectMapper.readTree(responseBody);
       return jsonNode.get("kakao_account").get("email").asText();
@@ -145,8 +144,8 @@ public class AuthService {
   public TokenResponse reissueAccessToken(HttpServletRequest request) {
     String refreshToken = extractRefreshToken(request).orElse(null);
 
-    // RefreshToken 이 유효하지 않을 경우 -> 재로그인 필요
-    if (!tokenProvider.validate(refreshToken) || !tokenProvider.validateExpired(refreshToken)) {
+    // RefreshToken이 유효하지 않을 경우 -> 재로그인 필요
+    if (!tokenProvider.validate(refreshToken) || !tokenProvider.validateExpire(refreshToken)) {
       throw new RuntimeException();
     }
 
