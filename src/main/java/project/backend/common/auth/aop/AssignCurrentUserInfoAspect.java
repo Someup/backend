@@ -9,7 +9,8 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import project.backend.common.error.exception.UserNotAuthenticatedException;
+import project.backend.common.error.CustomException;
+import project.backend.common.error.ErrorCode;
 import project.backend.common.auth.oauth.KakaoUserDetails;
 
 @Aspect
@@ -57,7 +58,8 @@ public class AssignCurrentUserInfoAspect {
 
     if (authentication == null || authentication.getPrincipal() == null) {
       // 인증 정보가 없을 때 예외를 던짐
-      throw new UserNotAuthenticatedException("인증 정보가 없습니다.");
+//      throw new UserNotAuthenticatedException("인증 정보가 없습니다.");
+      throw new CustomException(ErrorCode.NOT_AUTHENTICATED);
     }
 
     Object principal = authentication.getPrincipal();
@@ -68,6 +70,7 @@ public class AssignCurrentUserInfoAspect {
     }
 
     // principal 이 UserDetails 가 아닌 경우 예외를 던짐
-    throw new UserNotAuthenticatedException("사용자 인증 정보가 유효하지 않습니다.");
+//    throw new UserNotAuthenticatedException("사용자 인증 정보가 유효하지 않습니다.");
+    throw new CustomException(ErrorCode.NOT_AUTHENTICATED);
   }
 }
