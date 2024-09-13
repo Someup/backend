@@ -17,7 +17,7 @@ public class RefreshToken {
   private String email;
   private Collection<? extends GrantedAuthority> authorities;
 
-  @Indexed // 필드 값으로도 데이터를 빠르게 검색할 수 있다
+  @Indexed
   private String refreshToken;
 
   public String getAuthority() {

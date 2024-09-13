@@ -12,9 +12,7 @@ services:
   redis:
     image: redis
     container_name: redis-cache
-    environment:
-      REDIS_PASSWORD: password
-    command: ["redis-server", "--requirepass", "password", "--port", "6379"]
+    command: ["redis-server", "--port", "6379"] # 비밀번호 설정 제거
     ports:
       - 6379:6379
     networks:

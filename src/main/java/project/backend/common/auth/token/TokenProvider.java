@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,18 +36,16 @@ public class TokenProvider {
   private final long accessExpirations;
   private final long refreshExpirations;
 
-  public TokenProvider(
-      @Value("${jwt.secret_key}") String secretKey,
+  public TokenProvider(@Value("${jwt.secret_key}") String secretKey,
       @Value("${jwt.access_expirations}") long accessExpirations,
-      @Value("${jwt.refresh_expirations}") long refreshExpirations
-  ) {
+      @Value("${jwt.refresh_expirations}") long refreshExpirations) {
     this.secretKey = secretKey;
     this.accessExpirations = accessExpirations * 1000;
     this.refreshExpirations = refreshExpirations * 1000;
   }
 
   @PostConstruct
-  public void initializeKey() {
+  public void initKey() {
     byte[] keyBytes = Decoders.BASE64.decode(secretKey);
     this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
   }
@@ -78,7 +77,7 @@ public class TokenProvider {
 
   public Authentication getAuthentication(String token) {
     Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(key)
+                        .setSigningKey(secretKey)
                         .build()
                         .parseClaimsJws(token)
                         .getBody();
@@ -89,14 +88,11 @@ public class TokenProvider {
 
     List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream()
                                                                            .map(SimpleGrantedAuthority::new)
-                                                                           .toList();
+                                                                           .collect(Collectors.toList());
 
-    KakaoUserDetails principal = new KakaoUserDetails(
-        Long.parseLong((String) claims.get(AUTH_ID)),
+    KakaoUserDetails principal = new KakaoUserDetails(Long.parseLong((String) claims.get(AUTH_ID)),
         (String) claims.get(AUTH_EMAIL),
-        simpleGrantedAuthorities,
-        Map.of()
-    );
+        simpleGrantedAuthorities, Map.of());
 
     return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
   }
@@ -104,11 +100,11 @@ public class TokenProvider {
   public boolean validate(String token) {
     try {
       Jwts.parserBuilder()
-          .setSigningKey(key)
+          .setSigningKey(secretKey)
           .build()
           .parseClaimsJws(token);
       return true;
-    } catch (SecurityException | MalformedJwtException e) {
+    } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
       return false;
     } catch (UnsupportedJwtException e) {
       return false;
@@ -122,7 +118,7 @@ public class TokenProvider {
   public boolean validateExpired(String token) {
     try {
       Jwts.parserBuilder()
-          .setSigningKey(key)
+          .setSigningKey(secretKey)
           .build()
           .parseClaimsJws(token);
       return true;
