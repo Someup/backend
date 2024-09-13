@@ -5,12 +5,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import project.backend.dao.BaseEntity;
 import project.backend.dao.post.converter.PostStatusConverter;
 import project.backend.dao.post.converter.PostTypeConverter;
 import project.backend.dao.tag.entity.PostTag;
 import project.backend.dao.user.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,10 @@ public class Post extends BaseEntity {
 
     @Column
     private String memo;
+
+    @Column
+    private LocalDateTime memoCreatedAt;
+
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostTag> postTagList = new ArrayList<>();

@@ -2,6 +2,7 @@ package project.backend.business.post.implement;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
 import project.backend.dao.post.entity.Post;
 import project.backend.dao.post.repository.PostRepository;
@@ -24,8 +25,8 @@ public class PostReader {
                 Post::getId
         ).toList();
 
-        List<Object[]> results = tagRepository.findPostIdAndTagNamesByPostIds(postIdList);
-        Map<Long, List<String>> postTagMap = results.stream().collect(
+        List<Object[]> tagResults = tagRepository.findPostIdAndTagNamesByPostIds(postIdList);
+        Map<Long, List<String>> postTagMap = tagResults.stream().collect(
                 Collectors.groupingBy(
                         res -> (Long) res[0],
                         Collectors.mapping(res -> (String) res[1], Collectors.toList())
@@ -40,5 +41,20 @@ public class PostReader {
                         .tagList(postTagMap.get(p.getId()))
                         .build()
         ).collect(Collectors.toList());
+    }
+
+    public PostDetailDto readPostDetailWithTags(User user, Long postId) {
+        Post postDetail = postRepository.findPostById(postId);
+        List<String> tagList = tagRepository.findTagNamesByPostId(postId);
+
+        return PostDetailDto.builder()
+                .title(postDetail.getTitle())
+                .content(postDetail.getContent())
+                .url(postDetail.getUrl())
+                .tagList(tagList)
+                .createdAt(String.valueOf(postDetail.getCreatedAt()))
+                .memoContent(postDetail.getMemo())
+                .memoCreatedAt(String.valueOf(postDetail.getMemoCreatedAt()))
+                .build();
     }
 }
