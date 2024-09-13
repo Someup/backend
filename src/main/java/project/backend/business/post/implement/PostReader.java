@@ -2,6 +2,7 @@ package project.backend.business.post.implement;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import project.backend.business.common.DateTimeConverter;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
 import project.backend.dao.post.entity.Post;
@@ -37,7 +38,7 @@ public class PostReader {
                 p -> PostListDto.builder()
                         .id(p.getId())
                         .title(p.getTitle())
-                        .createdAt(String.valueOf(p.getCreatedAt()))
+                        .createdAt(DateTimeConverter.toStringPattern1(p.getCreatedAt()))
                         .tagList(postTagMap.get(p.getId()))
                         .build()
         ).collect(Collectors.toList());
@@ -52,9 +53,9 @@ public class PostReader {
                 .content(postDetail.getContent())
                 .url(postDetail.getUrl())
                 .tagList(tagList)
-                .createdAt(String.valueOf(postDetail.getCreatedAt()))
+                .createdAt(DateTimeConverter.toStringPattern2(postDetail.getCreatedAt()))
                 .memoContent(postDetail.getMemo())
-                .memoCreatedAt(String.valueOf(postDetail.getMemoCreatedAt()))
+                .memoCreatedAt(DateTimeConverter.toStringPattern3(postDetail.getMemoCreatedAt()))
                 .build();
     }
 }
