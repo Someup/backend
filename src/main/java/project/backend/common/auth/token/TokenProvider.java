@@ -115,7 +115,7 @@ public class TokenProvider {
     }
   }
 
-  public boolean validateExpire(String token) {
+  public boolean validateExpired(String token) {
     try {
       Jwts.parserBuilder()
           .setSigningKey(secretKey)

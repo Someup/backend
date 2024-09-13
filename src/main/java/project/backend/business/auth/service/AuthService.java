@@ -145,7 +145,7 @@ public class AuthService {
     String refreshToken = extractRefreshToken(request).orElse(null);
 
     // RefreshToken이 유효하지 않을 경우 -> 재로그인 필요
-    if (!tokenProvider.validate(refreshToken) || !tokenProvider.validateExpire(refreshToken)) {
+    if (!tokenProvider.validate(refreshToken) || !tokenProvider.validateExpired(refreshToken)) {
       throw new RuntimeException();
     }
 
