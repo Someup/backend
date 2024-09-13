@@ -41,4 +41,8 @@ public class User extends BaseEntity {
                .name(name)
                .build();
   }
+
+  public boolean equals(User other) {
+    return this.id.equals(other.getId());
+  }
 }

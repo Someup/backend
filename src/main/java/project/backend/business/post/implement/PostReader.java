@@ -1,10 +1,13 @@
 package project.backend.business.post.implement;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeConverter;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
+import project.backend.common.error.CustomException;
+import project.backend.common.error.ErrorCode;
 import project.backend.dao.post.entity.Post;
 import project.backend.dao.post.repository.PostRepository;
 import project.backend.dao.tag.respository.TagRepository;
@@ -14,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class PostReader {
@@ -45,7 +49,13 @@ public class PostReader {
     }
 
     public PostDetailDto readPostDetailWithTags(User user, Long postId) {
-        Post postDetail = postRepository.findPostById(postId);
+        Post postDetail = postRepository.findPostByIdAndUser(postId, user);
+
+        if (postDetail == null) {
+            log.info("[ERROR] readPostDetailWithTags userId: {}, postId: {}", user.getId(), postId);
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
         List<String> tagList = tagRepository.findTagNamesByPostId(postId);
 
         return PostDetailDto.builder()
