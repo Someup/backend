@@ -43,7 +43,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(request -> request
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/v1/auth/**").permitAll()
-            .requestMatchers("v1/exception/**").permitAll()
+            .requestMatchers("/v1/exception/**").permitAll()
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
