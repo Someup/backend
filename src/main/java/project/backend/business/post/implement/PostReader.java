@@ -9,6 +9,7 @@ import project.backend.business.post.dto.PostListDto;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
 import project.backend.dao.post.entity.Post;
+import project.backend.dao.post.entity.PostStatus;
 import project.backend.dao.post.repository.PostRepository;
 import project.backend.dao.tag.respository.TagRepository;
 import project.backend.dao.user.entity.User;
@@ -25,7 +26,7 @@ public class PostReader {
     private final TagRepository tagRepository;
 
     public List<PostListDto> readPostsWithTags(User user) {
-        List<Post> postList = postRepository.findAllByUserId(user.getId());
+        List<Post> postList = postRepository.findAllByUserIdAndStatus(user.getId(), PostStatus.PUBLISHED);
         List<Long> postIdList = postList.stream().map(
                 Post::getId
         ).toList();
@@ -49,7 +50,7 @@ public class PostReader {
     }
 
     public PostDetailDto readPostDetailWithTags(User user, Long postId) {
-        Post postDetail = postRepository.findPostByIdAndUser(postId, user);
+        Post postDetail = postRepository.findPostByIdAndUserAndStatus(postId, user, PostStatus.PUBLISHED);
 
         if (postDetail == null) {
             log.info("[ERROR] readPostDetailWithTags userId: {}, postId: {}", user.getId(), postId);
