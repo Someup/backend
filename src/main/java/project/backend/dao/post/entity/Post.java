@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import project.backend.dao.BaseEntity;
 import project.backend.dao.post.converter.PostStatusConverter;
 import project.backend.dao.post.converter.PostTypeConverter;
@@ -28,7 +27,7 @@ public class Post extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private User user;
 
     @Column(nullable = false)
@@ -59,23 +58,36 @@ public class Post extends BaseEntity {
     private List<PostTag> postTagList = new ArrayList<>();
 
     @Builder
-    private Post(User user, String title, String content, PostStatus status, PostType type, String url) {
+    private Post(User user, String title, String content, PostStatus status, PostType type, String url, boolean activated) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.type = type;
         this.status = status;
         this.url = url;
+        this.setActivated(activated);
     }
 
-    public static Post createPost(User user, String title, String content, PostStatus status, PostType type, String url) {
+    public static Post createPost(String title, String content, PostStatus status, String url) {
+        return Post.builder()
+                .title(title)
+                .content(content)
+                .type(PostType.PRIVATE)
+                .status(status)
+                .url(url)
+                .activated(true)
+                .build();
+    }
+
+    public static Post createPost(User user, String title, String content, PostStatus status, String url) {
         return Post.builder()
                 .user(user)
                 .title(title)
                 .content(content)
-                .type(type)
+                .type(PostType.PRIVATE)
                 .status(status)
                 .url(url)
+                .activated(true)
                 .build();
     }
 }

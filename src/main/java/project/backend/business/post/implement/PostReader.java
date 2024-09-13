@@ -3,7 +3,7 @@ package project.backend.business.post.implement;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import project.backend.business.common.DateTimeConverter;
+import project.backend.business.common.DateTimeManager;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
 import project.backend.common.error.CustomException;
@@ -42,7 +42,7 @@ public class PostReader {
                 p -> PostListDto.builder()
                         .id(p.getId())
                         .title(p.getTitle())
-                        .createdAt(DateTimeConverter.toStringPattern1(p.getCreatedAt()))
+                        .createdAt(DateTimeManager.convertToStringPattern1(p.getCreatedAt()))
                         .tagList(postTagMap.get(p.getId()))
                         .build()
         ).collect(Collectors.toList());
@@ -63,9 +63,9 @@ public class PostReader {
                 .content(postDetail.getContent())
                 .url(postDetail.getUrl())
                 .tagList(tagList)
-                .createdAt(DateTimeConverter.toStringPattern2(postDetail.getCreatedAt()))
+                .createdAt(DateTimeManager.convertToStringPattern2(postDetail.getCreatedAt()))
                 .memoContent(postDetail.getMemo())
-                .memoCreatedAt(DateTimeConverter.toStringPattern3(postDetail.getMemoCreatedAt()))
+                .memoCreatedAt(DateTimeManager.convertToStringPattern3(postDetail.getMemoCreatedAt()))
                 .build();
     }
 }

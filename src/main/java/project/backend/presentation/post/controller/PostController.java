@@ -1,17 +1,15 @@
 package project.backend.presentation.post.controller;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.backend.business.post.PostService;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
+import project.backend.presentation.post.dto.request.CreatePostRequest;
+import project.backend.presentation.post.dto.response.CreatePostResponse;
 import project.backend.presentation.post.dto.response.PostListResponse;
 import project.backend.presentation.post.dto.response.PostDetailResponse;
 
@@ -20,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/posts")
+@RequestMapping("/v1/post")
 public class PostController {
 
     private final PostService postService;
@@ -42,6 +40,16 @@ public class PostController {
         PostDetailResponse response = new PostDetailResponse(postDetail);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+    @PostMapping
+    public ResponseEntity<CreatePostResponse> createNewPost(@RequestBody CreatePostRequest createPostRequest) {
+//        Long postId = postService.createNewPostDetail("test1@test.com", createPostRequest);
+        Long postId = postService.createNewPostDetail(null, createPostRequest);
+        CreatePostResponse createPostResponse = new CreatePostResponse(postId);
+        return new ResponseEntity<>(createPostResponse, HttpStatus.CREATED);
+    }
+
 
 
 }
