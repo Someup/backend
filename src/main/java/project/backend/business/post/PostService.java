@@ -6,12 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.implement.OpenAIManager;
-import project.backend.business.post.implement.PostAppender;
+import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
 import project.backend.business.user.implement.UserReader;
 import project.backend.business.post.dto.PostListDto;
-import project.backend.common.error.CustomException;
-import project.backend.common.error.ErrorCode;
 import project.backend.dao.post.entity.Post;
 import project.backend.dao.user.entity.User;
 import project.backend.presentation.post.dto.request.CreatePostRequest;
@@ -27,7 +25,7 @@ public class PostService {
 
     private final UserReader userReader;
     private final PostReader postReader;
-    private final PostAppender postAppender;
+    private final PostManager postManager;
     private final OpenAIManager openAIManager;
 
     public List<PostListDto> getPostList(String email) {
@@ -45,12 +43,12 @@ public class PostService {
         String summary = openAIManager.getSummary(url);
 
         Optional<User> user = userReader.findUserByEmail(email);
-        return postAppender.createTempPost(user, url, summary);
+        return postManager.createTempPost(user, url, summary);
     }
 
     public Long updatePostDetail(Long userId, Long postId, UpdatePostRequest updatePostRequest) {
         Post post = postReader.read(userId, postId);
-        postAppender.updatePost(post, updatePostRequest);
+        postManager.updatePost(post, updatePostRequest);
         return post.getId();
     }
 }

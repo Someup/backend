@@ -12,7 +12,7 @@ import project.backend.common.auth.aop.AssignCurrentUserInfo;
 import project.backend.common.auth.aop.CurrentUserInfo;
 import project.backend.presentation.post.dto.request.CreatePostRequest;
 import project.backend.presentation.post.dto.request.UpdatePostRequest;
-import project.backend.presentation.post.dto.response.CreatePostResponse;
+import project.backend.presentation.post.dto.response.CreateUpdatePostResponse;
 import project.backend.presentation.post.dto.response.PostListResponse;
 import project.backend.presentation.post.dto.response.PostDetailResponse;
 
@@ -46,20 +46,21 @@ public class PostController {
 
 
     @PostMapping
-    public ResponseEntity<CreatePostResponse> createNewPost(@RequestBody CreatePostRequest createPostRequest) {
+    public ResponseEntity<CreateUpdatePostResponse> createNewPost(@RequestBody CreatePostRequest createPostRequest) {
 //        Long postId = postService.createNewPostDetail("test1@test.com", createPostRequest);
         Long postId = postService.createNewPostDetail(null, createPostRequest);
-        CreatePostResponse createPostResponse = new CreatePostResponse(postId);
-        return new ResponseEntity<>(createPostResponse, HttpStatus.CREATED);
+        CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(postId);
+        return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
     }
 
 
     @AssignCurrentUserInfo
     @PatchMapping("/{id}")
-    public ResponseEntity<Long> updatePost(CurrentUserInfo userInfo,
+    public ResponseEntity<CreateUpdatePostResponse> updatePost(CurrentUserInfo userInfo,
                                        @PathVariable("id") Long postId,
                                        @RequestBody UpdatePostRequest updatePostRequest) {
-        postService.updatePostDetail(userInfo.getUserId(), postId, updatePostRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Long id = postService.updatePostDetail(userInfo.getUserId(), postId, updatePostRequest);
+        CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(id);
+        return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.OK);
     }
 }

@@ -32,7 +32,7 @@ public class PostTag extends BaseEntity {
         this.tag = tag;
     }
 
-    public static PostTag addTag(Post post, Tag tag) {
+    public static PostTag create(Post post, Tag tag) {
         return PostTag.builder()
                 .post(post)
                 .tag(tag)

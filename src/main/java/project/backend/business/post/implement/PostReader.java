@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
+import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
 import project.backend.dao.post.entity.Post;
 import project.backend.dao.post.entity.PostStatus;
 import project.backend.dao.post.repository.PostRepository;
-import project.backend.dao.tag.respository.TagRepository;
 import project.backend.dao.user.entity.User;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PostReader {
     private final PostRepository postRepository;
-    private final TagRepository tagRepository;
+    private final TagReader tagReader;
 
     public Post read(Long userId, Long postId) {
         Post post = postRepository.findByIdAndUserId(postId, userId);
@@ -38,7 +38,7 @@ public class PostReader {
                 Post::getId
         ).toList();
 
-        List<Object[]> tagResults = tagRepository.findPostIdAndTagNamesByPostIds(postIdList);
+        List<Object[]> tagResults = tagReader.readTagNamesByPostIdList(postIdList);
         Map<Long, List<String>> postTagMap = tagResults.stream().collect(
                 Collectors.groupingBy(
                         res -> (Long) res[0],
@@ -64,7 +64,7 @@ public class PostReader {
             throw new CustomException(ErrorCode.BAD_REQUEST);
         }
 
-        List<String> tagList = tagRepository.findTagNamesByPostId(postId);
+        List<String> tagList = tagReader.readTagNamesByPostId(postId);
 
         return PostDetailDto.builder()
                 .title(postDetail.getTitle())

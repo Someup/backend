@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
+import project.backend.business.tag.implement.TagManager;
+import project.backend.business.tag.implement.TagReader;
 import project.backend.dao.post.entity.Post;
 import project.backend.dao.post.entity.PostStatus;
 import project.backend.dao.post.repository.PostRepository;
@@ -14,8 +16,11 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class PostAppender {
+public class PostManager {
     private final PostRepository postRepository;
+
+    private final TagReader tagReader;
+    private final TagManager tagManager;
 
     /**
      * 임시 Post는 생성 시간으로 시간 세팅
@@ -40,6 +45,7 @@ public class PostAppender {
         post.setContent(updatePostRequest.getContent());
         post.setMemo(updatePostRequest.getMemo());
 
+        tagManager.updateTag(post, updatePostRequest.getTagList());
         postRepository.save(post);
     }
 
