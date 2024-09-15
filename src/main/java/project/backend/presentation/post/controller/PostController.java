@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import project.backend.business.post.PostService;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
+import project.backend.common.auth.aop.AssignCurrentUserInfo;
+import project.backend.common.auth.aop.CurrentUserInfo;
 import project.backend.presentation.post.dto.request.CreatePostRequest;
+import project.backend.presentation.post.dto.request.UpdatePostRequest;
 import project.backend.presentation.post.dto.response.CreatePostResponse;
 import project.backend.presentation.post.dto.response.PostListResponse;
 import project.backend.presentation.post.dto.response.PostDetailResponse;
@@ -51,5 +54,12 @@ public class PostController {
     }
 
 
-
+    @AssignCurrentUserInfo
+    @PatchMapping("/{id}")
+    public ResponseEntity<Long> updatePost(CurrentUserInfo userInfo,
+                                       @PathVariable("id") Long postId,
+                                       @RequestBody UpdatePostRequest updatePostRequest) {
+        postService.updatePostDetail(userInfo.getUserId(), postId, updatePostRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

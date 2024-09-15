@@ -10,8 +10,12 @@ import project.backend.business.post.implement.PostAppender;
 import project.backend.business.post.implement.PostReader;
 import project.backend.business.user.implement.UserReader;
 import project.backend.business.post.dto.PostListDto;
+import project.backend.common.error.CustomException;
+import project.backend.common.error.ErrorCode;
+import project.backend.dao.post.entity.Post;
 import project.backend.dao.user.entity.User;
 import project.backend.presentation.post.dto.request.CreatePostRequest;
+import project.backend.presentation.post.dto.request.UpdatePostRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,5 +46,11 @@ public class PostService {
 
         Optional<User> user = userReader.findUserByEmail(email);
         return postAppender.createTempPost(user, url, summary);
+    }
+
+    public Long updatePostDetail(Long userId, Long postId, UpdatePostRequest updatePostRequest) {
+        Post post = postReader.read(userId, postId);
+        postAppender.updatePost(post, updatePostRequest);
+        return post.getId();
     }
 }

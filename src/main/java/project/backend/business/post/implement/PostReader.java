@@ -25,6 +25,13 @@ public class PostReader {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
 
+    public Post read(Long userId, Long postId) {
+        Post post = postRepository.findByIdAndUserId(postId, userId);
+
+        if (post == null) throw new CustomException(ErrorCode.BAD_REQUEST);
+        return post;
+    }
+
     public List<PostListDto> readPostsWithTags(User user) {
         List<Post> postList = postRepository.findAllByUserIdAndStatus(user.getId(), PostStatus.PUBLISHED);
         List<Long> postIdList = postList.stream().map(

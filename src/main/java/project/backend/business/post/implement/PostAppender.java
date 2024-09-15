@@ -8,6 +8,7 @@ import project.backend.dao.post.entity.Post;
 import project.backend.dao.post.entity.PostStatus;
 import project.backend.dao.post.repository.PostRepository;
 import project.backend.dao.user.entity.User;
+import project.backend.presentation.post.dto.request.UpdatePostRequest;
 
 import java.util.Optional;
 
@@ -17,20 +18,29 @@ public class PostAppender {
     private final PostRepository postRepository;
 
     /**
-     * 임시 POST는 생성 시간으로 시간 세팅
+     * 임시 Post는 생성 시간으로 시간 세팅
      */
     @Transactional
-    public Long createTempPost(Optional<User> user, String url, String summary){
+    public Long createTempPost(Optional<User> user, String url, String summary) {
         String tmpTitle = DateTimeManager.getCurrentDateTime();
 
         Post newTmpPost;
-        if (user.isPresent()){
+        if (user.isPresent()) {
             newTmpPost = Post.createPost(user.get(), tmpTitle, summary, PostStatus.DRAFT, url);
         } else {
             newTmpPost = Post.createPost(tmpTitle, summary, PostStatus.DRAFT, url);
         }
 
-            return postRepository.save(newTmpPost).getId();
+        return postRepository.save(newTmpPost).getId();
+    }
+
+    @Transactional
+    public void updatePost(Post post, UpdatePostRequest updatePostRequest){
+        post.setTitle(updatePostRequest.getTitle());
+        post.setContent(updatePostRequest.getContent());
+        post.setMemo(updatePostRequest.getMemo());
+
+        postRepository.save(post);
     }
 
 }

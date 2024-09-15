@@ -1,10 +1,7 @@
 package project.backend.dao.post.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import project.backend.dao.BaseEntity;
 import project.backend.dao.post.converter.PostStatusConverter;
 import project.backend.dao.post.converter.PostTypeConverter;
@@ -17,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseEntity {
@@ -90,4 +88,5 @@ public class Post extends BaseEntity {
                 .activated(true)
                 .build();
     }
+
 }
