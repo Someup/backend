@@ -29,16 +29,21 @@ public class User extends BaseEntity {
   @Column
   private String email;
 
+  @Column
+  private String profileImageUrl;
+
   @Builder
-  private User(String name, String email) {
+  private User(String name, String email, String profileImageUrl) {
     this.name = name;
     this.email = email;
+    this.profileImageUrl = profileImageUrl;
   }
 
-  public static User createUser(String email, String name) {
+  public static User createUser(String email, String name, String profileImageUrl) {
     return User.builder()
                .email(email)
                .name(name)
+               .profileImageUrl(profileImageUrl)
                .build();
   }
 }
