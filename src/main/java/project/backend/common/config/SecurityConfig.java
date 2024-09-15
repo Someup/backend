@@ -37,13 +37,11 @@ public class SecurityConfig {
         .cors(withDefaults())
         .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oauth2Login(oauth -> {
-          oauth.userInfoEndpoint(config -> config.userService(kakaoUserDetailsService));
-        })
+        .oauth2Login(oauth -> oauth.userInfoEndpoint(config -> config.userService(kakaoUserDetailsService)))
         .authorizeHttpRequests(request -> request
-            .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/v1/auth/**").permitAll()
             .requestMatchers("/v1/exception/**").permitAll()
+            .requestMatchers("/h2-console/**").permitAll()
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

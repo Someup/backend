@@ -1,10 +1,12 @@
 package project.backend.business.auth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import project.backend.common.auth.oauth.KakaoUserInfo;
 import project.backend.dao.auth.repository.RefreshTokenRedisRepository;
 import project.backend.dao.user.entity.User;
 import project.backend.dao.user.repository.UserRepository;
@@ -54,8 +57,7 @@ public class AuthService {
   @Transactional
   public TokenResponse kakaoLogin(String code) throws JsonProcessingException {
     String token = getToken(code);
-    String email = getKakaoUserInfo(token);
-    User user = saveIfNonExist(email);
+    User user = getKakaoUser(token);
 
     TokenResponse tokenResponse = tokenProvider.createToken(
         String.valueOf(user.getId()), user.getEmail(), "USER");
@@ -105,46 +107,51 @@ public class AuthService {
     return jsonNode.get("access_token").asText();
   }
 
-  private String getKakaoUserInfo(String token) throws JsonProcessingException {
+  @Transactional
+  public User getKakaoUser(String token) throws JsonProcessingException {
     HttpHeaders headers = new HttpHeaders();
-
-    headers.add("Authorization", "Bearer " + token);
+    headers.add("Authorization", BEARER + token);
     headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-    HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(headers);
+    HttpEntity<Void> kakaoProfileRequest = new HttpEntity<>(headers);
 
     try {
       RestTemplate restTemplate = new RestTemplate();
       ResponseEntity<String> response = restTemplate.exchange(
           "https://kapi.kakao.com/v2/user/me",
           HttpMethod.POST,
-          kakaoTokenRequest,
+          kakaoProfileRequest,
           String.class
       );
-      String responseBody = response.getBody();
-      log.info(responseBody);
-      ObjectMapper objectMapper = new ObjectMapper();
-      JsonNode jsonNode = objectMapper.readTree(responseBody);
-      return jsonNode.get("kakao_account").get("email").asText();
-    } catch (HttpClientErrorException e) {
-      throw new RuntimeException();
-    }
-  }
 
-  @Transactional
-  public User saveIfNonExist(String email) {
-    return userRepository.findByEmail(email)
-                         .orElseGet(() ->
-                             userRepository.save(
-                                 User.createUser(email, "낯선 " + email.split("@")[0])
-                             )
-                         );
+      String responseBody = response.getBody();
+      ObjectMapper objectMapper = new ObjectMapper();
+
+      // 응답을 Map<String, Object>로 파싱
+      Map<String, Object> attributes = objectMapper.readValue(responseBody, new TypeReference<>() {
+      });
+
+      // KakaoUserInfo 인스턴스 생성
+      KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(attributes);
+
+      String email = kakaoUserInfo.getEmail();
+      String name = kakaoUserInfo.getName();
+      String profileImageUrl = kakaoUserInfo.getProfileImageUrl();
+
+      // 데이터베이스에서 사용자 조회 또는 생성
+      return userRepository.findByEmail(email)
+                           .orElseGet(() -> userRepository.save(
+                               User.createUser(email, name, profileImageUrl)
+                           ));
+    } catch (HttpClientErrorException e) {
+      throw new RuntimeException("카카오 사용자 정보를 가져오는데 실패했습니다.", e);
+    }
   }
 
   public TokenResponse reissueAccessToken(HttpServletRequest request) {
     String refreshToken = extractRefreshToken(request).orElse(null);
 
-    // RefreshToken이 유효하지 않을 경우 -> 재로그인 필요
+    // RefreshToken 이 유효하지 않을 경우 -> 재로그인 필요
     if (!tokenProvider.validate(refreshToken) || !tokenProvider.validateExpired(refreshToken)) {
       throw new RuntimeException();
     }
