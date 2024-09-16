@@ -1,4 +1,4 @@
-package project.backend.common.auth.oauth;
+package project.backend.business.auth.service.oauth;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import project.backend.common.auth.oauth.KakaoUserDetails;
+import project.backend.common.auth.oauth.KakaoUserInfo;
 import project.backend.dao.user.entity.User;
 import project.backend.dao.user.repository.UserRepository;
 
