@@ -23,8 +23,4 @@ public class UserController {
     User user = userService.findUserById(userInfo.getUserId());
     return ResponseEntity.ok(user);
   }
-
-//  @PutMapping("/{}")
-//  public ResponseEntity<User> updateUser() {
-//  } // TODO 업데이트와 관련된 DTO 로 구현
 }
