@@ -1,6 +1,6 @@
 package project.backend.business.auth.service;
 
-import static project.backend.business.auth.service.oauth.KakaoApiService.BEARER;
+import static project.backend.business.auth.service.implement.KakaoLoginManager.BEARER;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.backend.business.auth.service.oauth.KakaoApiService;
+import project.backend.business.auth.service.implement.KakaoLoginManager;
 import project.backend.dao.auth.repository.RefreshTokenRedisRepository;
 import project.backend.dao.user.entity.User;
 import project.backend.common.auth.token.RefreshToken;
@@ -27,7 +27,7 @@ import project.backend.common.auth.token.TokenResponse;
 public class AuthService {
 
   private final TokenProvider tokenProvider;
-  private final KakaoApiService kakaoApiService;
+  private final KakaoLoginManager kakaoLoginManager;
   private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
   @Value("${jwt.refresh_header}")
@@ -35,8 +35,8 @@ public class AuthService {
 
   @Transactional
   public TokenResponse kakaoLogin(String code) throws JsonProcessingException {
-    String token = kakaoApiService.getKakaoToken(code);
-    User user = kakaoApiService.getKakaoUser(token);
+    String token = kakaoLoginManager.getKakaoToken(code);
+    User user = kakaoLoginManager.getKakaoUser(token);
 
     TokenResponse tokenResponse = tokenProvider.createToken(
         String.valueOf(user.getId()), user.getEmail(), "USER");

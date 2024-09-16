@@ -1,4 +1,4 @@
-package project.backend.business.auth.service.oauth;
+package project.backend.business.auth.service.implement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,7 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -24,9 +24,9 @@ import project.backend.dao.user.entity.User;
 import project.backend.dao.user.repository.UserRepository;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
-public class KakaoApiService {
+public class KakaoLoginManager {
 
   public static final String BEARER = "Bearer ";
 
@@ -75,7 +75,6 @@ public class KakaoApiService {
     HttpEntity<Void> kakaoProfileRequest = new HttpEntity<>(headers);
 
     try {
-      RestTemplate restTemplate = new RestTemplate();
       ResponseEntity<String> response = restTemplate.exchange(
           "https://kapi.kakao.com/v2/user/me",
           HttpMethod.POST,
@@ -84,9 +83,7 @@ public class KakaoApiService {
       );
 
       String responseBody = response.getBody();
-      ObjectMapper objectMapper = new ObjectMapper();
-      Map<String, Object> attributes = objectMapper.readValue(responseBody, new TypeReference<>() {
-      });
+      Map<String, Object> attributes = objectMapper.readValue(responseBody, new TypeReference<>() {});
 
       KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(attributes);
 
