@@ -26,17 +26,24 @@ public class JwtFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request,
-                                  HttpServletResponse response,
-                                  FilterChain filterChain) throws ServletException, IOException {
-    log.info("URL = {}", request.getRequestURI());
+      HttpServletResponse response,
+      FilterChain filterChain) throws ServletException, IOException {
+    log.info("URI = {}", request.getRequestURI());
     if (isRequestPassURI(request)) {
       filterChain.doFilter(request, response);
       return;
     }
-
+    log.info("accessTokenHeader = {}", request.getHeader(accessTokenHeader));
     String accessToken = extractAccessToken(request).orElse(null);
 
     if (!tokenProvider.validateExpired(accessToken) && tokenProvider.validate(accessToken)) {
+      String redirectUrl =
+          "https://" + request.getServerName() + "/api/exception/access-token-expired";
+      response.sendRedirect(redirectUrl);
+      return;
+    }
+
+    if (tokenProvider.validateExpired(accessToken) && tokenProvider.validate(accessToken)) {
       SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
     }
 
@@ -47,12 +54,15 @@ public class JwtFilter extends OncePerRequestFilter {
     if (request.getRequestURI().equals("/")) {
       return true;
     }
+
     if (request.getRequestURI().startsWith("/v1/auth")) {
       return true;
     }
+
     if (request.getRequestURI().startsWith("/v1/exception")) {
       return true;
     }
+
     return false;
   }
 

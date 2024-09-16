@@ -23,12 +23,12 @@ public class KakaoUserDetails implements OAuth2User {
   }
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities;
+  public Map<String, Object> getAttributes() {
+    return attributes;
   }
 
   @Override
-  public Map<String, Object> getAttributes() {
-    return attributes;
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return authorities;
   }
 }

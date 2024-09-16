@@ -20,7 +20,7 @@ public class AuthController {
 
   private final AuthService authService;
 
-  @PostMapping("/login/kakao")
+  @RequestMapping("/login/kakao")
   public ResponseEntity<TokenResponse> loginKakao(@RequestParam(name = "code") String code)
       throws JsonProcessingException {
     TokenResponse tokenResponse = authService.kakaoLogin(code);
