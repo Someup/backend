@@ -19,11 +19,11 @@ public class PostTag extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, insertable=false, updatable=false)
+    @JoinColumn(nullable = false)
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, insertable=false, updatable=false)
+    @JoinColumn(nullable = false)
     private Tag tag;
 
     @Builder

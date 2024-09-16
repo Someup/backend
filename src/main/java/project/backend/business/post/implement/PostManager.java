@@ -12,6 +12,7 @@ import project.backend.dao.post.repository.PostRepository;
 import project.backend.dao.user.entity.User;
 import project.backend.presentation.post.dto.request.UpdatePostRequest;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
@@ -43,7 +44,12 @@ public class PostManager {
     public void updatePost(Post post, UpdatePostRequest updatePostRequest){
         post.setTitle(updatePostRequest.getTitle());
         post.setContent(updatePostRequest.getContent());
-        post.setMemo(updatePostRequest.getMemo());
+        post.setStatus(PostStatus.PUBLISHED);
+
+        if (post.getMemo() == null || !post.getMemo().equals(updatePostRequest.getMemo())){
+            post.setMemo(updatePostRequest.getMemo());
+            post.setMemoCreatedAt(LocalDateTime.now());
+        }
 
         tagManager.updateTag(post, updatePostRequest.getTagList());
         postRepository.save(post);

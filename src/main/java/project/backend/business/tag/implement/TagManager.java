@@ -36,7 +36,7 @@ public class TagManager {
 
         // 기존 tag 중 연결 끊어야 하는 것들
         if (!tagNameMap.isEmpty()) {
-            this.disconnectTagAndPost((List<Tag>) tagNameMap.values(), post);
+            this.disconnectTagAndPost(new ArrayList<>(tagNameMap.values()), post);
         }
 
         // 새롭게 연결해야 하는 tag
@@ -71,7 +71,7 @@ public class TagManager {
                 .map(Tag::getId)
                 .toList();
 
-        postTagRepository.deletePostTagByPostIdAndTagIdList(post.getId(), disconnectTagIdList);
+        postTagRepository.deletePostTagByPostIdAndTagIdListIn(post.getId(), disconnectTagIdList);
     }
 
     private void connectTagAndPost(List<Tag> tags, Post post) {

@@ -20,7 +20,10 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
             "WHERE pt.post.id = :postId ")
     List<String> findTagNamesByPostId(@Param("postId") Long postId);
 
-    List<Tag> findByPostId(Long postId);
+    @Query("SELECT t " +
+            "FROM Tag AS t JOIN PostTag AS pt ON t = pt.tag " +
+            "WHERE pt.post.id = :postId ")
+    List<Tag> findAllByPostId(Long postId);
 
     List<Tag> findAllByNameIn(List<String> names);
 

@@ -47,8 +47,8 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<CreateUpdatePostResponse> createNewPost(@RequestBody CreatePostRequest createPostRequest) {
-//        Long postId = postService.createNewPostDetail("test1@test.com", createPostRequest);
-        Long postId = postService.createNewPostDetail(null, createPostRequest);
+        Long postId = postService.createNewPostDetail("test1@test.com", createPostRequest);
+//        Long postId = postService.createNewPostDetail(null, createPostRequest);
         CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(postId);
         return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
     }
@@ -59,7 +59,8 @@ public class PostController {
     public ResponseEntity<CreateUpdatePostResponse> updatePost(CurrentUserInfo userInfo,
                                        @PathVariable("id") Long postId,
                                        @RequestBody UpdatePostRequest updatePostRequest) {
-        Long id = postService.updatePostDetail(userInfo.getUserId(), postId, updatePostRequest);
+//        Long id = postService.updatePostDetail(userInfo.getUserId(), postId, updatePostRequest);
+        Long id = postService.updatePostDetail(1L, postId, updatePostRequest);
         CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(id);
         return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.OK);
     }

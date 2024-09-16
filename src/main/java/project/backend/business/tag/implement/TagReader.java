@@ -15,7 +15,7 @@ public class TagReader {
     private final TagRepository tagRepository;
 
     public Map<String, Tag> getTagNameMapByPostId(Long postId) {
-        List<Tag> tagList =  tagRepository.findByPostId(postId);
+        List<Tag> tagList =  tagRepository.findAllByPostId(postId);
         return tagList.stream().collect(Collectors.toMap(Tag::getName, tag -> tag));
     }
 
