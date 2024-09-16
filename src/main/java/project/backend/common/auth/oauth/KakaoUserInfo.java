@@ -13,28 +13,38 @@ public class KakaoUserInfo {
   public static final String PROFILE_IMAGE_URL = "profile_image_url";
 
   private final Map<String, Object> attributes;
+  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final TypeReference<Map<String, Object>> typeReference = new TypeReference<>() {};
 
   public KakaoUserInfo(final Map<String, Object> attributes) {
     this.attributes = attributes;
   }
 
-  private Map<String, Object> getAccountAttribute(String key) {
-    ObjectMapper objectMapper = new ObjectMapper();
-    TypeReference<Map<String, Object>> typeReference = new TypeReference<>() {};
-    Object kakaoAccount = attributes.get(KAKAO_ACCOUNT);
-    Map<String, Object> account = objectMapper.convertValue(kakaoAccount, typeReference);
-    return objectMapper.convertValue(account.get(key), typeReference);
+  private Map<String, Object> convertToMap(Object object) {
+    return objectMapper.convertValue(object, typeReference);
+  }
+
+  private Map<String, Object> getKakaoAccount() {
+    return convertToMap(attributes.get(KAKAO_ACCOUNT));
+  }
+
+  private Map<String, Object> getProfileAttributes() {
+    Map<String, Object> account = getKakaoAccount();
+    return convertToMap(account.get(PROFILE));
   }
 
   public String getEmail() {
-    return (String) getAccountAttribute(EMAIL).get(EMAIL);
+    Map<String, Object> account = getKakaoAccount();
+    return (String) account.get(EMAIL);
   }
 
   public String getName() {
-    return (String) getAccountAttribute(PROFILE).get(NAME);
+    Map<String, Object> profile = getProfileAttributes();
+    return (String) profile.get(NAME);
   }
 
   public String getProfileImageUrl() {
-    return (String) getAccountAttribute(PROFILE).get(PROFILE_IMAGE_URL);
+    Map<String, Object> profile = getProfileAttributes();
+    return (String) profile.get(PROFILE_IMAGE_URL);
   }
 }
