@@ -11,7 +11,9 @@ public class PostTypeConverter implements AttributeConverter<PostType, String> {
 
     @Override
     public String convertToDatabaseColumn(PostType postType) {
-        if (postType == null) return null;
+        if (postType == null) {
+            return null;
+        }
         return postType.getValue();
     }
 

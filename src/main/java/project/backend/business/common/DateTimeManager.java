@@ -8,7 +8,9 @@ public class DateTimeManager {
      * pattern: yyyy.MM.dd
      */
     public static String convertToStringPattern1(LocalDateTime dateTime) {
-        if (dateTime == null) return null;
+        if (dateTime == null) {
+            return null;
+        }
         return dateTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     }
 
@@ -16,7 +18,9 @@ public class DateTimeManager {
      * pattern: yyyy년 MM월 dd일
      */
     public static String convertToStringPattern2(LocalDateTime dateTime) {
-        if (dateTime == null) return null;
+        if (dateTime == null) {
+            return null;
+        }
         return dateTime.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
     }
 
@@ -24,7 +28,9 @@ public class DateTimeManager {
      * pattern: yy.MM.dd
      */
     public static String convertToStringPattern3(LocalDateTime dateTime) {
-        if (dateTime == null) return null;
+        if (dateTime == null) {
+            return null;
+        }
         return dateTime.format(DateTimeFormatter.ofPattern("yy.MM.dd"));
     }
 

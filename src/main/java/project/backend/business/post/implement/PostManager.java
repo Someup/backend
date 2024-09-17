@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
 import project.backend.business.tag.implement.TagManager;
-import project.backend.business.tag.implement.TagReader;
 import project.backend.dao.post.entity.Post;
 import project.backend.dao.post.entity.PostStatus;
 import project.backend.dao.post.repository.PostRepository;
@@ -19,8 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostManager {
     private final PostRepository postRepository;
-
-    private final TagReader tagReader;
     private final TagManager tagManager;
 
     /**
