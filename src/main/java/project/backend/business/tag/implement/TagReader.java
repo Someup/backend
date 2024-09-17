@@ -15,12 +15,18 @@ public class TagReader {
     private final TagRepository tagRepository;
 
     public Map<String, Tag> getTagNameMapByPostId(Long postId) {
-        List<Tag> tagList =  tagRepository.findAllByPostId(postId);
+        List<Tag> tagList = tagRepository.findAllByPostId(postId);
         return tagList.stream().collect(Collectors.toMap(Tag::getName, tag -> tag));
     }
 
-    public List<Object[]> readTagNamesByPostIdList(List<Long> postIdList) {
-        return tagRepository.findPostIdAndTagNamesByPostIdIn(postIdList);
+    public Map<Long, List<String>> getPostTagMap(List<Long> postIdList) {
+        List<Object[]> tagResults = tagRepository.findPostIdAndTagNamesByPostIdIn(postIdList);
+        return tagResults.stream().collect(
+                Collectors.groupingBy(
+                        res -> (Long) res[0],
+                        Collectors.mapping(res -> (String) res[1], Collectors.toList())
+                )
+        );
     }
 
     public List<String> readTagNamesByPostId(Long postId) {

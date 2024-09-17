@@ -16,7 +16,7 @@ import project.backend.dao.user.entity.User;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Component
@@ -34,26 +34,18 @@ public class PostReader {
 
     public List<PostListDto> readPostsWithTags(User user) {
         List<Post> postList = postRepository.findAllByUserIdAndStatus(user.getId(), PostStatus.PUBLISHED);
-        List<Long> postIdList = postList.stream().map(
-                Post::getId
-        ).toList();
+        List<Long> postIdList = postList.stream().map(Post::getId).toList();
 
-        List<Object[]> tagResults = tagReader.readTagNamesByPostIdList(postIdList);
-        Map<Long, List<String>> postTagMap = tagResults.stream().collect(
-                Collectors.groupingBy(
-                        res -> (Long) res[0],
-                        Collectors.mapping(res -> (String) res[1], Collectors.toList())
-                )
-        );
+        Map<Long, List<String>> postTagMap = tagReader.getPostTagMap(postIdList);
 
         return postList.stream().map(
-                p -> PostListDto.builder()
-                        .id(p.getId())
-                        .title(p.getTitle())
+                post -> PostListDto.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
                         .createdAt(DateTimeManager.convertToStringPattern1(p.getCreatedAt()))
-                        .tagList(postTagMap.get(p.getId()))
+                        .tagList(postTagMap.get(post.getId()))
                         .build()
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
     public PostDetailDto readPostDetailWithTags(User user, Long postId) {
