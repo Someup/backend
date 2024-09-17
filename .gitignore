@@ -41,3 +41,6 @@ application-dev.yml
 application-jwt.yml
 application-local.yml
 application-oauth.yml
+
+### java ###
+LocalSecurityConfig.java

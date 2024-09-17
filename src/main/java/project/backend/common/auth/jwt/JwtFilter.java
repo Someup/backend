@@ -34,7 +34,6 @@ public class JwtFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
-    log.info("accessTokenHeader = {}", request.getHeader(accessTokenHeader));
     String accessToken = extractAccessToken(request).orElse(null);
 
     if (!tokenProvider.validateExpired(accessToken) && tokenProvider.validate(accessToken)) {
