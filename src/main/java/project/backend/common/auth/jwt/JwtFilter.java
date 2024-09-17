@@ -9,6 +9,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request,
       HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    log.info("URI = {}", request.getRequestURI());
+    log.info("HttpMethod = {}, URI = {}", request.getMethod(), request.getRequestURI());
     if (isRequestPassURI(request)) {
       filterChain.doFilter(request, response);
       return;
@@ -60,6 +61,10 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     if (request.getRequestURI().startsWith("/v1/exception")) {
+      return true;
+    }
+
+    if (request.getRequestURI().equals("/api/post") && request.getMethod().equals(HttpMethod.POST.name())) {
       return true;
     }
 
