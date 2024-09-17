@@ -24,15 +24,9 @@ public class PostManager {
      * 임시 Post는 생성 시간으로 시간 세팅
      */
     @Transactional
-    public Long createTempPost(Optional<User> user, String url, String summary) {
+    public Long createTempPost(User user, String url, String summary) {
         String tmpTitle = DateTimeManager.getCurrentDateTime();
-
-        Post newTmpPost;
-        if (user.isPresent()) {
-            newTmpPost = Post.createPost(user.get(), tmpTitle, summary, PostStatus.DRAFT, url);
-        } else {
-            newTmpPost = Post.createPost(tmpTitle, summary, PostStatus.DRAFT, url);
-        }
+        Post newTmpPost = Post.createPost(user, tmpTitle, summary, PostStatus.DRAFT, url);
 
         return postRepository.save(newTmpPost).getId();
     }

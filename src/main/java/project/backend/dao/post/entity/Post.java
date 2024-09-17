@@ -66,20 +66,8 @@ public class Post extends BaseEntity {
         this.setActivated(activated);
     }
 
-    public static Post createPost(String title, String content, PostStatus status, String url) {
-        return Post.builder()
-                .title(title)
-                .content(content)
-                .type(PostType.PRIVATE)
-                .status(status)
-                .url(url)
-                .activated(true)
-                .build();
-    }
-
     public static Post createPost(User user, String title, String content, PostStatus status, String url) {
-        return Post.builder()
-                .user(user)
+        Post post = Post.builder()
                 .title(title)
                 .content(content)
                 .type(PostType.PRIVATE)
@@ -87,6 +75,12 @@ public class Post extends BaseEntity {
                 .url(url)
                 .activated(true)
                 .build();
+
+        if (user != null) {
+            post.setUser(user);
+        }
+
+        return post;
     }
 
 }

@@ -28,21 +28,20 @@ public class PostService {
     private final PostManager postManager;
     private final OpenAIManager openAIManager;
 
-    public List<PostListDto> getPostList(String email) {
-        User user = userReader.readUserByEmail(email);
+    public List<PostListDto> getPostList(Long userId) {
+        User user = userReader.readUserById(userId);
         return postReader.readPostsWithTags(user);
     }
 
-    public PostDetailDto getPostDetail(String email, Long postId) {
-        User user = userReader.readUserByEmail(email);
+    public PostDetailDto getPostDetail(Long userId, Long postId) {
+        User user = userReader.readUserById(userId);
         return postReader.readPostDetailWithTags(user, postId);
     }
 
-    public Long createNewPostDetail(String email, CreatePostRequest createPostRequest) {
+    public Long createNewPostDetail(Long userId, CreatePostRequest createPostRequest) {
         String url = createPostRequest.getUrl();
         String summary = openAIManager.getSummary(url);
-
-        Optional<User> user = userReader.findUserByEmail(email);
+        User user = userReader.findUserById(userId);
         return postManager.createTempPost(user, url, summary);
     }
 

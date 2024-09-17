@@ -15,13 +15,17 @@ import java.util.Optional;
 public class UserReader {
     private final UserRepository userRepository;
 
-    public User readUserByEmail(String email) {
+    public User readUserById(Long userId) {
 
-        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
-    public Optional<User> findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findUserById(Long userId) {
+        if (userId == null) {
+            return null;
+        }
+        Optional<User> user = userRepository.findById(userId);
+        return user.orElse(null);
     }
 
 }
