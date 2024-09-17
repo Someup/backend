@@ -25,7 +25,7 @@ import project.backend.common.error.ExceptionHandlerFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Profile("local")
+@Profile("dev")
 public class SecurityConfig {
 
     private final JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
