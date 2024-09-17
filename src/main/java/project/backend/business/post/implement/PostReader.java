@@ -42,7 +42,7 @@ public class PostReader {
                 post -> PostListDto.builder()
                         .id(post.getId())
                         .title(post.getTitle())
-                        .createdAt(DateTimeManager.convertToStringPattern1(p.getCreatedAt()))
+                        .createdAt(DateTimeManager.convertToStringPattern1(post.getCreatedAt()))
                         .tagList(postTagMap.get(post.getId()))
                         .build()
         ).toList();

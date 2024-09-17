@@ -38,12 +38,12 @@ public class PostManager {
     }
 
     @Transactional
-    public void updatePost(Post post, UpdatePostRequest updatePostRequest){
+    public void updatePost(Post post, UpdatePostRequest updatePostRequest) {
         post.setTitle(updatePostRequest.getTitle());
         post.setContent(updatePostRequest.getContent());
         post.setStatus(PostStatus.PUBLISHED);
 
-        if (post.getMemo() == null || !post.getMemo().equals(updatePostRequest.getMemo())){
+        if (post.getMemo() == null || !post.getMemo().equals(updatePostRequest.getMemo())) {
             post.setMemo(updatePostRequest.getMemo());
             post.setMemoCreatedAt(LocalDateTime.now());
         }
