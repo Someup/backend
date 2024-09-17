@@ -28,12 +28,10 @@ public class JwtFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request,
       HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    log.info("URI = {}", request.getRequestURI());
     if (isRequestPassURI(request)) {
       filterChain.doFilter(request, response);
       return;
     }
-    log.info("accessTokenHeader = {}", request.getHeader(accessTokenHeader));
     String accessToken = extractAccessToken(request).orElse(null);
 
     if (!tokenProvider.validateExpired(accessToken) && tokenProvider.validate(accessToken)) {

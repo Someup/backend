@@ -1,4 +1,4 @@
-package project.backend.common.auth.oauth;
+package project.backend.business.auth.service.oauth;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import project.backend.common.auth.oauth.KakaoUserDetails;
+import project.backend.common.auth.oauth.KakaoUserInfo;
 import project.backend.dao.user.entity.User;
 import project.backend.dao.user.repository.UserRepository;
 
@@ -16,7 +18,6 @@ import project.backend.dao.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class KakaoUserDetailsService extends DefaultOAuth2UserService {
 
-  private static final String PREFIX = "낯선 ";
   private static final String DEFAULT_ROLE = "USER";
 
   private final UserRepository userRepository;
@@ -25,13 +26,16 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
     OAuth2User oAuth2User = super.loadUser(userRequest);
     KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
     String email = kakaoUserInfo.getEmail();
+    String name = kakaoUserInfo.getName();
+    String profileImageUrl = kakaoUserInfo.getProfileImageUrl();
 
     User user = userRepository.findByEmail(email)
-                              .orElseGet(() -> userRepository.save(
-                                  User.createUser(email, PREFIX + email.split("@")[0])
-                              ));
+                              .orElseGet(
+                                  () -> userRepository.save(
+                                  User.createUser(email, name, profileImageUrl)
+                                  )
+                              );
 
-    log.info("카카오 유저 = {}", user);
     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(DEFAULT_ROLE);
 
     return new KakaoUserDetails(user.getId(), email, List.of(authority), oAuth2User.getAttributes());

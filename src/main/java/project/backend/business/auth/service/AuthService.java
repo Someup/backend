@@ -1,29 +1,21 @@
 package project.backend.business.auth.service;
 
+import static project.backend.business.auth.service.implement.KakaoLoginManager.BEARER;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+import project.backend.business.auth.service.implement.KakaoLoginManager;
 import project.backend.dao.auth.repository.RefreshTokenRedisRepository;
 import project.backend.dao.user.entity.User;
-import project.backend.dao.user.repository.UserRepository;
 import project.backend.common.auth.token.RefreshToken;
 import project.backend.common.auth.token.TokenProvider;
 import project.backend.common.auth.token.TokenResponse;
@@ -34,28 +26,17 @@ import project.backend.common.auth.token.TokenResponse;
 @Transactional(readOnly = true)
 public class AuthService {
 
-  private final String BEARER = "Bearer ";
   private final TokenProvider tokenProvider;
-  private final UserRepository userRepository;
+  private final KakaoLoginManager kakaoLoginManager;
   private final RefreshTokenRedisRepository refreshTokenRedisRepository;
-
-  @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-  private String kakaoClientId;
-
-  @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
-  private String kakaoClientSecret;
-
-  @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-  private String redirect_uri;
 
   @Value("${jwt.refresh_header}")
   private String refreshTokenHeader;
 
   @Transactional
   public TokenResponse kakaoLogin(String code) throws JsonProcessingException {
-    String token = getToken(code);
-    String email = getKakaoUserInfo(token);
-    User user = saveIfNonExist(email);
+    String token = kakaoLoginManager.getKakaoToken(code);
+    User user = kakaoLoginManager.getKakaoUser(token);
 
     TokenResponse tokenResponse = tokenProvider.createToken(
         String.valueOf(user.getId()), user.getEmail(), "USER");
@@ -65,86 +46,10 @@ public class AuthService {
     return tokenResponse;
   }
 
-  private void saveRefreshTokenOnRedis(User user, TokenResponse response) {
-    refreshTokenRedisRepository.save(RefreshToken.builder()
-                                                 .id(user.getId())
-                                                 .email(user.getEmail())
-                                                 .authorities(Collections.singleton(new SimpleGrantedAuthority("USER")))
-                                                 .refreshToken(response.getRefreshToken())
-                                                 .build());
-  }
-
-  private String getToken(final String code) throws JsonProcessingException {
-    // HTTP 헤더 생성
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-    // HTTP 바디 생성
-    MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-    body.add("grant_type", "authorization_code");
-    body.add("client_id", kakaoClientId);
-    body.add("client_secret", kakaoClientSecret);
-    body.add("redirect_uri", redirect_uri);
-    body.add("code", code);
-
-    // HTTP 요청 보내기
-    HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body, headers);
-
-    RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<String> response = restTemplate.exchange(
-        "https://kauth.kakao.com/oauth/token",
-        HttpMethod.POST,
-        kakaoTokenRequest,
-        String.class
-    );
-
-    String responseBody = response.getBody();
-    ObjectMapper objectMapper = new ObjectMapper();
-    JsonNode jsonNode = objectMapper.readTree(responseBody);
-
-    return jsonNode.get("access_token").asText();
-  }
-
-  private String getKakaoUserInfo(String token) throws JsonProcessingException {
-    HttpHeaders headers = new HttpHeaders();
-
-    headers.add("Authorization", "Bearer " + token);
-    headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-    HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(headers);
-
-    try {
-      RestTemplate restTemplate = new RestTemplate();
-      ResponseEntity<String> response = restTemplate.exchange(
-          "https://kapi.kakao.com/v2/user/me",
-          HttpMethod.POST,
-          kakaoTokenRequest,
-          String.class
-      );
-      String responseBody = response.getBody();
-      log.info(responseBody);
-      ObjectMapper objectMapper = new ObjectMapper();
-      JsonNode jsonNode = objectMapper.readTree(responseBody);
-      return jsonNode.get("kakao_account").get("email").asText();
-    } catch (HttpClientErrorException e) {
-      throw new RuntimeException();
-    }
-  }
-
-  @Transactional
-  public User saveIfNonExist(String email) {
-    return userRepository.findByEmail(email)
-                         .orElseGet(() ->
-                             userRepository.save(
-                                 User.createUser(email, "낯선 " + email.split("@")[0])
-                             )
-                         );
-  }
-
   public TokenResponse reissueAccessToken(HttpServletRequest request) {
     String refreshToken = extractRefreshToken(request).orElse(null);
 
-    // RefreshToken이 유효하지 않을 경우 -> 재로그인 필요
+    // RefreshToken 이 유효하지 않을 경우
     if (!tokenProvider.validate(refreshToken) || !tokenProvider.validateExpired(refreshToken)) {
       throw new RuntimeException();
     }
@@ -169,8 +74,17 @@ public class AuthService {
     return tokenResponse;
   }
 
+  private void saveRefreshTokenOnRedis(User user, TokenResponse response) {
+    refreshTokenRedisRepository.save(RefreshToken.builder()
+                                                 .id(user.getId())
+                                                 .email(user.getEmail())
+                                                 .authorities(Collections.singleton(new SimpleGrantedAuthority("USER")))
+                                                 .refreshToken(response.getRefreshToken())
+                                                 .build());
+  }
+
   // RefreshToken 추출
-  public Optional<String> extractRefreshToken(HttpServletRequest request) {
+  private Optional<String> extractRefreshToken(HttpServletRequest request) {
     return Optional.ofNullable(request.getHeader(refreshTokenHeader))
                    .filter(refreshToken -> refreshToken.startsWith(BEARER))
                    .map(refreshToken -> refreshToken.replace(BEARER, ""));
