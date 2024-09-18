@@ -20,8 +20,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import project.backend.common.auth.oauth.KakaoUserInfo;
 import project.backend.common.error.exception.UserNotAuthenticatedException;
-import project.backend.dao.user.entity.User;
-import project.backend.dao.user.repository.UserRepository;
+import project.backend.entity.user.User;
+import project.backend.repository.user.UserRepository;
 
 @Slf4j
 @Component

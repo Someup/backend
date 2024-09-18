@@ -10,8 +10,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import project.backend.common.auth.oauth.KakaoUserDetails;
 import project.backend.common.auth.oauth.KakaoUserInfo;
-import project.backend.dao.user.entity.User;
-import project.backend.dao.user.repository.UserRepository;
+import project.backend.entity.user.User;
+import project.backend.repository.user.UserRepository;
 
 @Slf4j
 @Service
