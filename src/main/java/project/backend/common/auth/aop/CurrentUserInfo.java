@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CurrentUserInfo {
 
-  @Null
-  private Long userId;
+    @Null
+    private Long userId;
 }
