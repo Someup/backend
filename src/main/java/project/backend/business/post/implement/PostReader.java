@@ -42,7 +42,7 @@ public class PostReader {
                 post -> PostListDto.builder()
                         .id(post.getId())
                         .title(post.getTitle())
-                        .createdAt(DateTimeManager.convertToStringPattern1(post.getCreatedAt()))
+                        .createdAt(DateTimeManager.convertToStringPattern(post.getCreatedAt(), "yyyy.MM.dd"))
                         .tagList(postTagMap.get(post.getId()))
                         .build()
         ).toList();
@@ -63,9 +63,9 @@ public class PostReader {
                 .content(postDetail.getContent())
                 .url(postDetail.getUrl())
                 .tagList(tagList)
-                .createdAt(DateTimeManager.convertToStringPattern2(postDetail.getCreatedAt()))
+                .createdAt(DateTimeManager.convertToStringPattern(postDetail.getCreatedAt(), "yyyy년 MM월 dd일"))
                 .memoContent(postDetail.getMemo())
-                .memoCreatedAt(DateTimeManager.convertToStringPattern3(postDetail.getMemoCreatedAt()))
+                .memoCreatedAt(DateTimeManager.convertToStringPattern(postDetail.getMemoCreatedAt(), "yy.MM.dd"))
                 .build();
     }
 }
