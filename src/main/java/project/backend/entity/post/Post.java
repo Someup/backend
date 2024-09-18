@@ -1,12 +1,12 @@
-package project.backend.dao.post.entity;
+package project.backend.entity.post;
 
 import jakarta.persistence.*;
 import lombok.*;
-import project.backend.dao.BaseEntity;
-import project.backend.dao.post.converter.PostStatusConverter;
-import project.backend.dao.post.converter.PostTypeConverter;
-import project.backend.dao.tag.entity.PostTag;
-import project.backend.dao.user.entity.User;
+import project.backend.entity.BaseEntity;
+import project.backend.entity.post.converter.PostStatusConverter;
+import project.backend.entity.post.converter.PostTypeConverter;
+import project.backend.entity.tag.PostTag;
+import project.backend.entity.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

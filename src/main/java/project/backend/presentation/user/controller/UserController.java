@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.user.service.UserService;
 import project.backend.common.auth.aop.AssignCurrentUserInfo;
 import project.backend.common.auth.aop.CurrentUserInfo;
-import project.backend.dao.user.entity.User;
+import project.backend.entity.user.User;
 
 @RestController
 @RequiredArgsConstructor

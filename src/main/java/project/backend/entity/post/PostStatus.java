@@ -1,4 +1,4 @@
-package project.backend.dao.post.entity;
+package project.backend.entity.post;
 
 import lombok.Getter;
 

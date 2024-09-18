@@ -2,8 +2,8 @@ package project.backend.business.tag.implement;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import project.backend.dao.tag.entity.Tag;
-import project.backend.dao.tag.respository.TagRepository;
+import project.backend.entity.tag.Tag;
+import project.backend.repository.tag.TagRepository;
 
 import java.util.List;
 import java.util.Map;

@@ -1,8 +1,8 @@
-package project.backend.dao.post.converter;
+package project.backend.entity.post.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import project.backend.dao.post.entity.PostType;
+import project.backend.entity.post.PostType;
 
 import java.util.Arrays;
 

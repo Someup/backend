@@ -1,12 +1,12 @@
-package project.backend.dao.tag.entity;
+package project.backend.entity.tag;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.backend.dao.BaseEntity;
-import project.backend.dao.post.entity.Post;
+import project.backend.entity.BaseEntity;
+import project.backend.entity.post.Post;
 
 @Entity
 @Getter

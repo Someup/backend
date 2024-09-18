@@ -6,14 +6,12 @@ import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.tag.implement.TagManager;
-import project.backend.dao.post.entity.Post;
-import project.backend.dao.post.entity.PostStatus;
-import project.backend.dao.post.repository.PostRepository;
-import project.backend.dao.user.entity.User;
-import project.backend.presentation.post.dto.request.UpdatePostRequest;
+import project.backend.entity.post.Post;
+import project.backend.entity.post.PostStatus;
+import project.backend.repository.post.PostRepository;
+import project.backend.entity.user.User;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

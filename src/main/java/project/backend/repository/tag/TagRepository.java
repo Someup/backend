@@ -1,10 +1,9 @@
-package project.backend.dao.tag.respository;
+package project.backend.repository.tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import project.backend.dao.tag.entity.Tag;
+import project.backend.entity.tag.Tag;
 
 import java.util.List;
 

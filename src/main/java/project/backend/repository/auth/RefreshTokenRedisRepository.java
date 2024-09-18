@@ -1,4 +1,4 @@
-package project.backend.dao.auth.repository;
+package project.backend.repository.auth;
 
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.repository.CrudRepository;

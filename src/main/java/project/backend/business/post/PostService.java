@@ -10,9 +10,8 @@ import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
 import project.backend.business.user.implement.UserReader;
 import project.backend.business.post.dto.PostListDto;
-import project.backend.dao.post.entity.Post;
-import project.backend.dao.user.entity.User;
-import project.backend.presentation.post.dto.request.CreatePostRequest;
+import project.backend.entity.post.Post;
+import project.backend.entity.user.User;
 
 import java.util.List;
 

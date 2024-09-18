@@ -2,11 +2,11 @@ package project.backend.business.tag.implement;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import project.backend.dao.post.entity.Post;
-import project.backend.dao.tag.entity.PostTag;
-import project.backend.dao.tag.entity.Tag;
-import project.backend.dao.tag.respository.PostTagRepository;
-import project.backend.dao.tag.respository.TagRepository;
+import project.backend.entity.post.Post;
+import project.backend.entity.tag.PostTag;
+import project.backend.entity.tag.Tag;
+import project.backend.repository.tag.PostTagRepository;
+import project.backend.repository.tag.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,10 +9,10 @@ import project.backend.business.post.dto.PostListDto;
 import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
-import project.backend.dao.post.entity.Post;
-import project.backend.dao.post.entity.PostStatus;
-import project.backend.dao.post.repository.PostRepository;
-import project.backend.dao.user.entity.User;
+import project.backend.entity.post.Post;
+import project.backend.entity.post.PostStatus;
+import project.backend.repository.post.PostRepository;
+import project.backend.entity.user.User;
 
 import java.util.List;
 import java.util.Map;

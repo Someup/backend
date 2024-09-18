@@ -1,4 +1,4 @@
-package project.backend.dao.user.entity;
+package project.backend.entity.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.backend.dao.BaseEntity;
+import project.backend.entity.BaseEntity;
 
 @Entity
 @Getter
