@@ -62,7 +62,7 @@ public class PostController {
     public ResponseEntity<CreateUpdatePostResponse> updatePost(CurrentUserInfo userInfo,
                                                                @PathVariable("id") Long postId,
                                                                @RequestBody UpdatePostRequest updatePostRequest) {
-        Long id = postService.updatePostDetail(userInfo.getUserId(), postId, updatePostRequest);
+        Long id = postService.updatePostDetail(userInfo.getUserId(), postId, updatePostRequest.toServiceDto());
         CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(id);
         return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.OK);
     }

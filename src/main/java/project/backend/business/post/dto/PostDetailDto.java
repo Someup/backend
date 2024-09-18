@@ -12,6 +12,7 @@ public class PostDetailDto {
     private String content;
     private String url;
     private List<String> tagList;
+    private int archiveId;
     private String createdAt;
     private String memoContent;
     private String memoCreatedAt;

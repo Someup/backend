@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
+import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.tag.implement.TagManager;
 import project.backend.dao.post.entity.Post;
 import project.backend.dao.post.entity.PostStatus;
@@ -32,17 +33,17 @@ public class PostManager {
     }
 
     @Transactional
-    public void updatePost(Post post, UpdatePostRequest updatePostRequest) {
-        post.setTitle(updatePostRequest.getTitle());
-        post.setContent(updatePostRequest.getContent());
+    public void updatePost(Post post, PostDetailDto postDetailDto) {
+        post.setTitle(postDetailDto.getTitle());
+        post.setContent(postDetailDto.getContent());
         post.setStatus(PostStatus.PUBLISHED);
 
-        if (post.getMemo() == null || !post.getMemo().equals(updatePostRequest.getMemo())) {
-            post.setMemo(updatePostRequest.getMemo());
+        if (post.getMemo() == null || !post.getMemo().equals(postDetailDto.getMemoContent())) {
+            post.setMemo(postDetailDto.getMemoContent());
             post.setMemoCreatedAt(LocalDateTime.now());
         }
 
-        tagManager.updateTag(post, updatePostRequest.getTagList());
+        tagManager.updateTag(post, postDetailDto.getTagList());
         postRepository.save(post);
     }
 
