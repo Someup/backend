@@ -41,7 +41,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<CreateUpdatePostResponse> createNewPost(CurrentUserInfo userInfo,
                                                                   @RequestBody CreatePostRequest createPostRequest) {
-        Long postId = postService.createNewPostDetail(userInfo.getUserId(), createPostRequest);
+        Long postId = postService.createNewPostDetail(userInfo.getUserId(), createPostRequest.getUrl());
         CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(postId);
         return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
     }

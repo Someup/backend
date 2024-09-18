@@ -15,7 +15,6 @@ import project.backend.dao.user.entity.User;
 import project.backend.presentation.post.dto.request.CreatePostRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,11 +36,10 @@ public class PostService {
         return postReader.readPostDetailWithTags(user, postId);
     }
 
-    public Long createNewPostDetail(Long userId, CreatePostRequest createPostRequest) {
-        String url = createPostRequest.getUrl();
-        String summary = openAIManager.getSummary(url);
+    public Long createNewPostDetail(Long userId, String requestUrl) {
+        String summary = openAIManager.getSummary(requestUrl);
         User user = userReader.findUserById(userId);
-        return postManager.createTempPost(user, url, summary);
+        return postManager.createTempPost(user, requestUrl, summary);
     }
 
     public Long updatePostDetail(Long userId, Long postId, PostDetailDto postDetailDto) {
