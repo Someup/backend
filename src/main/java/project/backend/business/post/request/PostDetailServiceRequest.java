@@ -1,4 +1,4 @@
-package project.backend.business.post.dto;
+package project.backend.business.post.request;
 
 import java.util.List;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PostDetailDto {
+public class PostDetailServiceRequest {
 
   private final String title;
   private final String content;

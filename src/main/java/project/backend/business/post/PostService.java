@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.backend.business.post.dto.PostDetailDto;
+import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.implement.OpenAIManager;
 import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
 import project.backend.business.user.implement.UserReader;
-import project.backend.business.post.dto.PostListDto;
+import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.entity.post.Post;
 import project.backend.entity.user.User;
 import project.backend.common.error.CustomException;
@@ -27,14 +27,14 @@ public class PostService {
   private final OpenAIManager openAIManager;
 
   @Transactional(readOnly = true)
-  public List<PostListDto> getPostList(Long userId) {
+  public List<PostListServiceRequest> getPostList(Long userId) {
     User user = userReader.findUserById(userId)
                           .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     return postReader.readPostsWithTags(user);
   }
 
   @Transactional(readOnly = true)
-  public PostDetailDto getPostDetail(Long userId, Long postId) {
+  public PostDetailServiceRequest getPostDetail(Long userId, Long postId) {
     User user = userReader.findUserById(userId)
                           .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     return postReader.readPostDetailWithTags(user, postId);
@@ -49,9 +49,9 @@ public class PostService {
   }
 
   @Transactional
-  public Long updatePostDetail(Long userId, Long postId, PostDetailDto postDetailDto) {
+  public Long updatePostDetail(Long userId, Long postId, PostDetailServiceRequest postDetailServiceRequest) {
     Post post = postReader.read(userId, postId);
-    postManager.updatePost(post, postDetailDto);
+    postManager.updatePost(post, postDetailServiceRequest);
     return post.getId();
   }
 }

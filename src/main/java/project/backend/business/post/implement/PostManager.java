@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
-import project.backend.business.post.dto.PostDetailDto;
+import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.tag.implement.TagManager;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;
@@ -28,17 +28,17 @@ public class PostManager {
     return postRepository.save(newTmpPost).getId();
   }
 
-  public void updatePost(Post post, PostDetailDto postDetailDto) {
-    post.setTitle(postDetailDto.getTitle());
-    post.setContent(postDetailDto.getContent());
+  public void updatePost(Post post, PostDetailServiceRequest postDetailServiceRequest) {
+    post.setTitle(postDetailServiceRequest.getTitle());
+    post.setContent(postDetailServiceRequest.getContent());
     post.setStatus(PostStatus.PUBLISHED);
 
-    if (post.getMemo().isEmpty() || !post.getMemo().equals(postDetailDto.getMemoContent())) {
-      post.setMemo(postDetailDto.getMemoContent());
+    if (post.getMemo().isEmpty() || !post.getMemo().equals(postDetailServiceRequest.getMemoContent())) {
+      post.setMemo(postDetailServiceRequest.getMemoContent());
       post.setMemoCreatedAt(LocalDateTime.now());
     }
 
-    tagManager.updateTag(post, postDetailDto.getTagList());
+    tagManager.updateTag(post, postDetailServiceRequest.getTagList());
     postRepository.save(post);
   }
 }

@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
-import project.backend.business.post.dto.PostDetailDto;
-import project.backend.business.post.dto.PostListDto;
+import project.backend.business.post.request.PostDetailServiceRequest;
+import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
@@ -29,23 +29,23 @@ public class PostReader {
                          .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
 
-  public List<PostListDto> readPostsWithTags(User user) {
+  public List<PostListServiceRequest> readPostsWithTags(User user) {
     List<Post> postList = postRepository.findAllByUserIdAndStatus(user.getId(), PostStatus.PUBLISHED);
     List<Long> postIdList = postList.stream().map(Post::getId).toList();
 
     Map<Long, List<String>> postTagMap = tagReader.getPostTagMap(postIdList);
 
     return postList.stream()
-                   .map(post -> PostListDto.builder()
-                                           .id(post.getId())
-                                           .title(post.getTitle())
-                                           .createdAt(DateTimeManager.convertToStringPattern(post.getCreatedAt(), "yyyy.MM.dd"))
-                                           .tagList(postTagMap.get(post.getId()))
-                                           .build())
+                   .map(post -> PostListServiceRequest.builder()
+                                                      .id(post.getId())
+                                                      .title(post.getTitle())
+                                                      .createdAt(DateTimeManager.convertToStringPattern(post.getCreatedAt(), "yyyy.MM.dd"))
+                                                      .tagList(postTagMap.get(post.getId()))
+                                                      .build())
                    .toList();
   }
 
-  public PostDetailDto readPostDetailWithTags(User user, Long postId) {
+  public PostDetailServiceRequest readPostDetailWithTags(User user, Long postId) {
     Post postDetail = postRepository.findPostByIdAndUserAndStatus(postId, user, PostStatus.PUBLISHED)
                                     .orElseThrow(() -> {
                                       log.info("[ERROR] readPostDetailWithTags userId: {}, postId: {}", user.getId(), postId);
@@ -54,14 +54,14 @@ public class PostReader {
 
     List<String> tagList = tagReader.readTagNamesByPostId(postId);
 
-    return PostDetailDto.builder()
-                        .title(postDetail.getTitle())
-                        .content(postDetail.getContent())
-                        .url(postDetail.getUrl())
-                        .tagList(tagList)
-                        .createdAt(DateTimeManager.convertToStringPattern(postDetail.getCreatedAt(), "yyyy년 MM월 dd일"))
-                        .memoContent(postDetail.getMemo())
-                        .memoCreatedAt(DateTimeManager.convertToStringPattern(postDetail.getMemoCreatedAt(), "yy.MM.dd"))
-                        .build();
+    return PostDetailServiceRequest.builder()
+                                   .title(postDetail.getTitle())
+                                   .content(postDetail.getContent())
+                                   .url(postDetail.getUrl())
+                                   .tagList(tagList)
+                                   .createdAt(DateTimeManager.convertToStringPattern(postDetail.getCreatedAt(), "yyyy년 MM월 dd일"))
+                                   .memoContent(postDetail.getMemo())
+                                   .memoCreatedAt(DateTimeManager.convertToStringPattern(postDetail.getMemoCreatedAt(), "yy.MM.dd"))
+                                   .build();
   }
 }
