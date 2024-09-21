@@ -3,7 +3,6 @@ package project.backend.business.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import project.backend.business.post.dto.CreatePostDto;
 import project.backend.business.post.dto.PostDetailDto;

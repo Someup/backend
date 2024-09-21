@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-  Boolean existsPostByIdAndUserId(Long postId, Long userId);
   Post findPostAndUserById(Long postId);
 
   Post findByIdAndUserId(Long postId, Long userId);
