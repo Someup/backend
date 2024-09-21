@@ -88,8 +88,10 @@ public class TokenProvider {
                                                    .split(","));
 
     List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream()
-                                                                           .map(SimpleGrantedAuthority::new)
-                                                                           .collect(Collectors.toList());
+                                                                           .map(
+                                                                               SimpleGrantedAuthority::new)
+                                                                           .collect(
+                                                                               Collectors.toList());
 
     KakaoUserDetails principal = new KakaoUserDetails(Long.parseLong((String) claims.get(AUTH_ID)),
         (String) claims.get(AUTH_EMAIL),

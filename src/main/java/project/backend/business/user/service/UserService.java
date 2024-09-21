@@ -3,6 +3,8 @@ package project.backend.business.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.backend.common.error.CustomException;
+import project.backend.common.error.ErrorCode;
 import project.backend.entity.user.User;
 import project.backend.repository.user.UserRepository;
 
@@ -15,6 +17,6 @@ public class UserService {
 
   public User findUserById(Long id) {
     return userRepository.findById(id)
-                         .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다. id: " + id));
+                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
   }
 }

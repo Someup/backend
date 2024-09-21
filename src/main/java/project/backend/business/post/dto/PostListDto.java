@@ -1,15 +1,16 @@
 package project.backend.business.post.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 @Builder
 public class PostListDto {
-    private Long id;
-    private String title;
-    private String createdAt;
-    private List<String> tagList;
+
+  private final Long id;
+  private final String title;
+  private final String createdAt;
+  private final List<String> tagList;
 }

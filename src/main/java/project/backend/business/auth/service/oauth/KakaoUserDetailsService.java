@@ -29,15 +29,12 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
     String name = kakaoUserInfo.getName();
     String profileImageUrl = kakaoUserInfo.getProfileImageUrl();
 
-    User user = userRepository.findByEmail(email)
-                              .orElseGet(
-                                  () -> userRepository.save(
-                                  User.createUser(email, name, profileImageUrl)
-                                  )
-                              );
+    User user = userRepository.findByEmail(email).orElseGet(
+        () -> userRepository.save(User.createUser(email, name, profileImageUrl)));
 
     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(DEFAULT_ROLE);
 
-    return new KakaoUserDetails(user.getId(), email, List.of(authority), oAuth2User.getAttributes());
+    return new KakaoUserDetails(user.getId(), email, List.of(authority),
+        oAuth2User.getAttributes());
   }
 }

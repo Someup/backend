@@ -16,11 +16,10 @@ public class JwtAuthenticationFailEntryPoint implements AuthenticationEntryPoint
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException {
     if (!request.isSecure()) {
-      String redirectUrl =
-          "https://" + request.getServerName() + EXCEPTION_ENTRY_POINT;
+      String redirectUrl = "https://" + request.getServerName() + EXCEPTION_ENTRY_POINT;
       response.sendRedirect(redirectUrl);
-    } else {
-      response.sendRedirect(EXCEPTION_ENTRY_POINT);
+      return;
     }
+    response.sendRedirect(EXCEPTION_ENTRY_POINT);
   }
 }

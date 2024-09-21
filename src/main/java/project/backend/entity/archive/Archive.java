@@ -14,34 +14,35 @@ import project.backend.entity.user.User;
 @Table(name = "archive")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Archive extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private User user;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Post post;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(nullable = false)
+  private User user;
 
-    @Column(nullable = false)
-    private String name;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(nullable = false)
+  private Post post;
 
-    @Builder
-    private Archive(User user, Post post, String name) {
-        this.user = user;
-        this.post = post;
-        this.name = name;
-    }
+  @Column(nullable = false)
+  private String name;
 
-    public static Archive createArchive(User user, Post post, String name) {
-        return Archive.builder()
-                .user(user)
-                .post(post)
-                .name(name)
-                .build();
-    }
+  @Builder
+  private Archive(User user, Post post, String name) {
+    this.user = user;
+    this.post = post;
+    this.name = name;
+  }
+
+  public static Archive createArchive(User user, Post post, String name) {
+    return Archive.builder()
+                  .user(user)
+                  .post(post)
+                  .name(name)
+                  .build();
+  }
 }

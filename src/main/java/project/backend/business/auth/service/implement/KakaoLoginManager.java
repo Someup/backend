@@ -13,13 +13,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import project.backend.common.auth.oauth.KakaoUserInfo;
-import project.backend.common.error.exception.UserNotAuthenticatedException;
+import project.backend.common.error.CustomException;
+import project.backend.common.error.ErrorCode;
 import project.backend.entity.user.User;
 import project.backend.repository.user.UserRepository;
 
@@ -66,7 +66,6 @@ public class KakaoLoginManager {
     return jsonNode.get("access_token").asText();
   }
 
-  @Transactional
   public User getKakaoUser(String token) throws JsonProcessingException {
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", BEARER + token);
@@ -83,7 +82,8 @@ public class KakaoLoginManager {
       );
 
       String responseBody = response.getBody();
-      Map<String, Object> attributes = objectMapper.readValue(responseBody, new TypeReference<>() {});
+      Map<String, Object> attributes = objectMapper.readValue(responseBody, new TypeReference<>() {
+      });
 
       KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(attributes);
 
@@ -96,7 +96,7 @@ public class KakaoLoginManager {
                                User.createUser(email, name, profileImageUrl)
                            ));
     } catch (HttpClientErrorException e) {
-      throw new UserNotAuthenticatedException("카카오 사용자 정보를 가져오는데 실패했습니다.", e);
+      throw new CustomException(ErrorCode.USER_NOT_FOUND);
     }
   }
 }

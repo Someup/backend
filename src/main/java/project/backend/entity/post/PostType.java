@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum PostType {
-    PUBLIC("public"),
-    PRIVATE("private");
+  PUBLIC("public"),
+  PRIVATE("private");
 
-    private String value;
+  private String value;
 
-    PostType(String value) {
-        this.value = value;
-    }
+  PostType(String value) {
+    this.value = value;
+  }
 }
 
