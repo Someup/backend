@@ -69,7 +69,8 @@ public class AuthService {
                                                  .build());
 
     SecurityContextHolder.getContext()
-                         .setAuthentication(tokenProvider.getAuthentication(tokenResponse.getAccessToken()));
+                         .setAuthentication(
+                             tokenProvider.getAuthentication(tokenResponse.getAccessToken()));
 
     return tokenResponse;
   }
@@ -78,7 +79,8 @@ public class AuthService {
     refreshTokenRedisRepository.save(RefreshToken.builder()
                                                  .id(user.getId())
                                                  .email(user.getEmail())
-                                                 .authorities(Collections.singleton(new SimpleGrantedAuthority("USER")))
+                                                 .authorities(Collections.singleton(
+                                                     new SimpleGrantedAuthority("USER")))
                                                  .refreshToken(response.getRefreshToken())
                                                  .build());
   }

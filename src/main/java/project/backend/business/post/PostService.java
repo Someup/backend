@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.backend.business.post.dto.PostDetailDto;
-import project.backend.business.post.implement.OpenAIManager;
+import project.backend.business.post.implement.SummaryAIManager;
 import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
 import project.backend.business.user.implement.UserReader;
@@ -23,7 +23,7 @@ public class PostService {
     private final UserReader userReader;
     private final PostReader postReader;
     private final PostManager postManager;
-    private final OpenAIManager openAIManager;
+    private final SummaryAIManager summaryAIManager;
 
     public List<PostListDto> getPostList(Long userId) {
         User user = userReader.readUserById(userId);
@@ -36,7 +36,7 @@ public class PostService {
     }
 
     public Long createNewPostDetail(Long userId, String requestUrl) {
-        String summary = openAIManager.getSummary(requestUrl);
+        String summary = summaryAIManager.getSummary(requestUrl);
         User user = userReader.findUserById(userId);
         return postManager.createTempPost(user, requestUrl, summary);
     }
