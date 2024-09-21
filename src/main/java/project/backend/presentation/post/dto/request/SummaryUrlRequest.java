@@ -5,7 +5,7 @@ import project.backend.business.post.dto.CreatePostDto;
 import project.backend.business.post.dto.summary.SummaryOption;
 
 @Getter
-public class CreatePostRequest {
+public class SummaryUrlRequest {
 
   String url;
   SummaryOptionRequest options;

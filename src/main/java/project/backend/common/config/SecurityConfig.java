@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/v1/auth/**").permitAll()
                         .requestMatchers("/v1/exception/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/post").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/post/*/summary").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

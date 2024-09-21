@@ -45,4 +45,10 @@ public class PostManager {
         postRepository.save(post);
     }
 
+    @Transactional
+  public void updateSummary(Post post, String url, String summary) {
+      post.setContent(summary);
+      post.setUrl(url);
+      postRepository.save(post);
+    }
 }

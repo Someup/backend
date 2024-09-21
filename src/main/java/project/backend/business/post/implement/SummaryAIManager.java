@@ -8,7 +8,6 @@ import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatOptions;
 import org.springframework.stereotype.Component;
 import project.backend.business.post.dto.CreatePostDto;
-import project.backend.business.post.dto.summary.SummaryLanguage;
 
 @Slf4j
 @Component
