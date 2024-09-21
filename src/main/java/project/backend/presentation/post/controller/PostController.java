@@ -37,14 +37,14 @@ public class PostController {
     }
 
 
-    @AssignOrNullCurrentUserInfo
-    @PostMapping
-    public ResponseEntity<CreateUpdatePostResponse> createNewPost(CurrentUserInfo userInfo,
-                                                                  @RequestBody CreatePostRequest createPostRequest) {
-        Long postId = postService.createNewPostDetail(userInfo.getUserId(), createPostRequest.getUrl());
-        CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(postId);
-        return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
-    }
+  @AssignOrNullCurrentUserInfo
+  @PostMapping
+  public ResponseEntity<CreateUpdatePostResponse> createNewPost(CurrentUserInfo userInfo,
+      @RequestBody CreatePostRequest createPostRequest) {
+    Long postId = postService.createNewPostDetail(userInfo.getUserId(), createPostRequest.toServiceDto());
+    CreateUpdatePostResponse createUpdatePostResponse = new CreateUpdatePostResponse(postId);
+    return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
+  }
 
     @AssignCurrentUserInfo
     @GetMapping("/{id}")

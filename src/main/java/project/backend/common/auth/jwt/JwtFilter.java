@@ -59,7 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private static boolean isRequestSummaryURI(HttpServletRequest request) {
-        return request.getRequestURI().equals("/api/post") && request.getMethod().equals(HttpMethod.POST.name());
+        return request.getRequestURI().equals("/post") && request.getMethod().equals(HttpMethod.POST.name());
     }
 
     private static boolean isRequestPassURI(HttpServletRequest request) {
