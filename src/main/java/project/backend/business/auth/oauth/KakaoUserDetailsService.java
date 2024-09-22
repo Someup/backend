@@ -1,4 +1,4 @@
-package project.backend.business.auth.service.oauth;
+package project.backend.business.auth.oauth;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import project.backend.business.auth.service.oauth.KakaoUserDetailsService;
+import project.backend.business.auth.oauth.KakaoUserDetailsService;
 import project.backend.common.auth.jwt.JwtAccessDeniedHandler;
 import project.backend.common.auth.jwt.JwtAuthenticationFailEntryPoint;
 import project.backend.common.auth.jwt.JwtFilter;

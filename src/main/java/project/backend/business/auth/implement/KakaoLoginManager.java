@@ -1,4 +1,4 @@
-package project.backend.business.auth.service.implement;
+package project.backend.business.auth.implement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
