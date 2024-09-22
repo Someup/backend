@@ -1,7 +1,7 @@
 spring:
   profiles:
     active:
-      dev
+      local
     group:
       local-env:
         - local
@@ -12,3 +12,4 @@ spring:
     include:
       - jwt
       - oauth
+      - ai
