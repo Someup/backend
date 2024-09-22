@@ -55,6 +55,14 @@ jobs:
           DEV_SECRET_DIR_FILE_NAME: application-jwt.yml
         run: echo $DEV_SECRET | base64 --decode >> $DEV_SECRET_DIR/$DEV_SECRET_DIR_FILE_NAME
 
+      # application-ai.yml (새로운 파일 추가)
+      - name: Copy ai Secret
+        env:
+          DEV_SECRET: ${{ secrets.APPLICATION_AI_YML }}
+          DEV_SECRET_DIR: src/main/resources
+          DEV_SECRET_DIR_FILE_NAME: application-ai.yml
+        run: echo $DEV_SECRET | base64 --decode >> $DEV_SECRET_DIR/$DEV_SECRET_DIR_FILE_NAME
+
       # ./gradlew 권한 설정
       - name: ./gradlew 권한 설정
         run: chmod +x ./gradlew
