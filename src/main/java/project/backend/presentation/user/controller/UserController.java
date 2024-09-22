@@ -12,7 +12,7 @@ import project.backend.entity.user.User;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
   private final UserService userService;
