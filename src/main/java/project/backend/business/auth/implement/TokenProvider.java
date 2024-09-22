@@ -1,4 +1,4 @@
-package project.backend.common.auth.token;
+package project.backend.business.auth.implement;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import project.backend.business.auth.response.TokenServiceResponse;
 import project.backend.common.auth.oauth.KakaoUserDetails;
 import project.backend.repository.auth.BlacklistTokenRedisRepository;
 
@@ -56,7 +56,7 @@ public class TokenProvider {
     this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
   }
 
-  public TokenResponse createToken(String userId, String email, String role) {
+  public TokenServiceResponse createToken(String userId, String email, String role) {
     long now = (new Date()).getTime();
 
     Date accessValidity = new Date(now + this.accessExpirations);
@@ -78,7 +78,7 @@ public class TokenProvider {
                               .setExpiration(refreshValidity)
                               .compact();
 
-    return TokenResponse.of(accessToken, refreshToken);
+    return TokenServiceResponse.of(accessToken, refreshToken);
   }
 
   public Authentication getAuthentication(String token) {
@@ -94,7 +94,7 @@ public class TokenProvider {
 
     List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream()
                                                                            .map(SimpleGrantedAuthority::new)
-                                                                           .collect(Collectors.toList());
+                                                                           .toList();
 
     KakaoUserDetails principal = new KakaoUserDetails(Long.parseLong((String) claims.get(AUTH_ID)),
         (String) claims.get(AUTH_EMAIL),

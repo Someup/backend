@@ -15,7 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import project.backend.common.auth.token.TokenProvider;
+import project.backend.business.auth.implement.TokenProvider;
 
 @Slf4j
 @Component
