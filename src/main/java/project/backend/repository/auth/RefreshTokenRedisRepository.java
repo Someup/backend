@@ -8,4 +8,6 @@ import project.backend.common.auth.token.RefreshToken;
 public interface RefreshTokenRedisRepository extends CrudRepository<RefreshToken, Long> {
 
   RefreshToken findByRefreshToken(String refreshToken);
+
+  void deleteById(String userId);
 }
