@@ -2,6 +2,7 @@ package project.backend.business.post.implement;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
 import project.backend.business.post.dto.PostDetailDto;
@@ -45,9 +46,9 @@ public class PostReader {
     return post;
   }
 
-  public List<PostListDto> readPostsWithTags(User user) {
-    List<Post> postList = postRepository.findAllByUserIdAndStatus(user.getId(),
-        PostStatus.PUBLISHED);
+  public List<PostListDto> readPostsWithTags(User user, Specification<Post> spec) {
+    List<Post> postList = postRepository.findAll(spec);
+
     List<Long> postIdList = postList.stream().map(Post::getId).toList();
 
     Map<Long, List<String>> postTagMap = tagReader.getPostTagMap(postIdList);

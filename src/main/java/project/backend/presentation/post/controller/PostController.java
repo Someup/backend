@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import project.backend.business.post.PostService;
 import project.backend.business.post.dto.PostDetailDto;
 import project.backend.business.post.dto.PostListDto;
+import project.backend.business.post.dto.request.PostListServiceRequest;
 import project.backend.common.auth.aop.AssignCurrentUserInfo;
 import project.backend.common.auth.aop.AssignOrNullCurrentUserInfo;
 import project.backend.common.auth.aop.CurrentUserInfo;
@@ -29,8 +30,14 @@ public class PostController {
 
   @AssignCurrentUserInfo
   @GetMapping
-  public ResponseEntity<PostListResponse> getPosts(CurrentUserInfo userInfo) {
-    List<PostListDto> posts = postService.getPostList(userInfo.getUserId());
+  public ResponseEntity<PostListResponse> getPosts(CurrentUserInfo userInfo,
+      @RequestParam(required = false) Integer cursor,
+      @RequestParam(required = false) Integer archiveId,
+      @RequestParam(required = false) String search) {
+    PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(cursor, archiveId,
+        search);
+
+    List<PostListDto> posts = postService.getPostList(userInfo.getUserId(), postListServiceRequest);
     PostListResponse response = new PostListResponse(posts);
 
     return new ResponseEntity<>(response, HttpStatus.OK);

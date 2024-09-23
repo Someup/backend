@@ -3,9 +3,11 @@ package project.backend.business.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import project.backend.business.post.dto.CreatePostDto;
 import project.backend.business.post.dto.PostDetailDto;
+import project.backend.business.post.dto.request.PostListServiceRequest;
 import project.backend.business.post.implement.SummaryAIManager;
 import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
@@ -17,6 +19,7 @@ import project.backend.entity.post.Post;
 import project.backend.entity.user.User;
 
 import java.util.List;
+import project.backend.repository.post.PostSpecification;
 
 @Slf4j
 @Service
@@ -29,9 +32,15 @@ public class PostService {
   private final SummaryAIManager summaryAIManager;
 
 
-  public List<PostListDto> getPostList(Long userId) {
+  public List<PostListDto> getPostList(Long userId, PostListServiceRequest postListServiceRequest) {
     User user = userReader.readUserById(userId);
-    return postReader.readPostsWithTags(user);
+
+    Specification<Post> spec =
+        Specification.where(PostSpecification.getUser(userId))
+                     .and(PostSpecification.getNextCursor(postListServiceRequest.getCursor()))
+                     .and(PostSpecification.getPublished());
+
+    return postReader.readPostsWithTags(user, spec);
   }
 
   public PostDetailDto getPostDetail(Long userId, Long postId) {

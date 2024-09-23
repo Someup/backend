@@ -13,19 +13,21 @@ import java.util.Optional;
 @Component
 @AllArgsConstructor
 public class UserReader {
-    private final UserRepository userRepository;
 
-    public User readUserById(Long userId) {
+  private final UserRepository userRepository;
 
-        return userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+  public User readUserById(Long userId) {
+
+    return userRepository.findById(userId)
+                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+  }
+
+  public User findUserById(Long userId) {
+    if (userId == null) {
+      return null;
     }
-
-    public User findUserById(Long userId) {
-        if (userId == null) {
-            return null;
-        }
-        Optional<User> user = userRepository.findById(userId);
-        return user.orElse(null);
-    }
+    Optional<User> user = userRepository.findById(userId);
+    return user.orElse(null);
+  }
 
 }
