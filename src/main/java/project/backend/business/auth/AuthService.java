@@ -49,31 +49,23 @@ public class AuthService {
   public void logout(TokenServiceRequest tokenServiceRequest) {
     String accessToken = tokenServiceRequest.getAccessToken();
 
-    log.info("로그아웃 요청 수신. Access Token: {}", accessToken);
-
-    if (accessToken != null && tokenProvider.validate(accessToken)) {
-      long expiration = tokenProvider.getExpiration(accessToken);
-      log.info("Access Token 유효함. 블랙리스트에 추가. 만료까지 남은 시간: {}초", expiration / 1000);
-
-      // 엑세스 토큰을 블랙리스트에 추가
-      blacklistTokenRedisRepository.save(BlacklistToken.builder()
-                                                       .token(accessToken)
-                                                       .expiration(expiration / 1000)
-                                                       .build());
-
-      // Access Token에서 사용자 정보 추출
-      Authentication authentication = tokenProvider.getAuthentication(accessToken);
-      String userId = authentication.getName(); // 사용자 ID
-
-      // Redis에서 리프레시 토큰 삭제
-      refreshTokenRedisRepository.deleteById(userId);
-      log.info("사용자 ID {}에 대한 Refresh Token 이 삭제되었습니다.", userId);
-    } else {
-      log.warn("Access Token 이 유효하지 않거나 null 입니다.");
+    if (accessToken == null || !tokenProvider.validate(accessToken)) {
+      throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
     }
 
+    long expiration = tokenProvider.getExpiration(accessToken);
+
+    blacklistTokenRedisRepository.save(BlacklistToken.builder()
+                                                     .token(accessToken)
+                                                     .expiration(expiration / 1000)
+                                                     .build());
+
+    Authentication authentication = tokenProvider.getAuthentication(accessToken);
+    String userId = authentication.getName();
+
+    refreshTokenRedisRepository.deleteById(userId);
+
     SecurityContextHolder.clearContext();
-    log.info("SecurityContextHolder 가 초기화되었습니다.");
   }
 
   public TokenServiceResponse reissueAccessToken(TokenServiceRequest tokenServiceRequest) {
