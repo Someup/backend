@@ -1,4 +1,4 @@
-package project.backend.common.auth.aop;
+package project.backend.security.aop;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -12,14 +12,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
-import project.backend.common.auth.oauth.KakaoUserDetails;
+import project.backend.security.oauth.KakaoUserDetails;
 
 @Aspect
 @Component
 public class AssignCurrentUserInfoAspect {
 
     // @AssignCurrentUserInfo 가 있는 메서드 실행 전에 현재 유저의 ID를 CurrentUserInfo 객체에 할당
-    @Before("@annotation(project.backend.common.auth.aop.AssignCurrentUserInfo)")
+    @Before("@annotation(project.backend.security.aop.AssignCurrentUserInfo)")
     public void assignUserId(JoinPoint joinPoint) {
         Arrays.stream(joinPoint.getArgs())
                 .forEach(arg -> getMethod(arg.getClass())
@@ -31,7 +31,7 @@ public class AssignCurrentUserInfoAspect {
 
     // Login 했을 경우 현재 유저의 ID를 CurrentUserInfo 객체에 할당
     // Login 하지 않았을 경우 CurrentUserInfo 객체에 null 할당
-    @Before("@annotation(project.backend.common.auth.aop.AssignOrNullCurrentUserInfo)")
+    @Before("@annotation(project.backend.security.aop.AssignOrNullCurrentUserInfo)")
     public void assignUserIdOrNull(JoinPoint joinPoint) {
         Arrays.stream(joinPoint.getArgs())
                 .forEach(arg -> getMethod(arg.getClass())

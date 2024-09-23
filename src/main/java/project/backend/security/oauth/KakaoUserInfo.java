@@ -1,4 +1,4 @@
-package project.backend.common.auth.oauth;
+package project.backend.security.oauth;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package project.backend.common.auth.oauth;
+package project.backend.security.oauth;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,4 +1,4 @@
-package project.backend.common.auth.aop;
+package project.backend.security.aop;
 
 import jakarta.validation.constraints.Null;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package project.backend.common.auth.jwt;
+package project.backend.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
