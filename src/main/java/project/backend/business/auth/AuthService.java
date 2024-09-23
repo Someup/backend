@@ -1,24 +1,25 @@
-package project.backend.business.auth.service;
-
-import static project.backend.business.auth.service.implement.KakaoLoginManager.BEARER;
+package project.backend.business.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.backend.business.auth.service.implement.KakaoLoginManager;
+import project.backend.business.auth.implement.KakaoLoginManager;
+import project.backend.common.auth.token.BlacklistToken;
+import project.backend.business.auth.request.TokenServiceRequest;
+import project.backend.common.error.CustomException;
+import project.backend.common.error.ErrorCode;
+import project.backend.repository.auth.BlacklistTokenRedisRepository;
 import project.backend.repository.auth.RefreshTokenRedisRepository;
 import project.backend.entity.user.User;
 import project.backend.common.auth.token.RefreshToken;
-import project.backend.common.auth.token.TokenProvider;
-import project.backend.common.auth.token.TokenResponse;
+import project.backend.business.auth.implement.TokenProvider;
+import project.backend.business.auth.response.TokenServiceResponse;
 
 @Slf4j
 @Service
@@ -29,34 +30,55 @@ public class AuthService {
   private final TokenProvider tokenProvider;
   private final KakaoLoginManager kakaoLoginManager;
   private final RefreshTokenRedisRepository refreshTokenRedisRepository;
-
-  @Value("${jwt.refresh_header}")
-  private String refreshTokenHeader;
+  private final BlacklistTokenRedisRepository blacklistTokenRedisRepository;
 
   @Transactional
-  public TokenResponse kakaoLogin(String code) throws JsonProcessingException {
+  public TokenServiceResponse kakaoLogin(String code) throws JsonProcessingException {
     String token = kakaoLoginManager.getKakaoToken(code);
     User user = kakaoLoginManager.getKakaoUser(token);
 
-    TokenResponse tokenResponse = tokenProvider.createToken(
+    TokenServiceResponse tokenServiceResponse = tokenProvider.createToken(
         String.valueOf(user.getId()), user.getEmail(), "USER");
 
-    saveRefreshTokenOnRedis(user, tokenResponse);
+    saveRefreshTokenOnRedis(user, tokenServiceResponse);
 
-    return tokenResponse;
+    return tokenServiceResponse;
   }
 
-  public TokenResponse reissueAccessToken(HttpServletRequest request) {
-    String refreshToken = extractRefreshToken(request).orElse(null);
+  @Transactional
+  public void logout(TokenServiceRequest tokenServiceRequest) {
+    String accessToken = tokenServiceRequest.getAccessToken();
+
+    if (accessToken == null || !tokenProvider.validate(accessToken)) {
+      throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
+    }
+
+    long expiration = tokenProvider.getExpiration(accessToken);
+
+    blacklistTokenRedisRepository.save(BlacklistToken.builder()
+                                                     .token(accessToken)
+                                                     .expiration(expiration / 1000)
+                                                     .build());
+
+    Authentication authentication = tokenProvider.getAuthentication(accessToken);
+    String userId = authentication.getName();
+
+    refreshTokenRedisRepository.deleteById(userId);
+
+    SecurityContextHolder.clearContext();
+  }
+
+  public TokenServiceResponse reissueAccessToken(TokenServiceRequest tokenServiceRequest) {
+    String refreshToken = tokenServiceRequest.getRefreshToken();
 
     // RefreshToken 이 유효하지 않을 경우
     if (!tokenProvider.validate(refreshToken) || !tokenProvider.validateExpired(refreshToken)) {
-      throw new RuntimeException();
+      throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
     }
 
     RefreshToken findToken = refreshTokenRedisRepository.findByRefreshToken(refreshToken);
 
-    TokenResponse tokenResponse = tokenProvider.createToken(
+    TokenServiceResponse tokenServiceResponse = tokenProvider.createToken(
         String.valueOf(findToken.getId()),
         findToken.getEmail(),
         findToken.getAuthority());
@@ -65,17 +87,17 @@ public class AuthService {
                                                  .id(findToken.getId())
                                                  .email(findToken.getEmail())
                                                  .authorities(findToken.getAuthorities())
-                                                 .refreshToken(tokenResponse.getRefreshToken())
+                                                 .refreshToken(tokenServiceResponse.getRefreshToken())
                                                  .build());
 
     SecurityContextHolder.getContext()
                          .setAuthentication(
-                             tokenProvider.getAuthentication(tokenResponse.getAccessToken()));
+                             tokenProvider.getAuthentication(tokenServiceResponse.getAccessToken()));
 
-    return tokenResponse;
+    return tokenServiceResponse;
   }
 
-  private void saveRefreshTokenOnRedis(User user, TokenResponse response) {
+  private void saveRefreshTokenOnRedis(User user, TokenServiceResponse response) {
     refreshTokenRedisRepository.save(RefreshToken.builder()
                                                  .id(user.getId())
                                                  .email(user.getEmail())
@@ -83,12 +105,5 @@ public class AuthService {
                                                      new SimpleGrantedAuthority("USER")))
                                                  .refreshToken(response.getRefreshToken())
                                                  .build());
-  }
-
-  // RefreshToken 추출
-  private Optional<String> extractRefreshToken(HttpServletRequest request) {
-    return Optional.ofNullable(request.getHeader(refreshTokenHeader))
-                   .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                   .map(refreshToken -> refreshToken.replace(BEARER, ""));
   }
 }
