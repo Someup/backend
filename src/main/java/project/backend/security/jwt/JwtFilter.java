@@ -46,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     if (!tokenProvider.validateExpired(accessToken) && tokenProvider.validate(accessToken)) {
       String redirectUrl =
-          "https://" + request.getServerName() + "/api/exception/access-token-expired";
+          "https://" + request.getServerName() + "/exception/access-token-expired";
       response.sendRedirect(redirectUrl);
       return;
     }
@@ -78,11 +78,11 @@ public class JwtFilter extends OncePerRequestFilter {
       return true;
     }
 
-    if (request.getRequestURI().startsWith("/v1/auth")) {
+    if (request.getRequestURI().startsWith("/auth")) {
       return true;
     }
 
-    if (request.getRequestURI().startsWith("/v1/exception")) {
+    if (request.getRequestURI().startsWith("/exception")) {
       return true;
     }
 

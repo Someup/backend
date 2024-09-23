@@ -43,8 +43,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(oauth -> oauth.userInfoEndpoint(config -> config.userService(kakaoUserDetailsService)))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/v1/auth/**").permitAll()
-                        .requestMatchers("/v1/exception/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/exception/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/post").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/post/*/summary").permitAll()
                         .anyRequest().authenticated()
