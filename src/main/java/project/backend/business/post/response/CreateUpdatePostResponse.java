@@ -1,5 +1,4 @@
-package project.backend.presentation.post.dto.response;
-
+package project.backend.business.post.response;
 
 import lombok.Builder;
 import lombok.Getter;

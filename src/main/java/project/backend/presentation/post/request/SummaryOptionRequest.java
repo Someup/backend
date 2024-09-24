@@ -1,4 +1,4 @@
-package project.backend.presentation.post.dto.request;
+package project.backend.presentation.post.request;
 
 import lombok.Getter;
 

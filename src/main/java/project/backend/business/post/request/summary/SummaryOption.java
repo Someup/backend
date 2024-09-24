@@ -1,4 +1,4 @@
-package project.backend.business.post.dto.summary;
+package project.backend.business.post.request.summary;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

@@ -1,13 +1,12 @@
-package project.backend.business.post.dto;
+package project.backend.business.post.request;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @Builder
-public class PostTagDto {
+public class PostTagRequest {
     private Long postId;
     private List<String> tagList;
 }

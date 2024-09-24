@@ -1,4 +1,4 @@
-package project.backend.business.post.dto.summary;
+package project.backend.business.post.request.summary;
 
 import lombok.Getter;
 
@@ -11,7 +11,6 @@ public enum SummaryTone {
   private String value;
 
   SummaryTone(String value) {
-
     this.value = value;
   }
 
