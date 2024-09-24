@@ -10,14 +10,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.backend.business.auth.implement.KakaoLoginManager;
-import project.backend.common.auth.token.BlacklistToken;
+import project.backend.entity.token.BlacklistToken;
 import project.backend.business.auth.request.TokenServiceRequest;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
 import project.backend.repository.auth.BlacklistTokenRedisRepository;
 import project.backend.repository.auth.RefreshTokenRedisRepository;
 import project.backend.entity.user.User;
-import project.backend.common.auth.token.RefreshToken;
+import project.backend.entity.token.RefreshToken;
 import project.backend.business.auth.implement.TokenProvider;
 import project.backend.business.auth.response.TokenServiceResponse;
 

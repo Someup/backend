@@ -8,10 +8,11 @@ public enum ErrorCode {
   NONE_AUTHENTICATED("인증 정보가 없습니다.", HttpStatus.UNAUTHORIZED),
   NOT_AUTHENTICATED("유효하지 않는 인증 정보입니다.", HttpStatus.UNAUTHORIZED),
   USER_NOT_FOUND("존재하지 않는 유저입니다.", HttpStatus.UNAUTHORIZED),
-  INVALID_PASSWORD("올바르지 않은 비밀번호입니다.", HttpStatus.UNAUTHORIZED),
   BAD_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
   INVALID_REFRESH_TOKEN("유효하지 않은 리프레시 토큰입니다.", HttpStatus.UNAUTHORIZED),
-  INVALID_ACCESS_TOKEN("유효하지 않은 엑세스 토큰입니다.", HttpStatus.UNAUTHORIZED);
+  INVALID_ACCESS_TOKEN("유효하지 않은 엑세스 토큰입니다.", HttpStatus.UNAUTHORIZED),
+  TOKEN_INVALID("유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
+  ACCESS_DENIED("접근 권한이 없습니다.", HttpStatus.FORBIDDEN);
 
   private final String message;
   private final HttpStatus httpStatus;
