@@ -8,6 +8,6 @@ import project.backend.business.post.request.summary.SummaryOption;
 @Builder
 public class CreatePostServiceRequest {
 
-  String url;
-  SummaryOption option;
+  private final String url;
+  private final SummaryOption option;
 }

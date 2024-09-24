@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PostTagRequest {
-    private Long postId;
-    private List<String> tagList;
+
+  private final Long postId;
+  private final List<String> tagList;
 }

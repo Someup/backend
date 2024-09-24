@@ -7,12 +7,13 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PostDetailServiceRequest {
-    private String title;
-    private String content;
-    private String url;
-    private List<String> tagList;
-    private int archiveId;
-    private String createdAt;
-    private String memoContent;
-    private String memoCreatedAt;
+
+  private final String title;
+  private final String content;
+  private final String url;
+  private final List<String> tagList;
+  private final int archiveId;
+  private final String createdAt;
+  private final String memoContent;
+  private final String memoCreatedAt;
 }

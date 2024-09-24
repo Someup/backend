@@ -16,7 +16,6 @@ public class SummaryAIManager {
 
   private final VertexAiGeminiChatModel chatModel;
 
-
   public String getSummary(CreatePostServiceRequest createPostServiceRequest) {
     Prompt prompt = getPrompt(createPostServiceRequest);
     ChatResponse response = chatModel.call(prompt);
@@ -25,10 +24,9 @@ public class SummaryAIManager {
     return content;
   }
 
-
   private Prompt getPrompt(CreatePostServiceRequest createPostServiceRequest) {
     String requestMessage = "URL: " + createPostServiceRequest.getUrl() + "\n" +
-        "위 웹사이트를 요약 조건에 맞춰서 블로그 형태로 요약해줘. 출처도 명시해줘!\n"+
+        "위 웹사이트를 요약 조건에 맞춰서 블로그 형태로 요약해줘. 출처도 명시해줘!\n" +
         "요약조건: \n" +
         "1. 요약 길이: " + createPostServiceRequest.getOption().getLevel().getLines() + "\n" +
         "2. 요약 말투: " + createPostServiceRequest.getOption().getTone().getValue() +
@@ -39,5 +37,4 @@ public class SummaryAIManager {
                                  .withModel(VertexAiGeminiChatModel.ChatModel.GEMINI_1_5_FLASH)
                                  .build());
   }
-
 }

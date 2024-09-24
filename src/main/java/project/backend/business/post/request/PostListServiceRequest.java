@@ -7,8 +7,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PostListServiceRequest {
-    private Long id;
-    private String title;
-    private String createdAt;
-    private List<String> tagList;
+
+  private final Long id;
+  private final String title;
+  private final String createdAt;
+  private final List<String> tagList;
 }

@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class CreateUpdatePostResponse {
-    Long postId;
 
-    @Builder
-    public CreateUpdatePostResponse(Long postId) {
-        this.postId = postId;
-    }
+  Long postId;
+
+  @Builder
+  public CreateUpdatePostResponse(Long postId) {
+    this.postId = postId;
+  }
 }

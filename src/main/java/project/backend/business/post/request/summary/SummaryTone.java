@@ -8,7 +8,7 @@ public enum SummaryTone {
   CASUAL("비공식적 말투"),
   CUTE("귀여운 말투");
 
-  private String value;
+  private final String value;
 
   SummaryTone(String value) {
     this.value = value;
