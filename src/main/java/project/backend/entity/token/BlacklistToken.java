@@ -1,4 +1,4 @@
-package project.backend.security.token;
+package project.backend.entity.token;
 
 import lombok.Builder;
 import lombok.Getter;

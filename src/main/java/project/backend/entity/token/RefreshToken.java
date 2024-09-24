@@ -1,4 +1,4 @@
-package project.backend.security.token;
+package project.backend.entity.token;
 
 import java.util.Collection;
 import org.springframework.data.annotation.Id;
