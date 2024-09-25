@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.backend.business.post.PostService;
+import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
 import project.backend.business.post.response.PostListResponse;
@@ -50,11 +51,13 @@ public class PostController {
     return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
   }
 
-  @AssignCurrentUserInfo
+  @AssignOrNullCurrentUserInfo
   @GetMapping("/{id}")
-  public ResponseEntity<PostDetailResponse> getPostDetailById(CurrentUserInfo userInfo,
-      @PathVariable("id") Long id) {
-    PostDetailResponse response = postService.getPostDetail(userInfo.getUserId(), id);
+  public ResponseEntity<PostDetailResponse> getPostDetail(CurrentUserInfo userInfo,
+      @PathVariable("id") Long id,
+      @RequestParam String status) {
+    PostDetailServiceRequest request = PostDetailServiceRequest.of(id, status);
+    PostDetailResponse response = postService.getPostDetail(userInfo.getUserId(), request);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 

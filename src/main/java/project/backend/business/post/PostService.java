@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import project.backend.business.post.request.CreatePostServiceRequest;
+import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.response.PostDetailDto;
 import project.backend.business.post.implement.SummaryAIManager;
 import project.backend.business.post.implement.PostManager;
@@ -51,9 +52,8 @@ public class PostService {
     return new PostListResponse(posts);
   }
 
-  public PostDetailResponse getPostDetail(Long userId, Long postId) {
-    User user = userReader.readUserById(userId);
-    PostDetailDto postDetailDto = postReader.readPostDetailWithTags(user, postId);
+  public PostDetailResponse getPostDetail(Long userId, PostDetailServiceRequest postDetailServiceRequest) {
+    PostDetailDto postDetailDto = postReader.readPostDetailWithTags(userId, postDetailServiceRequest);
 
     return new PostDetailResponse(postDetailDto);
   }

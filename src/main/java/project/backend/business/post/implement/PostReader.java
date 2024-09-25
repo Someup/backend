@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
+import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.response.PostDetailDto;
 import project.backend.business.post.response.PostListDto;
 import project.backend.business.tag.implement.TagReader;
@@ -16,7 +17,6 @@ import project.backend.common.error.ErrorCode;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;
 import project.backend.repository.post.PostRepository;
-import project.backend.entity.user.User;
 
 @Slf4j
 @Component
@@ -62,16 +62,20 @@ public class PostReader {
     ).toList();
   }
 
-  public PostDetailDto readPostDetailWithTags(User user, Long postId) {
-    Post postDetail = postRepository.findPostByIdAndUserAndStatus(postId, user,
-        PostStatus.PUBLISHED);
+  public PostDetailDto readPostDetailWithTags(Long userId,
+      PostDetailServiceRequest postDetailServiceRequest) {
+    Post postDetail = postRepository.findPostByIdAndUserIdAndStatus(
+        postDetailServiceRequest.getPostId(),
+        userId,
+        postDetailServiceRequest.getStatus());
 
     if (postDetail == null) {
-      log.info("[ERROR] readPostDetailWithTags userId: {}, postId: {}", user.getId(), postId);
+      log.info("[ERROR] readPostDetailWithTags userId: {}, postId: {}", userId,
+          postDetailServiceRequest.getPostId());
       throw new CustomException(ErrorCode.BAD_REQUEST);
     }
 
-    List<String> tagList = tagReader.readTagNamesByPostId(postId);
+    List<String> tagList = tagReader.readTagNamesByPostId(postDetailServiceRequest.getPostId());
 
     return PostDetailDto.builder()
                         .title(postDetail.getTitle())
