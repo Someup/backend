@@ -40,7 +40,8 @@ public class PostService {
   public PostListResponse getPostList(Long userId, PostListServiceRequest postListServiceRequest) {
     Specification<Post> spec =
         Specification.where(PostSpecification.getUser(userId))
-                     .and(PostSpecification.getPublished());
+                     .and(PostSpecification.getPublished())
+                     .and(PostSpecification.getSearch(postListServiceRequest.getSearch()));
 
     PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), 10,
         Sort.by("id").descending());
