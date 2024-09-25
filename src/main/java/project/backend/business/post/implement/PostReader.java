@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
@@ -43,8 +44,8 @@ public class PostReader {
     return post;
   }
 
-  public List<PostListDto> readPostsWithTags(User user, Specification<Post> spec) {
-    List<Post> postList = postRepository.findAll(spec);
+  public List<PostListDto> readPostsWithTags(Specification<Post> spec, PageRequest pageRequest) {
+    List<Post> postList = postRepository.findAll(spec, pageRequest).getContent();
 
     List<Long> postIdList = postList.stream().map(Post::getId).toList();
 

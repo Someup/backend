@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.backend.business.post.PostService;
-import project.backend.business.post.response.PostDetailDto;
 import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
 import project.backend.business.post.response.PostListResponse;
@@ -29,14 +28,15 @@ public class PostController {
   @AssignCurrentUserInfo
   @GetMapping
   public ResponseEntity<PostListResponse> getPosts(CurrentUserInfo userInfo,
-      @RequestParam(required = false) Integer cursor,
+      @RequestParam(required = false) Integer page,
       @RequestParam(required = false) Integer archiveId,
       @RequestParam(required = false) String search) {
-    PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(cursor, archiveId,
+    PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(page, archiveId,
         search);
 
     PostListResponse postListResponse = postService.getPostList(userInfo.getUserId(),
         postListServiceRequest);
+
     return new ResponseEntity<>(postListResponse, HttpStatus.OK);
   }
 

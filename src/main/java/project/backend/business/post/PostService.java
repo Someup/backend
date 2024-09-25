@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -36,14 +38,14 @@ public class PostService {
   private final SummaryAIManager summaryAIManager;
 
   public PostListResponse getPostList(Long userId, PostListServiceRequest postListServiceRequest) {
-    User user = userReader.readUserById(userId);
-
     Specification<Post> spec =
         Specification.where(PostSpecification.getUser(userId))
-                     .and(PostSpecification.getNextCursor(postListServiceRequest.getCursor()))
                      .and(PostSpecification.getPublished());
 
-    List<PostListDto> posts = postReader.readPostsWithTags(user, spec);
+    PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), 10,
+        Sort.by("id").descending());
+
+    List<PostListDto> posts = postReader.readPostsWithTags(spec, pageRequest);
 
     return new PostListResponse(posts);
   }

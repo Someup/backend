@@ -8,13 +8,17 @@ import lombok.Getter;
 @Builder
 public class PostListServiceRequest {
 
-  private Integer cursor;
+  private Integer page;
   private Integer archiveId;
   private String search;
 
-  public static PostListServiceRequest of(Integer cursor, Integer archiveId, String search) {
+  public static PostListServiceRequest of(Integer page, Integer archiveId, String search) {
+    if (page == null) {
+      page = 0;
+    }
+
     return PostListServiceRequest.builder()
-                                 .cursor(cursor)
+                                 .page(page)
                                  .archiveId(archiveId)
                                  .search(search)
                                  .build();
