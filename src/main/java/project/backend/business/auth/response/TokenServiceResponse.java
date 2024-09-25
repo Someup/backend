@@ -1,6 +1,5 @@
 package project.backend.business.auth.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 public class TokenServiceResponse {
 
   private final String accessToken;
-  @JsonIgnore
   private final String refreshToken;
 
   public static TokenServiceResponse of(final String accessToken, final String refreshToken) {

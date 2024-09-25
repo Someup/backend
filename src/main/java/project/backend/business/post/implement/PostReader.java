@@ -1,12 +1,14 @@
 package project.backend.business.post.implement;
 
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import project.backend.business.common.DateTimeManager;
-import project.backend.business.post.dto.PostDetailDto;
-import project.backend.business.post.dto.PostListDto;
+import project.backend.business.post.response.PostDetailDto;
+import project.backend.business.post.response.PostListDto;
 import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
@@ -15,10 +17,6 @@ import project.backend.entity.post.PostStatus;
 import project.backend.repository.post.PostRepository;
 import project.backend.entity.user.User;
 
-import java.util.List;
-import java.util.Map;
-
-
 @Slf4j
 @Component
 @AllArgsConstructor
@@ -26,7 +24,6 @@ public class PostReader {
 
   private final PostRepository postRepository;
   private final TagReader tagReader;
-
 
   public Post readPostAndUser(Long postId) {
     Post post = postRepository.findPostAndUserById(postId);
@@ -57,8 +54,8 @@ public class PostReader {
         post -> PostListDto.builder()
                            .id(post.getId())
                            .title(post.getTitle())
-                           .createdAt(DateTimeManager.convertToStringPattern(post.getCreatedAt(),
-                               "yyyy.MM.dd"))
+                           .createdAt(DateTimeManager.convertToStringPattern(
+                               post.getCreatedAt(), "yyyy.MM.dd"))
                            .tagList(postTagMap.get(post.getId()))
                            .build()
     ).toList();
@@ -80,11 +77,13 @@ public class PostReader {
                         .content(postDetail.getContent())
                         .url(postDetail.getUrl())
                         .tagList(tagList)
-                        .createdAt(DateTimeManager.convertToStringPattern(postDetail.getCreatedAt(),
+                        .createdAt(DateTimeManager.convertToStringPattern(
+                            postDetail.getCreatedAt(),
                             "yyyy년 MM월 dd일"))
                         .memoContent(postDetail.getMemo())
                         .memoCreatedAt(
-                            DateTimeManager.convertToStringPattern(postDetail.getMemoCreatedAt(),
+                            DateTimeManager.convertToStringPattern(
+                                postDetail.getMemoCreatedAt(),
                                 "yy.MM.dd"))
                         .build();
   }

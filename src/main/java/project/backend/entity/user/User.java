@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.backend.entity.BaseEntity;
@@ -16,6 +17,7 @@ import project.backend.entity.BaseEntity;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id", callSuper = false)
 public class User extends BaseEntity {
 
   @Id
@@ -45,9 +47,5 @@ public class User extends BaseEntity {
                .name(name)
                .profileImageUrl(profileImageUrl)
                .build();
-  }
-
-  public boolean equals(User other) {
-    return this.id.equals(other.getId());
   }
 }

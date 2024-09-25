@@ -23,7 +23,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import project.backend.business.auth.response.TokenServiceResponse;
-import project.backend.common.auth.oauth.KakaoUserDetails;
+import project.backend.security.oauth.KakaoUserDetails;
 import project.backend.repository.auth.BlacklistTokenRedisRepository;
 
 @Slf4j

@@ -18,7 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import project.backend.common.auth.oauth.KakaoUserInfo;
+import project.backend.security.oauth.KakaoUserInfo;
 import project.backend.common.error.exception.UserNotAuthenticatedException;
 import project.backend.entity.user.User;
 import project.backend.repository.user.UserRepository;

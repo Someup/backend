@@ -13,6 +13,7 @@ public class TokenExtractor {
 
   @Value("${jwt.access_header}")
   private String accessTokenHeader;
+  
   @Value("${jwt.refresh_header}")
   private String refreshTokenHeader;
 

@@ -17,9 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.backend.business.auth.oauth.KakaoUserDetailsService;
-import project.backend.common.auth.jwt.JwtAccessDeniedHandler;
-import project.backend.common.auth.jwt.JwtAuthenticationFailEntryPoint;
-import project.backend.common.auth.jwt.JwtFilter;
+import project.backend.security.jwt.JwtAccessDeniedHandler;
+import project.backend.security.jwt.JwtAuthenticationFailEntryPoint;
+import project.backend.security.jwt.JwtFilter;
 import project.backend.common.error.ExceptionHandlerFilter;
 
 @Configuration
@@ -28,36 +28,37 @@ import project.backend.common.error.ExceptionHandlerFilter;
 @Profile("dev")
 public class SecurityConfig {
 
-    private final JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtFilter jwtFilter;
-    private final KakaoUserDetailsService kakaoUserDetailsService;
+  private final JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+  private final JwtFilter jwtFilter;
+  private final KakaoUserDetailsService kakaoUserDetailsService;
+  private final ExceptionHandlerFilter exceptionHandlerFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(withDefaults())
-                .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2Login(oauth -> oauth.userInfoEndpoint(config -> config.userService(kakaoUserDetailsService)))
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers("/v1/auth/**").permitAll()
-                        .requestMatchers("/v1/exception/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/post").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/post/*/summary").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new ExceptionHandlerFilter(), JwtFilter.class) // JwtFilter 에서 CustomException 사용하기 위해 추가
-                .exceptionHandling(exceptionHandling -> {
-                    exceptionHandling.authenticationEntryPoint(jwtAuthenticationFailEntryPoint);
-                    exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler);
-                });
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.formLogin(AbstractHttpConfigurer::disable)
+        .httpBasic(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)
+        .cors(withDefaults())
+        .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .oauth2Login(oauth -> oauth.userInfoEndpoint(config -> config.userService(kakaoUserDetailsService)))
+        .authorizeHttpRequests(request -> request
+            .requestMatchers("/auth/**").permitAll()
+            .requestMatchers("/exception/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/post").permitAll()
+            .requestMatchers(HttpMethod.PATCH, "/post/*/summary").permitAll()
+            .anyRequest().authenticated()
+        )
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(exceptionHandlerFilter, JwtFilter.class) // ExceptionHandlerFilter 의존성 주입으로 사용
+        .exceptionHandling(exceptionHandling -> {
+          exceptionHandling.authenticationEntryPoint(jwtAuthenticationFailEntryPoint);
+          exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler);
+        });
 
-        return http.build();
-    }
+    return http.build();
+  }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

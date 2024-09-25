@@ -1,14 +1,12 @@
 package project.backend.business.user.implement;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
 import project.backend.entity.user.User;
 import project.backend.repository.user.UserRepository;
-
-import java.util.Optional;
-
 
 @Component
 @AllArgsConstructor
@@ -29,5 +27,4 @@ public class UserReader {
     Optional<User> user = userRepository.findById(userId);
     return user.orElse(null);
   }
-
 }

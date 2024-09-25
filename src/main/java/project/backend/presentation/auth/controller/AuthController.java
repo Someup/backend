@@ -17,7 +17,7 @@ import project.backend.presentation.auth.util.TokenExtractor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
   private final AuthService authService;

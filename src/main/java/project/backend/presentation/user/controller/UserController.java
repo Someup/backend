@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.user.UserService;
-import project.backend.common.auth.aop.AssignCurrentUserInfo;
-import project.backend.common.auth.aop.CurrentUserInfo;
-import project.backend.entity.user.User;
+import project.backend.business.user.response.UserResponse;
+import project.backend.security.aop.AssignCurrentUserInfo;
+import project.backend.security.aop.CurrentUserInfo;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +19,8 @@ public class UserController {
 
   @GetMapping
   @AssignCurrentUserInfo
-  public ResponseEntity<User> getUser(CurrentUserInfo userInfo) {
-    User user = userService.findUserById(userInfo.getUserId());
-    return ResponseEntity.ok(user);
+  public ResponseEntity<UserResponse> getUser(CurrentUserInfo userInfo) {
+    UserResponse response = userService.findUserById(userInfo.getUserId());
+    return ResponseEntity.ok(response);
   }
 }
