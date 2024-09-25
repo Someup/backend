@@ -1,4 +1,4 @@
-package project.backend.business.post.dto.summary;
+package project.backend.business.post.request.summary;
 
 import lombok.Getter;
 
@@ -8,10 +8,9 @@ public enum SummaryTone {
   CASUAL("비공식적 말투"),
   CUTE("귀여운 말투");
 
-  private String value;
+  private final String value;
 
   SummaryTone(String value) {
-
     this.value = value;
   }
 

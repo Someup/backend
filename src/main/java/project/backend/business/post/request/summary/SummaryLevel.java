@@ -1,4 +1,4 @@
-package project.backend.business.post.dto.summary;
+package project.backend.business.post.request.summary;
 
 import lombok.Getter;
 
@@ -8,9 +8,8 @@ public enum SummaryLevel {
   BASE("중간 요약", 20),
   DETAIL("상세 요약", 30);
 
-
-  private String value;
-  private int lines;
+  private final String value;
+  private final int lines;
 
   SummaryLevel(String value, int lines) {
     this.value = value;
