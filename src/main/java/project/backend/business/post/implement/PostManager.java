@@ -47,6 +47,13 @@ public class PostManager {
   }
 
   @Transactional
+  public void deletePost(Post post) {
+    post.setActivated(Boolean.FALSE);
+    postRepository.save(post);
+  }
+
+
+  @Transactional
   public void updateSummary(Post post, String url, String summary) {
     post.setContent(summary);
     post.setUrl(url);

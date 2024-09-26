@@ -75,6 +75,11 @@ public class PostService {
     return new CreateUpdatePostResponse(id);
   }
 
+  public void deletePostDetail(Long userId, Long postId) {
+    Post post = postReader.read(userId, postId);
+    postManager.deletePost(post);
+  }
+
   public CreateUpdatePostResponse updateSummaryPost(Long userId, Long postId,
       CreatePostServiceRequest createPostServiceRequest) {
     Post post = postReader.readPostAndUser(postId);

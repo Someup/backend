@@ -72,6 +72,15 @@ public class PostController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
+  @AssignCurrentUserInfo
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deletePost(CurrentUserInfo userInfo,
+      @PathVariable("id") Long postId) {
+    postService.deletePostDetail(userInfo.getUserId(), postId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+
   @AssignOrNullCurrentUserInfo
   @PatchMapping("/{id}/summary")
   public ResponseEntity<CreateUpdatePostResponse> updateSummaryPost(CurrentUserInfo userInfo,
