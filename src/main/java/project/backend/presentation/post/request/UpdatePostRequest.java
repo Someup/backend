@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import project.backend.business.post.response.PostDetailDto;
 
+
 @Getter
 public class UpdatePostRequest {
 
@@ -33,5 +34,6 @@ public class UpdatePostRequest {
                         .archiveId(archiveId)
                         .memoContent(memo)
                         .build();
+
   }
 }

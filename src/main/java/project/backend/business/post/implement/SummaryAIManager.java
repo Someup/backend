@@ -20,9 +20,8 @@ public class SummaryAIManager {
   public String getSummary(CreatePostServiceRequest createPostServiceRequest) {
     Prompt prompt = getPrompt(createPostServiceRequest);
     ChatResponse response = chatModel.call(prompt);
-    String content = response.getResult().getOutput().getContent();
-    log.info(content);
-    return content;
+
+    return response.getResult().getOutput().getContent();
   }
 
   private Prompt getPrompt(CreatePostServiceRequest createPostServiceRequest) {

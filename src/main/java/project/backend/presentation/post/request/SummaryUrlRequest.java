@@ -19,7 +19,6 @@ public class SummaryUrlRequest {
   @Valid
   private SummaryOptionRequest options;
 
-
   public CreatePostServiceRequest toServiceRequest() {
     SummaryOption option = SummaryOption.of(options.getLevel(), options.getTone(),
         options.getLanguage(), options.getKeywords());

@@ -15,8 +15,8 @@ import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
 import project.backend.entity.post.Post;
-import project.backend.entity.post.PostStatus;
 import project.backend.repository.post.PostRepository;
+
 
 @Slf4j
 @Component
@@ -46,7 +46,6 @@ public class PostReader {
 
   public List<PostListDto> readPostsWithTags(Specification<Post> spec, PageRequest pageRequest) {
     List<Post> postList = postRepository.findAll(spec, pageRequest).getContent();
-
     List<Long> postIdList = postList.stream().map(Post::getId).toList();
 
     Map<Long, List<String>> postTagMap = tagReader.getPostTagMap(postIdList);

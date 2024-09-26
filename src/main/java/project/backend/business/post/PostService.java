@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 import project.backend.business.post.request.CreatePostServiceRequest;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.response.PostDetailDto;

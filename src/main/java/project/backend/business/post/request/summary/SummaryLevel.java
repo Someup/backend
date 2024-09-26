@@ -8,6 +8,7 @@ public enum SummaryLevel {
   BASE("moderate summary", 20),
   DETAIL("detail summary", 30);
 
+
   private final String value;
   private final int lines;
 
@@ -17,8 +18,8 @@ public enum SummaryLevel {
   }
 
   public String getLines() {
-        return "About " + this.lines + " lines, " + this.value;
-  };
+    return "About " + this.lines + " lines, " + this.value;
+  }
 
   public static SummaryLevel stringToEnum(String level) {
     return SummaryLevel.valueOf(level);
