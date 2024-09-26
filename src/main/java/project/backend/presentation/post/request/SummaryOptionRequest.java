@@ -14,4 +14,6 @@ public class SummaryOptionRequest {
 
   @NotBlank(message = "언어는 필수 값입니다.")
   private String language;
+
+  private String keywords;
 }

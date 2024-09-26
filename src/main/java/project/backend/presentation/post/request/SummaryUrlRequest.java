@@ -19,10 +19,14 @@ public class SummaryUrlRequest {
   @Valid
   private SummaryOptionRequest options;
 
+
   public CreatePostServiceRequest toServiceRequest() {
+    SummaryOption option = SummaryOption.of(options.getLevel(), options.getTone(),
+        options.getLanguage(), options.getKeywords());
+
     return CreatePostServiceRequest.builder()
                                    .url(this.url)
-                                   .option(new SummaryOption(options.getLevel(), options.getTone(), options.getLanguage()))
+                                   .option(option)
                                    .build();
   }
 }

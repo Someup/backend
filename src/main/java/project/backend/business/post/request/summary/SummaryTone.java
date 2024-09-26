@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum SummaryTone {
-  FORMAL("공식적 말투"),
-  CASUAL("비공식적 말투"),
-  CUTE("귀여운 말투");
+  FORMAL("formal"),
+  CASUAL("casual"),
+  CUTE("cute"),
+  WITTY("witty");
 
   private final String value;
 

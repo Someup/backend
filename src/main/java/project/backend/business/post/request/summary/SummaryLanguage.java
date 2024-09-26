@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum SummaryLanguage {
-  KR("한국어"),
-  EN("영어");
+  KR("korean"),
+  EN("english");
 
   private final String value;
 
