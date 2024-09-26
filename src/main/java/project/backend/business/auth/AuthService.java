@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,26 +47,24 @@ public class AuthService {
   @Transactional
   public void logout(TokenServiceRequest tokenServiceRequest) {
     String accessToken = tokenServiceRequest.getAccessToken();
+    String refreshToken = tokenServiceRequest.getRefreshToken();
 
     if (accessToken == null || !tokenProvider.validate(accessToken)) {
       throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
     }
 
     long expiration = tokenProvider.getExpiration(accessToken);
-
     blacklistTokenRedisRepository.save(BlacklistToken.builder()
                                                      .token(accessToken)
                                                      .expiration(expiration / 1000)
                                                      .build());
 
-    Authentication authentication = tokenProvider.getAuthentication(accessToken);
-    String userId = authentication.getName();
-
-    refreshTokenRedisRepository.deleteById(userId);
+    refreshTokenRedisRepository.deleteById(refreshToken);
 
     SecurityContextHolder.clearContext();
   }
 
+  @Transactional
   public TokenServiceResponse reissueAccessToken(TokenServiceRequest tokenServiceRequest) {
     String refreshToken = tokenServiceRequest.getRefreshToken();
 
@@ -76,34 +73,44 @@ public class AuthService {
       throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
     }
 
-    RefreshToken findToken = refreshTokenRedisRepository.findByRefreshToken(refreshToken);
+    RefreshToken findToken = refreshTokenRedisRepository.findById(refreshToken)
+                                                        .orElseThrow(() -> new CustomException(
+                                                            ErrorCode.NOT_EXIST_REFRESH_TOKEN));
+    refreshTokenRedisRepository.deleteById(refreshToken);
 
+    // 새 AccessToken 생성
     TokenServiceResponse tokenServiceResponse = tokenProvider.createToken(
         String.valueOf(findToken.getId()),
         findToken.getEmail(),
-        findToken.getAuthority());
+        findToken.getAuthority()
+    );
 
-    refreshTokenRedisRepository.save(RefreshToken.builder()
-                                                 .id(findToken.getId())
-                                                 .email(findToken.getEmail())
-                                                 .authorities(findToken.getAuthorities())
-                                                 .refreshToken(tokenServiceResponse.getRefreshToken())
-                                                 .build());
+    // 새로 발급된 RefreshToken 을 다시 저장
+    refreshTokenRedisRepository.save(
+        RefreshToken.builder()
+                    .id(findToken.getId())
+                    .email(findToken.getEmail())
+                    .authorities(findToken.getAuthorities())
+                    .refreshToken(tokenServiceResponse.getRefreshToken())
+                    .build()
+    );
 
     SecurityContextHolder.getContext()
                          .setAuthentication(
-                             tokenProvider.getAuthentication(tokenServiceResponse.getAccessToken()));
+                             tokenProvider.getAuthentication(tokenServiceResponse.getAccessToken())
+                         );
 
     return tokenServiceResponse;
   }
 
   private void saveRefreshTokenOnRedis(User user, TokenServiceResponse response) {
-    refreshTokenRedisRepository.save(RefreshToken.builder()
-                                                 .id(user.getId())
-                                                 .email(user.getEmail())
-                                                 .authorities(Collections.singleton(
-                                                     new SimpleGrantedAuthority("USER")))
-                                                 .refreshToken(response.getRefreshToken())
-                                                 .build());
+    RefreshToken refreshToken = RefreshToken.builder()
+                                            .id(user.getId())
+                                            .email(user.getEmail())
+                                            .authorities(Collections.singleton(
+                                                new SimpleGrantedAuthority("USER")))
+                                            .refreshToken(response.getRefreshToken())
+                                            .build();
+    refreshTokenRedisRepository.save(refreshToken);
   }
 }
