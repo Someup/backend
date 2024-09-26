@@ -92,8 +92,7 @@ public class JwtFilter extends OncePerRequestFilter {
         HttpMethod.PATCH.name())) {
       return true;
     }
-//    return false;
-    return true;
+    return false;
   }
 
   private static boolean isRequestPassURI(HttpServletRequest request) {
