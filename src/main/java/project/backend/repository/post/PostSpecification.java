@@ -38,4 +38,10 @@ public class PostSpecification {
     return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"),
         PostStatus.PUBLISHED);
   }
+
+  public static Specification<Post> getActivated() {
+    return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("activated"),
+        Boolean.TRUE);
+  }
+
 }

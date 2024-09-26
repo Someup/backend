@@ -41,7 +41,8 @@ public class PostService {
     Specification<Post> spec =
         Specification.where(PostSpecification.getUser(userId))
                      .and(PostSpecification.getPublished())
-                     .and(PostSpecification.getSearch(postListServiceRequest.getSearch()));
+                     .and(PostSpecification.getSearch(postListServiceRequest.getSearch()))
+                     .and(PostSpecification.getActivated());
 
     PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), 10,
         Sort.by("id").descending());
@@ -51,8 +52,10 @@ public class PostService {
     return new PostListResponse(posts);
   }
 
-  public PostDetailResponse getPostDetail(Long userId, PostDetailServiceRequest postDetailServiceRequest) {
-    PostDetailDto postDetailDto = postReader.readPostDetailWithTags(userId, postDetailServiceRequest);
+  public PostDetailResponse getPostDetail(Long userId,
+      PostDetailServiceRequest postDetailServiceRequest) {
+    PostDetailDto postDetailDto = postReader.readPostDetailWithTags(userId,
+        postDetailServiceRequest);
 
     return new PostDetailResponse(postDetailDto);
   }

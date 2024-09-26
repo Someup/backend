@@ -27,7 +27,7 @@ public class PostReader {
   private final TagReader tagReader;
 
   public Post readPostAndUser(Long postId) {
-    Post post = postRepository.findPostAndUserById(postId);
+    Post post = postRepository.findPostAndUserAndActivatedTrueById(postId);
 
     if (post == null) {
       throw new CustomException(ErrorCode.BAD_REQUEST);
@@ -36,7 +36,7 @@ public class PostReader {
   }
 
   public Post read(Long userId, Long postId) {
-    Post post = postRepository.findByIdAndUserId(postId, userId);
+    Post post = postRepository.findByIdAndUserIdAndActivatedTrue(postId, userId);
 
     if (post == null) {
       throw new CustomException(ErrorCode.BAD_REQUEST);
@@ -63,7 +63,7 @@ public class PostReader {
 
   public PostDetailDto readPostDetailWithTags(Long userId,
       PostDetailServiceRequest postDetailServiceRequest) {
-    Post postDetail = postRepository.findPostByIdAndUserIdAndStatus(
+    Post postDetail = postRepository.findPostByIdAndUserIdAndStatusAndActivatedTrue(
         postDetailServiceRequest.getPostId(),
         userId,
         postDetailServiceRequest.getStatus());

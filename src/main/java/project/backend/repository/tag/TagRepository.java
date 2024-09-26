@@ -11,17 +11,17 @@ import java.util.List;
 public interface TagRepository extends JpaRepository<Tag, Long> {
     @Query("SELECT pt.post.id, t.name " +
             "FROM Tag AS t JOIN PostTag AS pt ON t = pt.tag " +
-            "WHERE pt.post.id IN :postIdList ")
+            "WHERE pt.post.id IN :postIdList AND t.activated = true")
     List<Object[]> findPostIdAndTagNamesByPostIdIn(List<Long> postIdList);
 
     @Query("SELECT t.name " +
             "FROM Tag AS t JOIN PostTag AS pt ON t = pt.tag " +
-            "WHERE pt.post.id = :postId ")
+            "WHERE pt.post.id = :postId AND t.activated = true")
     List<String> findTagNamesByPostId(Long postId);
 
     @Query("SELECT t " +
             "FROM Tag AS t JOIN PostTag AS pt ON t = pt.tag " +
-            "WHERE pt.post.id = :postId ")
+            "WHERE pt.post.id = :postId AND t.activated = true")
     List<Tag> findAllByPostId(Long postId);
 
     List<Tag> findAllByNameIn(List<String> names);
