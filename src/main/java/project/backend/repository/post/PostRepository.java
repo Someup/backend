@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;
 
-
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificationExecutor {
 

@@ -16,14 +16,12 @@ public class SummaryOption {
   private SummaryLanguage language;
   private String keywords;
 
-
   public static SummaryOption of(String level, String tone, String language, String keywords) {
     try {
       return SummaryOption.builder()
                           .level(SummaryLevel.stringToEnum(level.toUpperCase()))
                           .tone(SummaryTone.stringToEnum(tone.toUpperCase()))
-                          .language(
-                              SummaryLanguage.stringToEnum(language.toUpperCase()))
+                          .language(SummaryLanguage.stringToEnum(language.toUpperCase()))
                           .keywords(keywords)
                           .build();
     } catch (IllegalArgumentException e) {

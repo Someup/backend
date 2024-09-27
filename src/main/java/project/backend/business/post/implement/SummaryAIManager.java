@@ -21,7 +21,9 @@ public class SummaryAIManager {
     Prompt prompt = getPrompt(createPostServiceRequest);
     ChatResponse response = chatModel.call(prompt);
 
-    return response.getResult().getOutput().getContent();
+    return response.getResult()
+                   .getOutput()
+                   .getContent();
   }
 
   private Prompt getPrompt(CreatePostServiceRequest createPostServiceRequest) {
@@ -34,8 +36,8 @@ public class SummaryAIManager {
         + "Summary conditions: \n"
         + "Summary length: " + options.getLevel().getLines() + "\n"
         + "Summary tone:" + options.getTone().getValue() + "\n"
-        + "Summary language: " + options.getLanguage().getValue() +
-        "\n" + "Summary keywords: " + options.getKeywords();
+        + "Summary language: " + options.getLanguage().getValue() + "\n"
+        + "Summary keywords: " + options.getKeywords();
 
     return new Prompt(requestMessage,
         VertexAiGeminiChatOptions.builder()

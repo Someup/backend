@@ -8,7 +8,6 @@ public enum SummaryLevel {
   BASE("moderate summary", 20),
   DETAIL("detail summary", 30);
 
-
   private final String value;
   private final int lines;
 

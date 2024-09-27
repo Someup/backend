@@ -8,6 +8,7 @@ import project.backend.entity.post.converter.PostStatusConverter;
 @Getter
 @Builder
 public class PostDetailServiceRequest {
+
   private Long postId;
   private PostStatus status;
 
@@ -20,5 +21,4 @@ public class PostDetailServiceRequest {
                                    .status(postStatus)
                                    .build();
   }
-
 }
