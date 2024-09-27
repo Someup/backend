@@ -26,21 +26,13 @@ public class PostReader {
   private final TagReader tagReader;
 
   public Post readPostAndUser(Long postId) {
-    Post post = postRepository.findPostAndUserAndActivatedTrueById(postId);
-
-    if (post == null) {
-      throw new CustomException(ErrorCode.BAD_REQUEST);
-    }
-    return post;
+    return postRepository.findPostAndUserAndActivatedTrueById(postId)
+                         .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
 
   public Post read(Long userId, Long postId) {
-    Post post = postRepository.findByIdAndUserIdAndActivatedTrue(postId, userId);
-
-    if (post == null) {
-      throw new CustomException(ErrorCode.BAD_REQUEST);
-    }
-    return post;
+    return postRepository.findByIdAndUserIdAndActivatedTrue(postId, userId)
+                         .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
 
   public List<PostListDto> readPostsWithTags(Specification<Post> spec, PageRequest pageRequest) {
@@ -63,15 +55,10 @@ public class PostReader {
   public PostDetailDto readPostDetailWithTags(Long userId,
       PostDetailServiceRequest postDetailServiceRequest) {
     Post postDetail = postRepository.findPostByIdAndUserIdAndStatusAndActivatedTrue(
-        postDetailServiceRequest.getPostId(),
-        userId,
-        postDetailServiceRequest.getStatus());
-
-    if (postDetail == null) {
-      log.info("[ERROR] readPostDetailWithTags userId: {}, postId: {}", userId,
-          postDetailServiceRequest.getPostId());
-      throw new CustomException(ErrorCode.BAD_REQUEST);
-    }
+                                        postDetailServiceRequest.getPostId(),
+                                        userId,
+                                        postDetailServiceRequest.getStatus())
+                                    .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
 
     List<String> tagList = tagReader.readTagNamesByPostId(postDetailServiceRequest.getPostId());
 
