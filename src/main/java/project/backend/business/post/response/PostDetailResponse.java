@@ -3,7 +3,7 @@ package project.backend.business.post.response;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import project.backend.business.post.request.PostDetailServiceRequest;
+
 
 @Getter
 public class PostDetailResponse {
@@ -17,13 +17,13 @@ public class PostDetailResponse {
   private final String memoCreatedAt;
 
   @Builder
-  public PostDetailResponse(PostDetailServiceRequest postDetailServiceRequest) {
-    this.title = postDetailServiceRequest.getTitle();
-    this.content = postDetailServiceRequest.getContent();
-    this.url = postDetailServiceRequest.getUrl();
-    this.tagList = postDetailServiceRequest.getTagList();
-    this.createdAt = postDetailServiceRequest.getCreatedAt();
-    this.memoContent = postDetailServiceRequest.getMemoContent();
-    this.memoCreatedAt = postDetailServiceRequest.getMemoCreatedAt();
+  public PostDetailResponse(PostDetailDto postDetailDto) {
+    this.title = postDetailDto.getTitle();
+    this.content = postDetailDto.getContent();
+    this.url = postDetailDto.getUrl();
+    this.tagList = postDetailDto.getTagList();
+    this.createdAt = postDetailDto.getCreatedAt();
+    this.memoContent = postDetailDto.getMemoContent();
+    this.memoCreatedAt = postDetailDto.getMemoCreatedAt();
   }
 }

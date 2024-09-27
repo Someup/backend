@@ -1,19 +1,24 @@
 package project.backend.business.post.request;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import project.backend.entity.post.PostStatus;
+import project.backend.entity.post.converter.PostStatusConverter;
 
 @Getter
 @Builder
 public class PostDetailServiceRequest {
 
-  private final String title;
-  private final String content;
-  private final String url;
-  private final List<String> tagList;
-  private final int archiveId;
-  private final String createdAt;
-  private final String memoContent;
-  private final String memoCreatedAt;
+  private Long postId;
+  private PostStatus status;
+
+  public static PostDetailServiceRequest of(Long postId, String status) {
+    PostStatusConverter converter = new PostStatusConverter();
+    PostStatus postStatus = converter.convertToEntityAttribute(status);
+
+    return PostDetailServiceRequest.builder()
+                                   .postId(postId)
+                                   .status(postStatus)
+                                   .build();
+  }
 }

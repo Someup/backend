@@ -3,7 +3,8 @@ package project.backend.presentation.post.request;
 import jakarta.validation.constraints.*;
 import java.util.List;
 import lombok.Getter;
-import project.backend.business.post.request.PostDetailServiceRequest;
+import project.backend.business.post.response.PostDetailDto;
+
 
 @Getter
 public class UpdatePostRequest {
@@ -25,13 +26,14 @@ public class UpdatePostRequest {
   @Size(max = 2000, message = "메모는 2000자를 초과할 수 없습니다.")
   private String memo;
 
-  public PostDetailServiceRequest toServiceRequest() {
-    return PostDetailServiceRequest.builder()
-                                   .title(title)
-                                   .content(content)
-                                   .tagList(tagList)
-                                   .archiveId(archiveId)
-                                   .memoContent(memo)
-                                   .build();
+  public PostDetailDto toServiceRequest() {
+    return PostDetailDto.builder()
+                        .title(title)
+                        .content(content)
+                        .tagList(tagList)
+                        .archiveId(archiveId)
+                        .memoContent(memo)
+                        .build();
+
   }
 }

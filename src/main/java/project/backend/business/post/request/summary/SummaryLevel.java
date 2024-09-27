@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum SummaryLevel {
-  BRIEF("간단 요약", 10),
-  BASE("중간 요약", 20),
-  DETAIL("상세 요약", 30);
+  BRIEF("brief summary", 10),
+  BASE("moderate summary", 20),
+  DETAIL("detail summary", 30);
 
   private final String value;
   private final int lines;
@@ -14,6 +14,10 @@ public enum SummaryLevel {
   SummaryLevel(String value, int lines) {
     this.value = value;
     this.lines = lines;
+  }
+
+  public String getLines() {
+    return "About " + this.lines + " lines, " + this.value;
   }
 
   public static SummaryLevel stringToEnum(String level) {

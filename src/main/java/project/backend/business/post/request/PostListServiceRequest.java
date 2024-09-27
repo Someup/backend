@@ -1,6 +1,5 @@
 package project.backend.business.post.request;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,8 +7,19 @@ import lombok.Getter;
 @Builder
 public class PostListServiceRequest {
 
-  private final Long id;
-  private final String title;
-  private final String createdAt;
-  private final List<String> tagList;
+  private Integer page;
+  private Integer archiveId;
+  private String search;
+
+  public static PostListServiceRequest of(Integer page, Integer archiveId, String search) {
+    if (page == null) {
+      page = 0;
+    }
+
+    return PostListServiceRequest.builder()
+                                 .page(page)
+                                 .archiveId(archiveId)
+                                 .search(search)
+                                 .build();
+  }
 }

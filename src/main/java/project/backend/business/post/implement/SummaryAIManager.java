@@ -8,6 +8,7 @@ import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatOptions;
 import org.springframework.stereotype.Component;
 import project.backend.business.post.request.CreatePostServiceRequest;
+import project.backend.business.post.request.summary.SummaryOption;
 
 @Slf4j
 @Component
@@ -19,18 +20,24 @@ public class SummaryAIManager {
   public String getSummary(CreatePostServiceRequest createPostServiceRequest) {
     Prompt prompt = getPrompt(createPostServiceRequest);
     ChatResponse response = chatModel.call(prompt);
-    String content = response.getResult().getOutput().getContent();
-    log.info(content);
-    return content;
+
+    return response.getResult()
+                   .getOutput()
+                   .getContent();
   }
 
   private Prompt getPrompt(CreatePostServiceRequest createPostServiceRequest) {
+    SummaryOption options = createPostServiceRequest.getOption();
+
     String requestMessage = "URL: " + createPostServiceRequest.getUrl() + "\n" +
-        "위 웹사이트를 요약 조건에 맞춰서 블로그 형태로 요약해줘. 출처도 명시해줘!\n" +
-        "요약조건: \n" +
-        "1. 요약 길이: " + createPostServiceRequest.getOption().getLevel().getLines() + "\n" +
-        "2. 요약 말투: " + createPostServiceRequest.getOption().getTone().getValue() +
-        "3. 요약 언어: " + createPostServiceRequest.getOption().getLanguage().getValue();
+        "Summarize the website corresponding to the URL below in a blog style according to the following summary conditions.\n"
+        + "Please also mention the source!\n"
+        + "Translate the content into the summary language!\n"
+        + "Summary conditions: \n"
+        + "Summary length: " + options.getLevel().getLines() + "\n"
+        + "Summary tone:" + options.getTone().getValue() + "\n"
+        + "Summary language: " + options.getLanguage().getValue() + "\n"
+        + "Summary keywords: " + options.getKeywords();
 
     return new Prompt(requestMessage,
         VertexAiGeminiChatOptions.builder()
