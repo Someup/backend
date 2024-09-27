@@ -43,5 +43,4 @@ public class PostSpecification {
     return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("activated"),
         Boolean.TRUE);
   }
-
 }

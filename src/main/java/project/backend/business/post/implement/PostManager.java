@@ -9,8 +9,8 @@ import project.backend.business.post.response.PostDetailDto;
 import project.backend.business.tag.implement.TagManager;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;
-import project.backend.repository.post.PostRepository;
 import project.backend.entity.user.User;
+import project.backend.repository.post.PostRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -51,7 +51,6 @@ public class PostManager {
     post.setActivated(Boolean.FALSE);
     postRepository.save(post);
   }
-
 
   @Transactional
   public void updateSummary(Post post, String url, String summary) {

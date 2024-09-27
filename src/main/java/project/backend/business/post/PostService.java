@@ -8,14 +8,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import project.backend.business.post.request.CreatePostServiceRequest;
-import project.backend.business.post.request.PostDetailServiceRequest;
-import project.backend.business.post.response.PostDetailDto;
-import project.backend.business.post.implement.SummaryAIManager;
 import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
+import project.backend.business.post.implement.SummaryAIManager;
+import project.backend.business.post.request.CreatePostServiceRequest;
+import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
+import project.backend.business.post.response.PostDetailDto;
 import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListDto;
 import project.backend.business.post.response.PostListResponse;
@@ -26,12 +26,12 @@ import project.backend.entity.post.Post;
 import project.backend.entity.user.User;
 import project.backend.repository.post.PostSpecification;
 
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
+  private final int PAGE_SIZE = 10;
   private final UserReader userReader;
   private final PostReader postReader;
   private final PostManager postManager;
@@ -44,7 +44,7 @@ public class PostService {
                      .and(PostSpecification.getSearch(postListServiceRequest.getSearch()))
                      .and(PostSpecification.getActivated());
 
-    PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), 10,
+    PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), PAGE_SIZE,
         Sort.by("id").descending());
 
     List<PostListDto> posts = postReader.readPostsWithTags(spec, pageRequest);

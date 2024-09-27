@@ -17,7 +17,6 @@ import project.backend.common.error.ErrorCode;
 import project.backend.entity.post.Post;
 import project.backend.repository.post.PostRepository;
 
-
 @Slf4j
 @Component
 @AllArgsConstructor
