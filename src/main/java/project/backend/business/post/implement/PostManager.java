@@ -22,7 +22,6 @@ public class PostManager {
   /**
    * 임시 Post는 생성 시간으로 시간 세팅
    */
-  @Transactional
   public Long createTempPost(User user, String url, String summary) {
     String tmpTitle = DateTimeManager.getCurrentDateTime();
     Post newTmpPost = Post.createPost(user, tmpTitle, summary, PostStatus.DRAFT, url);
@@ -30,7 +29,6 @@ public class PostManager {
     return postRepository.save(newTmpPost).getId();
   }
 
-  @Transactional
   public void updatePost(Post post, PostDetailDto postDetailDto) {
     post.setTitle(postDetailDto.getTitle());
     post.setContent(postDetailDto.getContent());
@@ -46,7 +44,6 @@ public class PostManager {
     postRepository.save(post);
   }
 
-  @Transactional
   public void deletePost(Post post) {
     post.setActivated(Boolean.FALSE);
     postRepository.save(post);

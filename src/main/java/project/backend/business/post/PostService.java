@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
 import project.backend.business.post.implement.SummaryAIManager;
@@ -37,6 +38,7 @@ public class PostService {
   private final PostManager postManager;
   private final SummaryAIManager summaryAIManager;
 
+  @Transactional(readOnly = true)
   public PostListResponse getPostList(Long userId, PostListServiceRequest postListServiceRequest) {
     Specification<Post> spec =
         Specification.where(PostSpecification.getUser(userId))
@@ -52,6 +54,7 @@ public class PostService {
     return new PostListResponse(posts);
   }
 
+  @Transactional(readOnly = true)
   public PostDetailResponse getPostDetail(Long userId,
       PostDetailServiceRequest postDetailServiceRequest) {
     PostDetailDto postDetailDto = postReader.readPostDetailWithTags(userId,
@@ -60,6 +63,7 @@ public class PostService {
     return new PostDetailResponse(postDetailDto);
   }
 
+  @Transactional
   public CreateUpdatePostResponse createNewPostDetail(Long userId,
       CreatePostServiceRequest createPostServiceRequest) {
     String summary = summaryAIManager.getSummary(createPostServiceRequest);
@@ -69,6 +73,7 @@ public class PostService {
     return new CreateUpdatePostResponse(postId);
   }
 
+  @Transactional
   public CreateUpdatePostResponse updatePostDetail(Long userId, Long postId,
       PostDetailDto postDetailDto) {
     Post post = postReader.read(userId, postId);
@@ -78,11 +83,13 @@ public class PostService {
     return new CreateUpdatePostResponse(id);
   }
 
+  @Transactional
   public void deletePostDetail(Long userId, Long postId) {
     Post post = postReader.read(userId, postId);
     postManager.deletePost(post);
   }
 
+  @Transactional
   public CreateUpdatePostResponse updateSummaryPost(Long userId, Long postId,
       CreatePostServiceRequest createPostServiceRequest) {
     Post post = postReader.readPostAndUser(postId);
