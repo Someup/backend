@@ -30,11 +30,12 @@ import project.backend.repository.auth.BlacklistTokenRedisRepository;
 @Component
 public class TokenProvider {
 
-  private final BlacklistTokenRedisRepository blacklistTokenRedisRepository;
-
   private static final String AUTH_ID = "ID";
   private static final String AUTH_KEY = "AUTHORITY";
   private static final String AUTH_EMAIL = "EMAIL";
+
+  private final BlacklistTokenRedisRepository blacklistTokenRedisRepository;
+
   private Key key;
   private final String secretKey;
   private final long accessExpirations;

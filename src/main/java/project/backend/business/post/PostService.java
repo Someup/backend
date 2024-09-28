@@ -32,7 +32,8 @@ import project.backend.repository.post.PostSpecification;
 @RequiredArgsConstructor
 public class PostService {
 
-  private final int PAGE_SIZE = 10;
+  private static final int PAGE_SIZE = 10;
+
   private final UserReader userReader;
   private final PostReader postReader;
   private final PostManager postManager;
@@ -67,7 +68,7 @@ public class PostService {
   public CreateUpdatePostResponse createNewPostDetail(Long userId,
       CreatePostServiceRequest createPostServiceRequest) {
     String summary = summaryAIManager.getSummary(createPostServiceRequest);
-    User user = userReader.findUserById(userId);
+    User user = userReader.readUserById(userId);
     Long postId = postManager.createTempPost(user, createPostServiceRequest.getUrl(), summary);
 
     return new CreateUpdatePostResponse(postId);

@@ -9,11 +9,11 @@ import project.backend.entity.user.User;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserService {
 
   private final UserReader userReader;
 
+  @Transactional(readOnly = true)
   public UserInfoResponse getUserInfo(Long id) {
     User user = userReader.readUserById(id);
     return new UserInfoResponse(user.getName(), user.getEmail(), user.getProfileImageUrl());
