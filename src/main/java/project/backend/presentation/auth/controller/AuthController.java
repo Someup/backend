@@ -2,6 +2,7 @@ package project.backend.presentation.auth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.auth.AuthService;
 import project.backend.business.auth.request.TokenServiceRequest;
 import project.backend.business.auth.response.TokenServiceResponse;
+import project.backend.presentation.auth.util.TokenCookieManager;
 import project.backend.presentation.auth.util.TokenExtractor;
 
 @RestController
@@ -22,23 +24,42 @@ public class AuthController {
 
   private final AuthService authService;
   private final TokenExtractor tokenExtractor;
+  private final TokenCookieManager tokenCookieManager;
 
   @RequestMapping("/login/kakao")
-  public ResponseEntity<TokenServiceResponse> loginKakao(@RequestParam(name = "code") String code) throws JsonProcessingException {
+  public ResponseEntity<TokenServiceResponse> loginKakao(
+      @RequestParam(name = "code") String code,
+      HttpServletResponse response) throws JsonProcessingException {
     TokenServiceResponse tokenServiceResponse = authService.kakaoLogin(code);
-    return new ResponseEntity<>(tokenServiceResponse, HttpStatus.OK);
+
+    tokenCookieManager.addRefreshTokenCookie(response, tokenServiceResponse.getRefreshToken());
+
+    TokenServiceResponse tokenServiceResponseWithoutRefreshToken = tokenServiceResponse.withoutRefreshToken();
+    return new ResponseEntity<>(tokenServiceResponseWithoutRefreshToken, HttpStatus.OK);
   }
 
   @GetMapping("/reissue")
-  public ResponseEntity<TokenServiceResponse> reissueToken(HttpServletRequest request) {
+  public ResponseEntity<TokenServiceResponse> reissueToken(
+      HttpServletRequest request,
+      HttpServletResponse response) {
     TokenServiceRequest tokenServiceRequest = tokenExtractor.extractTokenRequest(request);
-    return new ResponseEntity<>(authService.reissueAccessToken(tokenServiceRequest), HttpStatus.OK);
+    TokenServiceResponse tokenServiceResponse = authService.reissueAccessToken(tokenServiceRequest);
+
+    tokenCookieManager.addRefreshTokenCookie(response, tokenServiceResponse.getRefreshToken());
+
+    TokenServiceResponse tokenServiceResponseWithoutRefreshToken = tokenServiceResponse.withoutRefreshToken();
+    return new ResponseEntity<>(tokenServiceResponseWithoutRefreshToken, HttpStatus.OK);
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<Void> logout(HttpServletRequest request) {
+  public ResponseEntity<Void> logout(
+      HttpServletRequest request,
+      HttpServletResponse response) {
     TokenServiceRequest tokenServiceRequest = tokenExtractor.extractTokenRequest(request);
     authService.logout(tokenServiceRequest);
+
+    tokenCookieManager.removeRefreshTokenCookie(response);
+
     return ResponseEntity.ok().build();
   }
 }

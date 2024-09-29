@@ -2,6 +2,7 @@ package project.backend.presentation.auth.util;
 
 import static project.backend.business.auth.implement.KakaoLoginManager.BEARER;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +17,13 @@ public class TokenExtractor {
   @Value("${jwt.access_header}")
   private String accessTokenHeader;
 
-  @Value("${jwt.refresh_header}")
-  private String refreshTokenHeader;
+  @Value("${jwt.refresh_cookie_name}")
+  private String refreshTokenCookieName;
 
   public TokenServiceRequest extractTokenRequest(HttpServletRequest request) {
     String accessToken = extractAccessToken(request).orElse(null);
     String refreshToken = extractRefreshToken(request).orElse(null);
-    log.info("Logout initiated with accessToken: {}, refreshToken: {}", accessToken, refreshToken);
+    log.info("Token extraction initiated with accessToken: {}, refreshToken: {}", accessToken, refreshToken);
     return TokenServiceRequest.builder()
                               .accessToken(accessToken)
                               .refreshToken(refreshToken)
@@ -36,8 +37,14 @@ public class TokenExtractor {
   }
 
   private Optional<String> extractRefreshToken(HttpServletRequest request) {
-    return Optional.ofNullable(request.getHeader(refreshTokenHeader))
-                   .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                   .map(refreshToken -> refreshToken.replace(BEARER, ""));
+    if (request.getCookies() == null) {
+      return Optional.empty();
+    }
+    for (Cookie cookie : request.getCookies()) {
+      if (refreshTokenCookieName.equals(cookie.getName())) {
+        return Optional.ofNullable(cookie.getValue());
+      }
+    }
+    return Optional.empty();
   }
 }
