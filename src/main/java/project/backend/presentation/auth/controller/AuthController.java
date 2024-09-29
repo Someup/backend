@@ -18,13 +18,14 @@ import project.backend.presentation.auth.util.TokenExtractor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthControllerDocs {
 
   private final AuthService authService;
   private final TokenExtractor tokenExtractor;
 
   @RequestMapping("/login/kakao")
-  public ResponseEntity<TokenServiceResponse> loginKakao(@RequestParam(name = "code") String code) throws JsonProcessingException {
+  public ResponseEntity<TokenServiceResponse> loginKakao(@RequestParam(name = "code") String code)
+      throws JsonProcessingException {
     TokenServiceResponse tokenServiceResponse = authService.kakaoLogin(code);
     return new ResponseEntity<>(tokenServiceResponse, HttpStatus.OK);
   }
