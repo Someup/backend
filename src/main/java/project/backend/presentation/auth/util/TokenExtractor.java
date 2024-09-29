@@ -4,6 +4,8 @@ import static project.backend.business.auth.implement.KakaoLoginManager.BEARER;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,14 +39,12 @@ public class TokenExtractor {
   }
 
   private Optional<String> extractRefreshToken(HttpServletRequest request) {
-    if (request.getCookies() == null) {
-      return Optional.empty();
-    }
-    for (Cookie cookie : request.getCookies()) {
-      if (refreshTokenCookieName.equals(cookie.getName())) {
-        return Optional.ofNullable(cookie.getValue());
-      }
-    }
-    return Optional.empty();
+    return Optional.ofNullable(request.getCookies())
+                   .map(Arrays::asList)
+                   .orElse(Collections.emptyList())
+                   .stream()
+                   .filter(cookie -> refreshTokenCookieName.equals(cookie.getName()))
+                   .map(Cookie::getValue)
+                   .findAny();
   }
 }
