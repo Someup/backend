@@ -26,7 +26,7 @@ public class AuthController {
   private final TokenExtractor tokenExtractor;
   private final TokenCookieManager tokenCookieManager;
 
-  @RequestMapping("/login/kakao")
+  @PostMapping("/login/kakao")
   public ResponseEntity<TokenServiceResponse> loginKakao(
       @RequestParam(name = "code") String code,
       HttpServletResponse response) throws JsonProcessingException {
