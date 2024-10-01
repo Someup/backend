@@ -1,6 +1,5 @@
 package project.backend.business.post.implement;
 
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -49,7 +48,6 @@ public class PostManager {
     postRepository.save(post);
   }
 
-  @Transactional
   public void updateSummary(Post post, String url, String summary) {
     post.setContent(summary);
     post.setUrl(url);
