@@ -26,5 +26,4 @@ public class MemoService {
     Post post = postReader.readActivatedPublishedPost(userId, postId);
     memoManager.deleteMemo(post);
   }
-
 }

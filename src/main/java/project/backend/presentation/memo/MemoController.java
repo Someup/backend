@@ -1,4 +1,4 @@
-package project.backend.presentation.memo.controller;
+package project.backend.presentation.memo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.memo.MemoService;
+import project.backend.presentation.memo.docs.MemoControllerDocs;
 import project.backend.presentation.memo.request.CreateUpdateMemoRequest;
 import project.backend.security.aop.AssignCurrentUserInfo;
 import project.backend.security.aop.CurrentUserInfo;
@@ -35,5 +36,4 @@ public class MemoController implements MemoControllerDocs {
     memoService.deleteMemo(userInfo.getUserId(), postId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
 }

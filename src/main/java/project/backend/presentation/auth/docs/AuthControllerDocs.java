@@ -1,4 +1,4 @@
-package project.backend.presentation.auth.controller;
+package project.backend.presentation.auth.docs;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;

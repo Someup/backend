@@ -1,6 +1,6 @@
 package project.backend.business.user.implement;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
@@ -8,7 +8,7 @@ import project.backend.entity.user.User;
 import project.backend.repository.user.UserRepository;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserReader {
 
   private final UserRepository userRepository;

@@ -11,8 +11,8 @@ import java.util.List;
 
 @Repository
 public interface PostTagRepository extends JpaRepository<PostTag, Long> {
+
     @Modifying
     @Query("DELETE FROM PostTag as pt WHERE pt.post.id = :postId AND pt.tag.id IN :tagIdList")
     void deletePostTagByPostIdAndTagIdListIn(@Param("postId") Long postId, @Param("tagIdList") List<Long> tagIdList);
-
 }

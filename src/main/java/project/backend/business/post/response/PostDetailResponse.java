@@ -1,9 +1,8 @@
 package project.backend.business.post.response;
 
 import java.util.List;
-import lombok.Builder;
 import lombok.Getter;
-
+import project.backend.business.post.response.dto.PostDetailDto;
 
 @Getter
 public class PostDetailResponse {
@@ -16,7 +15,6 @@ public class PostDetailResponse {
   private final String memoContent;
   private final String memoCreatedAt;
 
-  @Builder
   public PostDetailResponse(PostDetailDto postDetailDto) {
     this.title = postDetailDto.getTitle();
     this.content = postDetailDto.getContent();

@@ -16,6 +16,10 @@ public class UserService {
   @Transactional(readOnly = true)
   public UserInfoResponse getUserInfo(Long id) {
     User user = userReader.readUserById(id);
-    return new UserInfoResponse(user.getName(), user.getEmail(), user.getProfileImageUrl());
+    return UserInfoResponse.builder()
+                           .name(user.getName())
+                           .email(user.getEmail())
+                           .profileImageUrl(user.getProfileImageUrl())
+                           .build();
   }
 }

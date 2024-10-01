@@ -12,8 +12,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
-@MappedSuperclass // BaseEntity 를 상속한 엔티티들은 아래 필드들을 컬럼 인식
-@EntityListeners(AuditingEntityListener.class) // 자동 값 매핑
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
   @Column

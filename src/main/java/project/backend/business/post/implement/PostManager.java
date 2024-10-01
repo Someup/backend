@@ -1,11 +1,10 @@
 package project.backend.business.post.implement;
 
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import project.backend.business.common.DateTimeManager;
-import project.backend.business.post.response.PostDetailDto;
+import project.backend.business.post.response.dto.PostDetailDto;
+import project.backend.business.post.util.DateTimeManager;
 import project.backend.business.tag.implement.TagManager;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;
@@ -49,7 +48,6 @@ public class PostManager {
     postRepository.save(post);
   }
 
-  @Transactional
   public void updateSummary(Post post, String url, String summary) {
     post.setContent(summary);
     post.setUrl(url);

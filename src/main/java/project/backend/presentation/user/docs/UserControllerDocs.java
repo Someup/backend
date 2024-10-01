@@ -1,4 +1,4 @@
-package project.backend.presentation.user.controller;
+package project.backend.presentation.user.docs;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

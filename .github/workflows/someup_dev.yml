@@ -31,6 +31,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       # application-dev.yml
       - name: Copy dev Secret
         env:
@@ -55,12 +56,20 @@ jobs:
           DEV_SECRET_DIR_FILE_NAME: application-jwt.yml
         run: echo $DEV_SECRET | base64 --decode >> $DEV_SECRET_DIR/$DEV_SECRET_DIR_FILE_NAME
 
-      # application-ai.yml (새로운 파일 추가)
+      # application-ai.yml
       - name: Copy ai Secret
         env:
           DEV_SECRET: ${{ secrets.APPLICATION_AI_YML }}
           DEV_SECRET_DIR: src/main/resources
           DEV_SECRET_DIR_FILE_NAME: application-ai.yml
+        run: echo $DEV_SECRET | base64 --decode >> $DEV_SECRET_DIR/$DEV_SECRET_DIR_FILE_NAME
+
+      # application-swagger.yml
+      - name: Copy swagger Secret
+        env:
+          DEV_SECRET: ${{ secrets.APPLICATION_SWAGGER_YML }}
+          DEV_SECRET_DIR: src/main/resources
+          DEV_SECRET_DIR_FILE_NAME: application-swagger.yml
         run: echo $DEV_SECRET | base64 --decode >> $DEV_SECRET_DIR/$DEV_SECRET_DIR_FILE_NAME
 
       # ./gradlew 권한 설정
@@ -73,6 +82,8 @@ jobs:
           ./gradlew clean
           ./gradlew compileJava
           ./gradlew build
+        env:
+          SPRING_PROFILES_ACTIVE: dev
 
       # Docker Build하고 DockerHub에 Push
       - name: Docker Build & Push to DockerHub
@@ -124,6 +135,7 @@ jobs:
             sudo docker-compose pull
             sudo docker-compose up -d
             sudo docker image prune -f
+
       # Security Group에서 Github IP를 삭제
       - name: Remove Github IP From Security Group
         run: |

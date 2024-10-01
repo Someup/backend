@@ -1,10 +1,10 @@
 package project.backend.business.user.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class UserInfoResponse {
 
   private final String name;

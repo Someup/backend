@@ -2,15 +2,15 @@ package project.backend.business.post.implement;
 
 import java.util.List;
 import java.util.Map;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import project.backend.business.common.DateTimeManager;
 import project.backend.business.post.request.PostDetailServiceRequest;
-import project.backend.business.post.response.PostDetailDto;
-import project.backend.business.post.response.PostListDto;
+import project.backend.business.post.response.dto.PostDetailDto;
+import project.backend.business.post.response.dto.PostListDto;
+import project.backend.business.post.util.DateTimeManager;
 import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
@@ -20,7 +20,7 @@ import project.backend.repository.post.PostRepository;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PostReader {
 
   private final PostRepository postRepository;

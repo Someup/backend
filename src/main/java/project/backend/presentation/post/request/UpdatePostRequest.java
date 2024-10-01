@@ -3,8 +3,7 @@ package project.backend.presentation.post.request;
 import jakarta.validation.constraints.*;
 import java.util.List;
 import lombok.Getter;
-import project.backend.business.post.response.PostDetailDto;
-
+import project.backend.business.post.response.dto.PostDetailDto;
 
 @Getter
 public class UpdatePostRequest {

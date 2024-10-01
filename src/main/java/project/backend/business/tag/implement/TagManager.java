@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.entity.post.Post;
 import project.backend.entity.tag.PostTag;
@@ -13,7 +13,7 @@ import project.backend.repository.tag.PostTagRepository;
 import project.backend.repository.tag.TagRepository;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TagManager {
 
   private final TagReader tagReader;
