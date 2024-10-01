@@ -45,4 +45,11 @@ public class Archive extends BaseEntity {
                   .name(name)
                   .build();
   }
+
+  public static Archive createArchiveWithoutPost(User user, String name) {
+    return Archive.builder()
+                  .user(user)
+                  .name(name)
+                  .build();
+  }
 }
