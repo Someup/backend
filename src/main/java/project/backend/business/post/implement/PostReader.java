@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import project.backend.business.common.DateTimeManager;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.response.dto.PostDetailDto;
 import project.backend.business.post.response.dto.PostListDto;
