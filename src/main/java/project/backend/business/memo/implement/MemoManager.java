@@ -1,7 +1,7 @@
 package project.backend.business.memo.implement;
 
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.backend.entity.post.Post;
@@ -9,7 +9,7 @@ import project.backend.repository.post.PostRepository;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MemoManager {
 
   private final PostRepository postRepository;
