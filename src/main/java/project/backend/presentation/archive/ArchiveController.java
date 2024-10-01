@@ -16,6 +16,7 @@ import project.backend.business.archive.ArchiveService;
 import project.backend.business.archive.respone.ArchiveDetailResponse;
 import project.backend.business.archive.respone.ArchiveListResponse;
 import project.backend.business.archive.respone.CreateUpdateArchiveResponse;
+import project.backend.presentation.archive.docs.ArchiveControllerDocs;
 import project.backend.presentation.archive.request.CreateUpdateArchiveRequest;
 import project.backend.security.aop.AssignCurrentUserInfo;
 import project.backend.security.aop.CurrentUserInfo;
@@ -23,7 +24,7 @@ import project.backend.security.aop.CurrentUserInfo;
 @RestController
 @RequestMapping("/archives")
 @RequiredArgsConstructor
-public class ArchiveController {
+public class ArchiveController implements ArchiveControllerDocs {
 
   private final ArchiveService archiveService;
 

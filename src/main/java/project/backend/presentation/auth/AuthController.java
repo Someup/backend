@@ -61,6 +61,6 @@ public class AuthController implements AuthControllerDocs {
 
     tokenCookieManager.removeRefreshTokenCookie(response);
 
-    return ResponseEntity.ok().build();
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }
