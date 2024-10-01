@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.business.post.response.dto.PostDetailDto;
+import project.backend.business.post.util.DateTimeManager;
 import project.backend.business.tag.implement.TagManager;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;

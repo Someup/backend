@@ -1,4 +1,4 @@
-package project.backend.business.post.implement;
+package project.backend.business.post.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
