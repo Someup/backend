@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class CreateUpdatePostResponse {
 
-  Long postId;
+  private final Long postId;
 
   @Builder
   public CreateUpdatePostResponse(Long postId) {

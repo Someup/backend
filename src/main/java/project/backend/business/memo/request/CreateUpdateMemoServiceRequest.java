@@ -9,5 +9,4 @@ public class CreateUpdateMemoServiceRequest {
 
   private Long postId;
   private String content;
-
 }

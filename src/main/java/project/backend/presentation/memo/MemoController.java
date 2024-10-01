@@ -36,5 +36,4 @@ public class MemoController implements MemoControllerDocs {
     memoService.deleteMemo(userInfo.getUserId(), postId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
 }
