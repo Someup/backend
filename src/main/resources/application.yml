@@ -1,7 +1,7 @@
 spring:
   profiles:
     active:
-      dev
+      local
     group:
       local-env:
         - local
@@ -13,22 +13,4 @@ spring:
       - jwt
       - oauth
       - ai
-
-springdoc:
-  swagger-ui:
-    groups-order: DESC
-    tags-sorter: alpha
-    operations-sorter: method
-    disable-swagger-default-url: true
-    display-request-duration: true
-    defaultModelsExpandDepth: 2
-    defaultModelExpandDepth: 2
-  api-docs:
-    path: /api-docs
-  show-actuator: true
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  writer-with-default-pretty-printer: true
-  model-and-view-allowed: true
-  paths-to-match:
-    - /**
+      - swagger

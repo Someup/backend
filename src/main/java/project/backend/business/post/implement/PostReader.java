@@ -15,6 +15,7 @@ import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
 import project.backend.entity.post.Post;
+import project.backend.entity.post.PostStatus;
 import project.backend.repository.post.PostRepository;
 
 @Slf4j
@@ -25,13 +26,20 @@ public class PostReader {
   private final PostRepository postRepository;
   private final TagReader tagReader;
 
-  public Post readPostAndUser(Long postId) {
-    return postRepository.findPostAndUserAndActivatedTrueById(postId)
+  public Post readActivatedPost(Long userId, Long postId) {
+    return postRepository.findByIdAndUserIdAndActivatedTrue(postId, userId)
                          .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
 
-  public Post read(Long userId, Long postId) {
-    return postRepository.findByIdAndUserIdAndActivatedTrue(postId, userId)
+  public Post readActivatedPublishedPost(Long userId, Long PostId) {
+    return postRepository.findPostByIdAndUserIdAndStatusAndActivatedTrue(PostId, userId,
+                             PostStatus.PUBLISHED)
+                         .orElseThrow(() -> new CustomException(
+                             ErrorCode.BAD_REQUEST));
+  }
+
+  public Post readActivatedPostAndWriter(Long postId) {
+    return postRepository.findPostAndUserAndActivatedTrueById(postId)
                          .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
 

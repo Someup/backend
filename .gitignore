@@ -42,6 +42,7 @@ application-jwt.yml
 application-local.yml
 application-oauth.yml
 application-ai.yml
+application-swagger.yml
 
 ### java ###
 LocalSecurityConfig.java
