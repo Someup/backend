@@ -1,5 +1,6 @@
 package project.backend.presentation.post;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,19 +41,15 @@ public class PostController implements PostControllerDocs {
       @RequestParam(required = false) Integer page,
       @RequestParam(required = false) Integer archiveId,
       @RequestParam(required = false) String search) {
-    PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(page, archiveId,
-        search);
-
-    PostListResponse postListResponse = postService.getPostList(userInfo.getUserId(),
-        postListServiceRequest);
-
+    PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(page, archiveId, search);
+    PostListResponse postListResponse = postService.getPostList(userInfo.getUserId(), postListServiceRequest);
     return new ResponseEntity<>(postListResponse, HttpStatus.OK);
   }
 
   @AssignOrNullCurrentUserInfo
   @PostMapping
   public ResponseEntity<CreateUpdatePostResponse> createNewPost(CurrentUserInfo userInfo,
-      @RequestBody SummaryUrlRequest summaryUrlRequest) {
+      @Valid @RequestBody SummaryUrlRequest summaryUrlRequest) { // @Valid 추가
     CreateUpdatePostResponse createUpdatePostResponse = postService.createNewPostDetail(
         userInfo.getUserId(), summaryUrlRequest.toServiceRequest());
     return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
@@ -70,10 +67,9 @@ public class PostController implements PostControllerDocs {
   @AssignCurrentUserInfo
   @PatchMapping("/{id}")
   public ResponseEntity<CreateUpdatePostResponse> updatePost(CurrentUserInfo userInfo,
-      @PathVariable("id") Long postId, @RequestBody UpdatePostRequest updatePostRequest) {
+      @PathVariable("id") Long postId, @Valid @RequestBody UpdatePostRequest updatePostRequest) {
     CreateUpdatePostResponse response = postService.updatePostDetail(userInfo.getUserId(), postId,
         updatePostRequest.toServiceRequest());
-
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
@@ -88,7 +84,7 @@ public class PostController implements PostControllerDocs {
   @AssignOrNullCurrentUserInfo
   @PatchMapping("/{id}/summary")
   public ResponseEntity<CreateUpdatePostResponse> updateSummaryPost(CurrentUserInfo userInfo,
-      @PathVariable("id") Long postId, @RequestBody SummaryUrlRequest summaryUrlRequest) {
+      @PathVariable("id") Long postId, @Valid @RequestBody SummaryUrlRequest summaryUrlRequest) {
     CreateUpdatePostResponse response = postService.updateSummaryPost(userInfo.getUserId(), postId,
         summaryUrlRequest.toServiceRequest());
     return new ResponseEntity<>(response, HttpStatus.OK);

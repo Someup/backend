@@ -1,6 +1,5 @@
 package project.backend.presentation.post.request;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -16,7 +15,6 @@ public class SummaryUrlRequest {
   private String url;
 
   @NotNull(message = "요약 옵션은 필수 값입니다.")
-  @Valid
   private SummaryOptionRequest options;
 
   public CreatePostServiceRequest toServiceRequest() {
