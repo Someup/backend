@@ -22,10 +22,9 @@ public class MemoController implements MemoControllerDocs {
 
   @AssignCurrentUserInfo
   @PostMapping
-  public ResponseEntity<Void> createMemo(CurrentUserInfo userInfo, @RequestParam Long postId,
+  public ResponseEntity<Void> createUpdateMemo(CurrentUserInfo userInfo, @RequestParam Long postId,
       @RequestBody CreateUpdateMemoRequest memoRequest) {
-    memoService.createMemo(userInfo.getUserId(), memoRequest.toServiceRequest(postId));
+    memoService.createUpdateMemo(userInfo.getUserId(), memoRequest.toServiceRequest(postId));
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
 }

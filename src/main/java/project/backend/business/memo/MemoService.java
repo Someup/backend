@@ -16,9 +16,9 @@ public class MemoService {
   private final MemoManager memoManager;
 
   @Transactional
-  public void createMemo(Long userId, CreateUpdateMemoServiceRequest memoServiceRequest) {
+  public void createUpdateMemo(Long userId, CreateUpdateMemoServiceRequest memoServiceRequest) {
     Post post = postReader.readActivatedPublishedPost(userId, memoServiceRequest.getPostId());
-    memoManager.addMemo(post, memoServiceRequest.getContent());
+    memoManager.createUpdateMemo(post, memoServiceRequest.getContent());
   }
 
 }

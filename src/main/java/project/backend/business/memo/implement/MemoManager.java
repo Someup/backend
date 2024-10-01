@@ -14,7 +14,7 @@ public class MemoManager {
 
   private final PostRepository postRepository;
 
-  public void addMemo(Post post, String content) {
+  public void createUpdateMemo(Post post, String content) {
     post.setMemo(content);
     post.setMemoCreatedAt(LocalDateTime.now());
     postRepository.save(post);
