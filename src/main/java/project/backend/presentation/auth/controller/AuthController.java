@@ -20,7 +20,7 @@ import project.backend.presentation.auth.util.TokenExtractor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthControllerDocs {
 
   private final AuthService authService;
   private final TokenExtractor tokenExtractor;

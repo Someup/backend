@@ -29,7 +29,7 @@ import project.backend.security.aop.CurrentUserInfo;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/post")
-public class PostController {
+public class PostController implements PostControllerDocs {
 
   private final PostService postService;
 
@@ -60,8 +60,8 @@ public class PostController {
   @AssignOrNullCurrentUserInfo
   @GetMapping("/{id}")
   public ResponseEntity<PostDetailResponse> getPostDetail(CurrentUserInfo userInfo,
-      @PathVariable("id") Long id, @RequestParam String status) {
-    PostDetailServiceRequest request = PostDetailServiceRequest.of(id, status);
+      @PathVariable("id") Long postId, @RequestParam String status) {
+    PostDetailServiceRequest request = PostDetailServiceRequest.of(postId, status);
     PostDetailResponse response = postService.getPostDetail(userInfo.getUserId(), request);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }

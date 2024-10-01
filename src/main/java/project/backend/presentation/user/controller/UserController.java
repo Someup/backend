@@ -13,7 +13,7 @@ import project.backend.security.aop.CurrentUserInfo;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class UserController implements UserControllerDocs {
 
   private final UserService userService;
 

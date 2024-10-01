@@ -37,7 +37,8 @@ public class AssignCurrentUserInfoAspect {
               log.info("Setting userId: {}", userId);
               invokeMethod(arg, setUserId, userId);
             },
-            () -> log.warn("No setUserId method found for class: {}", arg.getClass().getSimpleName())
+            () -> log.warn("No setUserId method found for class: {}",
+                arg.getClass().getSimpleName())
         );
       }
     }
@@ -60,7 +61,8 @@ public class AssignCurrentUserInfoAspect {
                     log.info("Setting userId: {}", userId);
                     invokeMethod(arg, setUserId, userId);
                   },
-                  () -> log.warn("No setUserId method found for class: {}", arg.getClass().getSimpleName())
+                  () -> log.warn("No setUserId method found for class: {}",
+                      arg.getClass().getSimpleName())
               );
             }
           });
@@ -69,7 +71,8 @@ public class AssignCurrentUserInfoAspect {
   // arg 객체의 setUserId 메서드를 호출하여 현재 유저의 ID를 할당
   private void invokeMethod(Object arg, Method method, Long currentUserId) {
     try {
-      log.info("Invoking method: {} on class: {} with userId: {}", method.getName(), arg.getClass().getSimpleName(), currentUserId);
+      log.info("Invoking method: {} on class: {} with userId: {}", method.getName(),
+          arg.getClass().getSimpleName(), currentUserId);
       method.invoke(arg, currentUserId);
     } catch (ReflectiveOperationException e) {
       log.error("Error invoking method: {}", method.getName(), e);

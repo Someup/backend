@@ -17,10 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.backend.business.auth.oauth.KakaoUserDetailsService;
+import project.backend.common.error.ExceptionHandlerFilter;
 import project.backend.security.jwt.JwtAccessDeniedHandler;
 import project.backend.security.jwt.JwtAuthenticationFailEntryPoint;
 import project.backend.security.jwt.JwtFilter;
-import project.backend.common.error.ExceptionHandlerFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -41,18 +41,23 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .cors(withDefaults())
         .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oauth2Login(oauth -> oauth.userInfoEndpoint(config -> config.userService(kakaoUserDetailsService)))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .oauth2Login(
+            oauth -> oauth.userInfoEndpoint(config -> config.userService(kakaoUserDetailsService)))
         .authorizeHttpRequests(request -> request
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/exception/**").permitAll()
+            .requestMatchers("/swagger-ui/**").permitAll()
+            .requestMatchers("/api-docs/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/post").permitAll()
             .requestMatchers(HttpMethod.GET, "/post/*").permitAll()
             .requestMatchers(HttpMethod.PATCH, "/post/*/summary").permitAll()
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(exceptionHandlerFilter, JwtFilter.class) // ExceptionHandlerFilter 의존성 주입으로 사용
+        .addFilterBefore(exceptionHandlerFilter,
+            JwtFilter.class) // ExceptionHandlerFilter 의존성 주입으로 사용
         .exceptionHandling(exceptionHandling -> {
           exceptionHandling.authenticationEntryPoint(jwtAuthenticationFailEntryPoint);
           exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler);
@@ -61,8 +66,8 @@ public class SecurityConfig {
     return http.build();
   }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

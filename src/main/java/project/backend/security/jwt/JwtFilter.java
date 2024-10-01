@@ -1,5 +1,6 @@
 package project.backend.security.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import project.backend.business.auth.implement.TokenProvider;
 import project.backend.common.error.ErrorCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Slf4j
 @Component
@@ -71,7 +71,8 @@ public class JwtFilter extends OncePerRequestFilter {
   }
 
   private void setErrorResponse(HttpServletResponse response) throws IOException {
-    Objects.requireNonNull(response).setStatus(ErrorCode.INVALID_ACCESS_TOKEN.getHttpStatus().value());
+    Objects.requireNonNull(response)
+           .setStatus(ErrorCode.INVALID_ACCESS_TOKEN.getHttpStatus().value());
     response.setContentType("application/json; charset=UTF-8");
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -105,6 +106,14 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     if (request.getRequestURI().startsWith("/exception")) {
+      return true;
+    }
+
+    if (request.getRequestURI().startsWith("/swagger-ui")) {
+      return true;
+    }
+
+    if (request.getRequestURI().startsWith("/api-docs")) {
       return true;
     }
 
