@@ -1,4 +1,4 @@
-package project.backend.presentation.auth.controller;
+package project.backend.presentation.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.auth.AuthService;
 import project.backend.business.auth.request.TokenServiceRequest;
 import project.backend.business.auth.response.TokenServiceResponse;
+import project.backend.presentation.auth.docs.AuthControllerDocs;
 import project.backend.presentation.auth.util.TokenCookieManager;
 import project.backend.presentation.auth.util.TokenExtractor;
 

@@ -1,4 +1,4 @@
-package project.backend.presentation.memo.controller;
+package project.backend.presentation.memo.docs;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

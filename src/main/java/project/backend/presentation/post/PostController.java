@@ -1,4 +1,4 @@
-package project.backend.presentation.post.controller;
+package project.backend.presentation.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
 import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListResponse;
+import project.backend.presentation.post.docs.PostControllerDocs;
 import project.backend.presentation.post.request.SummaryUrlRequest;
 import project.backend.presentation.post.request.UpdatePostRequest;
 import project.backend.security.aop.AssignCurrentUserInfo;

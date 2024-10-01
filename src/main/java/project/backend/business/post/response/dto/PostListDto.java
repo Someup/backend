@@ -1,4 +1,4 @@
-package project.backend.business.post.response;
+package project.backend.business.post.response.dto;
 
 import java.util.List;
 import lombok.Builder;
