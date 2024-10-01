@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.backend.entity.BaseEntity;
-import project.backend.entity.post.Post;
 import project.backend.entity.user.User;
 
 @Entity
@@ -24,32 +23,23 @@ public class Archive extends BaseEntity {
   @JoinColumn(nullable = false)
   private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn
-  private Post post;
-
   @Column(nullable = false)
   private String name;
 
   @Builder
-  private Archive(User user, Post post, String name) {
+  private Archive(User user, String name) {
     this.user = user;
-    this.post = post;
     this.name = name;
   }
 
-  public static Archive createArchive(User user, Post post, String name) {
+  public static Archive createArchive(User user, String name) {
     return Archive.builder()
                   .user(user)
-                  .post(post)
                   .name(name)
                   .build();
   }
 
-  public static Archive createArchiveWithoutPost(User user, String name) {
-    return Archive.builder()
-                  .user(user)
-                  .name(name)
-                  .build();
+  public void updateName(String newName) {
+    this.name = newName;
   }
 }

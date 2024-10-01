@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +30,14 @@ public class ArchiveController {
     CreateUpdateArchiveResponse response = archiveService.createArchive(
         userInfo.getUserId(), archiveRequest.toServiceRequest());
     return new ResponseEntity<>(response, HttpStatus.CREATED);
+  }
+
+  @AssignCurrentUserInfo
+  @PatchMapping("/{archiveId}")
+  public ResponseEntity<CreateUpdateArchiveResponse> updateArchiveName(CurrentUserInfo userInfo,
+      @PathVariable Long archiveId, @Valid @RequestBody CreateUpdateArchiveRequest archiveRequest) {
+    CreateUpdateArchiveResponse response = archiveService.updateArchiveName(
+        userInfo.getUserId(), archiveId, archiveRequest.toServiceRequest());
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

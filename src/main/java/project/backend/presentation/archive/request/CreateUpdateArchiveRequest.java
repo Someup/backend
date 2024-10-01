@@ -10,12 +10,9 @@ public class CreateUpdateArchiveRequest {
   @NotBlank(message = "아카이브 이름은 필수 입력 값입니다.")
   private String name;
 
-  private Long postId;
-
   public CreateUpdateArchiveServiceRequest toServiceRequest() {
     return CreateUpdateArchiveServiceRequest.builder()
                                             .name(name)
-                                            .postId(postId)
                                             .build();
   }
 }

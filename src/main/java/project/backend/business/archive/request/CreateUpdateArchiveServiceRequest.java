@@ -8,5 +8,4 @@ import lombok.Getter;
 public class CreateUpdateArchiveServiceRequest {
 
   private final String name;
-  private final Long postId;
 }
