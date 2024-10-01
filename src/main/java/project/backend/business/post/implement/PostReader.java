@@ -26,12 +26,7 @@ public class PostReader {
   private final PostRepository postRepository;
   private final TagReader tagReader;
 
-  public Post readPostAndUser(Long postId) {
-    return postRepository.findPostAndUserAndActivatedTrueById(postId)
-                         .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
-  }
-
-  public Post read(Long userId, Long postId) {
+  public Post readActivatedPost(Long userId, Long postId) {
     return postRepository.findByIdAndUserIdAndActivatedTrue(postId, userId)
                          .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
@@ -41,6 +36,11 @@ public class PostReader {
                              PostStatus.PUBLISHED)
                          .orElseThrow(() -> new CustomException(
                              ErrorCode.BAD_REQUEST));
+  }
+
+  public Post readActivatedPostAndWriter(Long postId) {
+    return postRepository.findPostAndUserAndActivatedTrueById(postId)
+                         .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
 
   public List<PostListDto> readPostsWithTags(Specification<Post> spec, PageRequest pageRequest) {

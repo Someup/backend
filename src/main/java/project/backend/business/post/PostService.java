@@ -77,7 +77,7 @@ public class PostService {
   @Transactional
   public CreateUpdatePostResponse updatePostDetail(Long userId, Long postId,
       PostDetailDto postDetailDto) {
-    Post post = postReader.read(userId, postId);
+    Post post = postReader.readActivatedPost(userId, postId);
     postManager.updatePost(post, postDetailDto);
     Long id = post.getId();
 
@@ -86,14 +86,14 @@ public class PostService {
 
   @Transactional
   public void deletePostDetail(Long userId, Long postId) {
-    Post post = postReader.read(userId, postId);
+    Post post = postReader.readActivatedPost(userId, postId);
     postManager.deletePost(post);
   }
 
   @Transactional
   public CreateUpdatePostResponse updateSummaryPost(Long userId, Long postId,
       CreatePostServiceRequest createPostServiceRequest) {
-    Post post = postReader.readPostAndUser(postId);
+    Post post = postReader.readActivatedPostAndWriter(postId);
 
     if (post.getUser() != null && !Objects.equals(post.getUser().getId(), userId)) {
       throw new CustomException(ErrorCode.BAD_REQUEST);
