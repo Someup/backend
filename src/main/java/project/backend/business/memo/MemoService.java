@@ -21,4 +21,10 @@ public class MemoService {
     memoManager.createUpdateMemo(post, memoServiceRequest.getContent());
   }
 
+  @Transactional
+  public void deleteMemo(Long userId, Long postId) {
+    Post post = postReader.readActivatedPublishedPost(userId, postId);
+    memoManager.deleteMemo(post);
+  }
+
 }

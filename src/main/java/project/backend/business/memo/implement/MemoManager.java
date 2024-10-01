@@ -19,4 +19,10 @@ public class MemoManager {
     post.setMemoCreatedAt(LocalDateTime.now());
     postRepository.save(post);
   }
+
+  public void deleteMemo(Post post) {
+    post.setMemo(null);
+    post.setMemoCreatedAt(null);
+    postRepository.save(post);
+  }
 }
