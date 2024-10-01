@@ -1,6 +1,7 @@
 package project.backend.presentation.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,6 @@ public class UserController implements UserControllerDocs {
   @AssignCurrentUserInfo
   public ResponseEntity<UserInfoResponse> getUserInfo(CurrentUserInfo userInfo) {
     UserInfoResponse response = userService.getUserInfo(userInfo.getUserId());
-    return ResponseEntity.ok(response);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

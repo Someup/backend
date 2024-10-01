@@ -42,17 +42,17 @@ public class PostController implements PostControllerDocs {
       @RequestParam(required = false) Integer archiveId,
       @RequestParam(required = false) String search) {
     PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(page, archiveId, search);
-    PostListResponse postListResponse = postService.getPostList(userInfo.getUserId(), postListServiceRequest);
-    return new ResponseEntity<>(postListResponse, HttpStatus.OK);
+    PostListResponse response = postService.getPostList(userInfo.getUserId(), postListServiceRequest);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @AssignOrNullCurrentUserInfo
   @PostMapping
   public ResponseEntity<CreateUpdatePostResponse> createNewPost(CurrentUserInfo userInfo,
-      @Valid @RequestBody SummaryUrlRequest summaryUrlRequest) { // @Valid 추가
-    CreateUpdatePostResponse createUpdatePostResponse = postService.createNewPostDetail(
+      @Valid @RequestBody SummaryUrlRequest summaryUrlRequest) {
+    CreateUpdatePostResponse response = postService.createNewPostDetail(
         userInfo.getUserId(), summaryUrlRequest.toServiceRequest());
-    return new ResponseEntity<>(createUpdatePostResponse, HttpStatus.CREATED);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @AssignOrNullCurrentUserInfo
