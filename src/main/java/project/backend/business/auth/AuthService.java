@@ -23,7 +23,6 @@ import project.backend.business.auth.response.TokenServiceResponse;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AuthService {
 
   private final TokenProvider tokenProvider;

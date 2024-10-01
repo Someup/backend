@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.user.UserService;
-import project.backend.business.user.response.UserResponse;
+import project.backend.business.user.response.UserInfoResponse;
 import project.backend.security.aop.AssignCurrentUserInfo;
 import project.backend.security.aop.CurrentUserInfo;
 
@@ -19,8 +19,8 @@ public class UserController implements UserControllerDocs {
 
   @GetMapping
   @AssignCurrentUserInfo
-  public ResponseEntity<UserResponse> getUser(CurrentUserInfo userInfo) {
-    UserResponse response = userService.findUserById(userInfo.getUserId());
+  public ResponseEntity<UserInfoResponse> getUserInfo(CurrentUserInfo userInfo) {
+    UserInfoResponse response = userService.getUserInfo(userInfo.getUserId());
     return ResponseEntity.ok(response);
   }
 }
