@@ -14,4 +14,3 @@ spring:
       - oauth
       - ai
       - swagger
-
