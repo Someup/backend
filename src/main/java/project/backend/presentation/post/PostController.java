@@ -42,7 +42,7 @@ public class PostController implements PostControllerDocs {
       @RequestParam(required = false) Integer archiveId,
       @RequestParam(required = false) String search) {
     PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(page, archiveId, search);
-    PostListResponse response = postService.getPostList(userInfo.getUserId(), postListServiceRequest);
+    PostListResponse response = postService.getPosts(userInfo.getUserId(), postListServiceRequest);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 

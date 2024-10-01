@@ -40,7 +40,7 @@ public class PostService {
   private final SummaryAIManager summaryAIManager;
 
   @Transactional(readOnly = true)
-  public PostListResponse getPostList(Long userId, PostListServiceRequest postListServiceRequest) {
+  public PostListResponse getPosts(Long userId, PostListServiceRequest postListServiceRequest) {
     Specification<Post> spec =
         Specification.where(PostSpecification.getUser(userId))
                      .and(PostSpecification.getPublished())
