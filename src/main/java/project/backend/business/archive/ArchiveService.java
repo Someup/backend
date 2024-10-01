@@ -40,4 +40,12 @@ public class ArchiveService {
     Archive updatedArchive = archiveManager.updateArchiveName(archive, request.getName());
     return CreateUpdateArchiveResponse.from(updatedArchive);
   }
+
+  @Transactional
+  public void deleteArchive(Long userId, Long archiveId) {
+    User user = userReader.readUserById(userId);
+    Archive archive = archiveReader.readArchiveById(archiveId);
+    archiveManager.checkArchiveOwner(archive, user);
+    archiveManager.deleteArchive(archive);
+  }
 }

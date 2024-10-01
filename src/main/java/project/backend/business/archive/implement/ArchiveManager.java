@@ -29,4 +29,9 @@ public class ArchiveManager {
       throw new CustomException(ErrorCode.BAD_REQUEST);
     }
   }
+
+  public void deleteArchive(Archive archive) {
+    archive.setActivated(Boolean.FALSE);
+    archiveRepository.save(archive);
+  }
 }
