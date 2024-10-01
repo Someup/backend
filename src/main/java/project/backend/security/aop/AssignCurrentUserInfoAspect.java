@@ -27,9 +27,8 @@ public class AssignCurrentUserInfoAspect {
 
     for (int i = 0; i < args.length; i++) {
       Object arg = args[i];
-      if (arg == null) {
-        log.warn("Argument at index {} is null, skipping this argument.", i);
-      } else {
+
+      if (arg instanceof CurrentUserInfo) {
         log.info("Processing argument at index {}: {}", i, arg.getClass().getSimpleName());
         getMethod(arg.getClass()).ifPresentOrElse(
             setUserId -> {
@@ -40,6 +39,8 @@ public class AssignCurrentUserInfoAspect {
             () -> log.warn("No setUserId method found for class: {}",
                 arg.getClass().getSimpleName())
         );
+      } else {
+        log.info("Skipping argument at index {}: Not a CurrentUserInfo instance", i);
       }
     }
   }
