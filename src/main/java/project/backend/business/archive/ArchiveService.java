@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import project.backend.business.archive.implement.ArchiveManager;
 import project.backend.business.archive.implement.ArchiveReader;
 import project.backend.business.archive.request.CreateUpdateArchiveServiceRequest;
-import project.backend.business.archive.respone.ArchiveDetailResponse;
 import project.backend.business.archive.respone.ArchiveListResponse;
 import project.backend.business.archive.respone.CreateUpdateArchiveResponse;
 import project.backend.business.user.implement.UserReader;
@@ -28,14 +27,6 @@ public class ArchiveService {
   public ArchiveListResponse getArchives(Long userId) {
     List<Archive> archives = archiveReader.readActivatedArchivesByUserId(userId);
     return ArchiveListResponse.from(archives);
-  }
-
-  @Transactional(readOnly = true)
-  public ArchiveDetailResponse getArchiveDetail(Long userId, Long archiveId) {
-    User user = userReader.readUserById(userId);
-    Archive archive = archiveReader.readActivatedArchiveById(archiveId);
-    archiveManager.checkArchiveOwner(archive, user);
-    return ArchiveDetailResponse.from(archive);
   }
 
   @Transactional

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.archive.ArchiveService;
-import project.backend.business.archive.respone.ArchiveDetailResponse;
 import project.backend.business.archive.respone.ArchiveListResponse;
 import project.backend.business.archive.respone.CreateUpdateArchiveResponse;
 import project.backend.presentation.archive.docs.ArchiveControllerDocs;
@@ -32,14 +31,6 @@ public class ArchiveController implements ArchiveControllerDocs {
   @GetMapping
   public ResponseEntity<ArchiveListResponse> getUserArchives(CurrentUserInfo userInfo) {
     ArchiveListResponse response = archiveService.getArchives(userInfo.getUserId());
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
-
-  @AssignCurrentUserInfo
-  @GetMapping("/{archiveId}")
-  public ResponseEntity<ArchiveDetailResponse> getArchiveDetail(CurrentUserInfo userInfo,
-      @PathVariable Long archiveId) {
-    ArchiveDetailResponse response = archiveService.getArchiveDetail(userInfo.getUserId(), archiveId);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 

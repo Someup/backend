@@ -3,21 +3,25 @@ package project.backend.business.archive.respone;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import project.backend.business.archive.respone.dto.ArchiveDto;
 import project.backend.entity.archive.Archive;
 
 @Getter
 @Builder
 public class ArchiveListResponse {
 
-  private final List<Long> archiveIdList;
+  private final List<ArchiveDto> archives;
 
   public static ArchiveListResponse from(List<Archive> archiveList) {
-    List<Long> archiveIds = archiveList.stream()
-                                       .map(Archive::getId)  // 각 아카이브의 ID를 추출
-                                       .toList();
+    List<ArchiveDto> archiveDtos = archiveList.stream()
+                                              .map(archive -> ArchiveDto.builder()
+                                                                        .id(archive.getId())
+                                                                        .name(archive.getName())
+                                                                        .build())
+                                              .toList();
 
     return ArchiveListResponse.builder()
-                              .archiveIdList(archiveIds)
+                              .archives(archiveDtos)
                               .build();
   }
 }
