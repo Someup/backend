@@ -51,9 +51,9 @@ public class PostService {
     PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), PAGE_SIZE,
         Sort.by("id").descending());
 
-    List<PostListDto> posts = postReader.readPostsWithTags(spec, pageRequest);
+    List<PostListDto> postListDtos = postReader.readPostsWithTags(spec, pageRequest);
 
-    return new PostListResponse(posts);
+    return PostListResponse.from(postListDtos);
   }
 
   @Transactional(readOnly = true)
