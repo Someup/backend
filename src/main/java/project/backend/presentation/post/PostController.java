@@ -82,7 +82,7 @@ public class PostController implements PostControllerDocs {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @AssignOrNullCurrentUserInfo
+  @AssignCurrentUserInfo
   @PatchMapping("/{id}/summary")
   public ResponseEntity<CreateUpdatePostResponse> updateSummaryPost(CurrentUserInfo userInfo,
       @PathVariable("id") Long postId, @Valid @RequestBody SummaryUrlRequest summaryUrlRequest) {

@@ -51,10 +51,8 @@ public class PostManager {
     postRepository.save(post);
   }
 
-  public void updateSummary(Post post, String url, SummaryResultDto summaryResultDto) {
-    post.setTitle(summaryResultDto.getTitle());
-    post.setContent(summaryResultDto.getContent());
-    post.setUrl(url);
-    postRepository.save(post);
+  public Post updateSummary(Post post, String url, SummaryResultDto summaryResultDto) {
+    post.updatePostSummary(summaryResultDto.getTitle(), summaryResultDto.getContent(), url);
+    return postRepository.save(post);
   }
 }

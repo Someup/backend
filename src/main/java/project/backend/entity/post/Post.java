@@ -109,4 +109,10 @@ public class Post extends BaseEntity {
     this.memo = memo;
     this.memoCreatedAt = memoCreatedAt;
   }
+
+  public void updatePostSummary(String title, String content, String url) {
+    this.title = title;
+    this.content = content;
+    this.url = url;
+  }
 }

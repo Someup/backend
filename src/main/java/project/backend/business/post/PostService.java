@@ -98,13 +98,14 @@ public class PostService {
       CreatePostServiceRequest createPostServiceRequest) {
     Post post = postReader.readActivatedPostAndWriter(postId);
 
-    if (post.getUser() != null && !Objects.equals(post.getUser().getId(), userId)) {
+    if (!Objects.equals(post.getUser().getId(), userId)) {
       throw new CustomException(ErrorCode.BAD_REQUEST);
     }
 
     SummaryResultDto summaryResultDto = summaryAIManager.getSummary(createPostServiceRequest);
-    postManager.updateSummary(post, createPostServiceRequest.getUrl(), summaryResultDto);
+    Post updatedPost = postManager.updateSummary(post, createPostServiceRequest.getUrl(),
+        summaryResultDto);
 
-    return CreateUpdatePostResponse.from(post);
+    return CreateUpdatePostResponse.from(updatedPost);
   }
 }
