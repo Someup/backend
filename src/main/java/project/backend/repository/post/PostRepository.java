@@ -10,6 +10,8 @@ import project.backend.entity.post.PostStatus;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificationExecutor {
 
+  int countPostsByUserIdAndStatusAndActivatedTrue(Long userId, PostStatus status);
+
   Optional<Post> findPostAndUserAndActivatedTrueById(Long postId);
 
   Optional<Post> findByIdAndUserIdAndActivatedTrue(Long postId, Long userId);

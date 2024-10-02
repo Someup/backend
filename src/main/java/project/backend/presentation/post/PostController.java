@@ -18,6 +18,7 @@ import project.backend.business.post.PostService;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
+import project.backend.business.post.response.PostCountResponse;
 import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListResponse;
 import project.backend.presentation.post.docs.PostControllerDocs;
@@ -34,6 +35,13 @@ import project.backend.security.aop.CurrentUserInfo;
 public class PostController implements PostControllerDocs {
 
   private final PostService postService;
+
+  @AssignCurrentUserInfo
+  @GetMapping("/count")
+  public ResponseEntity<PostCountResponse> getPostCount(CurrentUserInfo userInfo) {
+    PostCountResponse response = postService.getTotalPostCount(userInfo.getUserId());
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
 
   @AssignCurrentUserInfo
   @GetMapping

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import project.backend.business.post.response.CreateUpdatePostResponse;
+import project.backend.business.post.response.PostCountResponse;
 import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListResponse;
 import project.backend.entity.post.PostStatus;
@@ -16,7 +17,7 @@ import project.backend.security.aop.CurrentUserInfo;
 @Tag(name = "게시글 API")
 public interface PostControllerDocs {
 
-  @Operation(summary = "게시글 목록 조회 API", description = "로그인한 유저가 작성한 게시글을 최근 작성한 순서대로 조회합니다.")
+  @Operation(summary = "게시글 목록 조회 API", description = "로그인한 유저의 게시글을 최근 작성한 순서대로 조회.")
   @Parameter(name = "userInfo", hidden = true)
   @Parameter(name = "page", description = "조회할 페이지 번호. 시작 = 0")
   @Parameter(name = "archiveId", description = "조회할 아카이브 번호.")
@@ -26,6 +27,10 @@ public interface PostControllerDocs {
       Integer page,
       Long archiveId,
       String search);
+
+  @Operation(summary = "게시글 개수 조회 API", description = "로그인한 유저가 작성한 게시글의 총 개수 조회.")
+  @Parameter(name = "userInfo", hidden = true)
+  ResponseEntity<PostCountResponse> getPostCount(CurrentUserInfo userInfo);
 
   @Operation(summary = "요약 요청 API", description = "요약 옵션을 통해 웹사이트 요약.")
   @Parameter(name = "userInfo", hidden = true)

@@ -17,6 +17,7 @@ import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.post.request.UpdatePostServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
+import project.backend.business.post.response.PostCountResponse;
 import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListResponse;
 import project.backend.business.post.response.dto.PostDetailDto;
@@ -56,6 +57,12 @@ public class PostService {
     List<PostListDto> postListDtos = postReader.readPostsWithTags(spec, pageRequest);
 
     return PostListResponse.from(postListDtos);
+  }
+
+  @Transactional(readOnly = true)
+  public PostCountResponse getTotalPostCount(Long userId) {
+    int count = postReader.readActivatePostCountByUserId(userId);
+    return PostCountResponse.from(count);
   }
 
   @Transactional(readOnly = true)
