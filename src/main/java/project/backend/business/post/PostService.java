@@ -20,6 +20,7 @@ import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListResponse;
 import project.backend.business.post.response.dto.PostDetailDto;
 import project.backend.business.post.response.dto.PostListDto;
+import project.backend.business.post.response.dto.SummaryResultDto;
 import project.backend.business.user.implement.UserReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
@@ -68,9 +69,9 @@ public class PostService {
   @Transactional
   public CreateUpdatePostResponse createPostDetail(Long userId,
       CreatePostServiceRequest createPostServiceRequest) {
-    String summary = summaryAIManager.getSummary(createPostServiceRequest);
-    User user = userReader.readUserById(userId);
-    Post post = postManager.createPost(user, createPostServiceRequest.getUrl(), summary);
+    SummaryResultDto summaryResultDto = summaryAIManager.getSummary(createPostServiceRequest);
+    User user = userReader.readUserByIdOrNull(userId);
+    Post post = postManager.createPost(user, createPostServiceRequest.getUrl(), summaryResultDto);
 
     return CreateUpdatePostResponse.from(post);
   }
@@ -80,9 +81,8 @@ public class PostService {
       PostDetailDto postDetailDto) {
     Post post = postReader.readActivatedPost(userId, postId);
     postManager.updatePost(post, postDetailDto);
-    Long id = post.getId();
 
-    return new CreateUpdatePostResponse(id);
+    return CreateUpdatePostResponse.from(post);
   }
 
   @Transactional
@@ -100,9 +100,9 @@ public class PostService {
       throw new CustomException(ErrorCode.BAD_REQUEST);
     }
 
-    String summary = summaryAIManager.getSummary(createPostServiceRequest);
-    postManager.updateSummary(post, createPostServiceRequest.getUrl(), summary);
+    SummaryResultDto summaryResultDto = summaryAIManager.getSummary(createPostServiceRequest);
+    postManager.updateSummary(post, createPostServiceRequest.getUrl(), summaryResultDto);
 
-    return new CreateUpdatePostResponse(post.getId());
+    return CreateUpdatePostResponse.from(post);
   }
 }

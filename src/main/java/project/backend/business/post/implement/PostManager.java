@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.backend.business.post.response.dto.PostDetailDto;
-import project.backend.business.post.util.DateTimeManager;
+import project.backend.business.post.response.dto.SummaryResultDto;
 import project.backend.business.tag.implement.TagManager;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;
@@ -19,9 +19,9 @@ public class PostManager {
   private final TagManager tagManager;
 
 
-  public Post createPost(User user, String url, String summary) {
-    String tmpTitle = DateTimeManager.getCurrentDateTime();
-    Post newPost = Post.createPost(user, tmpTitle, summary, PostStatus.DRAFT, url);
+  public Post createPost(User user, String url, SummaryResultDto summaryResultDto) {
+    Post newPost = Post.createPost(user, summaryResultDto.getTitle(), summaryResultDto.getContent(),
+        PostStatus.DRAFT, url);
 
     return postRepository.save(newPost);
   }
@@ -46,8 +46,9 @@ public class PostManager {
     postRepository.save(post);
   }
 
-  public void updateSummary(Post post, String url, String summary) {
-    post.setContent(summary);
+  public void updateSummary(Post post, String url, SummaryResultDto summaryResultDto) {
+    post.setTitle(summaryResultDto.getTitle());
+    post.setContent(summaryResultDto.getContent());
     post.setUrl(url);
     postRepository.save(post);
   }
