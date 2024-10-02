@@ -63,7 +63,7 @@ public class PostService {
     PostDetailDto postDetailDto = postReader.readPostDetailWithTags(userId,
         postDetailServiceRequest);
 
-    return new PostDetailResponse(postDetailDto);
+    return PostDetailResponse.from(postDetailDto);
   }
 
   @Transactional

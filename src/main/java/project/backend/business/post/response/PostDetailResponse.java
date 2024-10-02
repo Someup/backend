@@ -1,10 +1,12 @@
 package project.backend.business.post.response;
 
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import project.backend.business.post.response.dto.PostDetailDto;
 
 @Getter
+@Builder
 public class PostDetailResponse {
 
   private final String title;
@@ -23,5 +25,17 @@ public class PostDetailResponse {
     this.createdAt = postDetailDto.getCreatedAt();
     this.memoContent = postDetailDto.getMemoContent();
     this.memoCreatedAt = postDetailDto.getMemoCreatedAt();
+  }
+
+  public static PostDetailResponse from(PostDetailDto postDetailDto) {
+    return PostDetailResponse.builder()
+                             .title(postDetailDto.getTitle())
+                             .content(postDetailDto.getContent())
+                             .url(postDetailDto.getUrl())
+                             .tagList(postDetailDto.getTagList())
+                             .createdAt(postDetailDto.getCreatedAt())
+                             .memoContent(postDetailDto.getMemoContent())
+                             .memoCreatedAt(postDetailDto.getMemoCreatedAt())
+                             .build();
   }
 }
