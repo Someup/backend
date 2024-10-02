@@ -30,7 +30,7 @@ import project.backend.security.aop.CurrentUserInfo;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController implements PostControllerDocs {
 
   private final PostService postService;

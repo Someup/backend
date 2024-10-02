@@ -17,7 +17,7 @@ import project.backend.security.aop.CurrentUserInfo;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/post/{postId}/memo")
+@RequestMapping("/posts/{postId}/memos")
 public class MemoController implements MemoControllerDocs {
 
   private final MemoService memoService;
