@@ -8,10 +8,10 @@ import lombok.Getter;
 public class PostListServiceRequest {
 
   private Integer page;
-  private Integer archiveId;
+  private Long archiveId;
   private String search;
 
-  public static PostListServiceRequest of(Integer page, Integer archiveId, String search) {
+  public static PostListServiceRequest of(Integer page, Long archiveId, String search) {
     if (page == null) {
       page = 0;
     }

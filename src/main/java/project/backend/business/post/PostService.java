@@ -16,10 +16,10 @@ import project.backend.business.post.request.CreatePostServiceRequest;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
-import project.backend.business.post.response.dto.PostDetailDto;
 import project.backend.business.post.response.PostDetailResponse;
-import project.backend.business.post.response.dto.PostListDto;
 import project.backend.business.post.response.PostListResponse;
+import project.backend.business.post.response.dto.PostDetailDto;
+import project.backend.business.post.response.dto.PostListDto;
 import project.backend.business.user.implement.UserReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
@@ -43,8 +43,9 @@ public class PostService {
   public PostListResponse getPosts(Long userId, PostListServiceRequest postListServiceRequest) {
     Specification<Post> spec =
         Specification.where(PostSpecification.getUser(userId))
-                     .and(PostSpecification.getPublished())
+                     .and(PostSpecification.getArchive(postListServiceRequest.getArchiveId()))
                      .and(PostSpecification.getSearch(postListServiceRequest.getSearch()))
+                     .and(PostSpecification.getPublished())
                      .and(PostSpecification.getActivated());
 
     PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), PAGE_SIZE,

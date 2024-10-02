@@ -24,7 +24,7 @@ public interface PostControllerDocs {
   ResponseEntity<PostListResponse> getPosts(
       CurrentUserInfo userInfo,
       Integer page,
-      Integer archiveId,
+      Long archiveId,
       String search);
 
   @Operation(summary = "요약 요청 API", description = "요약 옵션을 통해 웹사이트 요약.")

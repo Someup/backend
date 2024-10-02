@@ -39,9 +39,10 @@ public class PostController implements PostControllerDocs {
   @GetMapping
   public ResponseEntity<PostListResponse> getPosts(CurrentUserInfo userInfo,
       @RequestParam(required = false) Integer page,
-      @RequestParam(required = false) Integer archiveId,
+      @RequestParam(required = false) Long archiveId,
       @RequestParam(required = false) String search) {
-    PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(page, archiveId, search);
+    PostListServiceRequest postListServiceRequest = PostListServiceRequest.of(page, archiveId,
+        search);
     PostListResponse response = postService.getPosts(userInfo.getUserId(), postListServiceRequest);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }

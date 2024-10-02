@@ -34,6 +34,16 @@ public class PostSpecification {
     };
   }
 
+  public static Specification<Post> getArchive(Long archiveId) {
+    return (root, query, criteriaBuilder) -> {
+      if (archiveId == null) {
+        return null;
+      } else {
+        return criteriaBuilder.equal(root.get("archive").get("id"), archiveId);
+      }
+    };
+  }
+
   public static Specification<Post> getPublished() {
     return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"),
         PostStatus.PUBLISHED);
