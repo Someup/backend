@@ -18,14 +18,12 @@ public class PostManager {
   private final PostRepository postRepository;
   private final TagManager tagManager;
 
-  /**
-   * 임시 Post는 생성 시간으로 시간 세팅
-   */
-  public Long createTempPost(User user, String url, String summary) {
-    String tmpTitle = DateTimeManager.getCurrentDateTime();
-    Post newTmpPost = Post.createPost(user, tmpTitle, summary, PostStatus.DRAFT, url);
 
-    return postRepository.save(newTmpPost).getId();
+  public Post createPost(User user, String url, String summary) {
+    String tmpTitle = DateTimeManager.getCurrentDateTime();
+    Post newPost = Post.createPost(user, tmpTitle, summary, PostStatus.DRAFT, url);
+
+    return postRepository.save(newPost);
   }
 
   public void updatePost(Post post, PostDetailDto postDetailDto) {

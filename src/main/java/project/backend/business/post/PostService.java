@@ -66,13 +66,13 @@ public class PostService {
   }
 
   @Transactional
-  public CreateUpdatePostResponse createNewPostDetail(Long userId,
+  public CreateUpdatePostResponse createPostDetail(Long userId,
       CreatePostServiceRequest createPostServiceRequest) {
     String summary = summaryAIManager.getSummary(createPostServiceRequest);
     User user = userReader.readUserById(userId);
-    Long postId = postManager.createTempPost(user, createPostServiceRequest.getUrl(), summary);
+    Post post = postManager.createPost(user, createPostServiceRequest.getUrl(), summary);
 
-    return new CreateUpdatePostResponse(postId);
+    return CreateUpdatePostResponse.from(post);
   }
 
   @Transactional

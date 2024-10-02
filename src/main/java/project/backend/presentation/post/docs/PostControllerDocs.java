@@ -29,7 +29,7 @@ public interface PostControllerDocs {
 
   @Operation(summary = "요약 요청 API", description = "요약 옵션을 통해 웹사이트 요약.")
   @Parameter(name = "userInfo", hidden = true)
-  ResponseEntity<CreateUpdatePostResponse> createNewPost(
+  ResponseEntity<CreateUpdatePostResponse> createPost(
       @Schema(hidden = true)
       CurrentUserInfo userInfo,
       SummaryUrlRequest summaryUrlRequest);

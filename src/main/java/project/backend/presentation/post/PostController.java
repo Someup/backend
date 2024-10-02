@@ -49,11 +49,11 @@ public class PostController implements PostControllerDocs {
 
   @AssignOrNullCurrentUserInfo
   @PostMapping
-  public ResponseEntity<CreateUpdatePostResponse> createNewPost(CurrentUserInfo userInfo,
+  public ResponseEntity<CreateUpdatePostResponse> createPost(CurrentUserInfo userInfo,
       @Valid @RequestBody SummaryUrlRequest summaryUrlRequest) {
-    CreateUpdatePostResponse response = postService.createNewPostDetail(
+    CreateUpdatePostResponse response = postService.createPostDetail(
         userInfo.getUserId(), summaryUrlRequest.toServiceRequest());
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @AssignOrNullCurrentUserInfo
