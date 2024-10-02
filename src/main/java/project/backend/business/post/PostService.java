@@ -15,6 +15,7 @@ import project.backend.business.post.implement.SummaryAIManager;
 import project.backend.business.post.request.CreatePostServiceRequest;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
+import project.backend.business.post.request.UpdatePostServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
 import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListResponse;
@@ -78,11 +79,12 @@ public class PostService {
 
   @Transactional
   public CreateUpdatePostResponse updatePostDetail(Long userId, Long postId,
-      PostDetailDto postDetailDto) {
-    Post post = postReader.readActivatedPost(userId, postId);
-    postManager.updatePost(post, postDetailDto);
+      UpdatePostServiceRequest updatePostServiceRequest) {
+    User user = userReader.readUserById(userId);
+    Post post = postReader.readActivatedPostAndWriter(postId);
+    Post updatedPost = postManager.updatePost(user, post, updatePostServiceRequest);
 
-    return CreateUpdatePostResponse.from(post);
+    return CreateUpdatePostResponse.from(updatedPost);
   }
 
   @Transactional

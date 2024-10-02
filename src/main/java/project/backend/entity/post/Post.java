@@ -87,19 +87,26 @@ public class Post extends BaseEntity {
 
   public static Post createPost(User user, String title, String content, PostStatus status,
       String url) {
-    Post post = Post.builder()
-                    .title(title)
-                    .content(content)
-                    .type(PostType.PRIVATE)
-                    .status(status)
-                    .url(url)
-                    .activated(true)
-                    .build();
+    Post post = Post.builder().title(title).content(content).type(PostType.PRIVATE).status(status)
+                    .url(url).activated(true).build();
 
     if (user != null) {
       post.setUser(user);
     }
 
     return post;
+  }
+
+  public void updatePost(User user, String title, String content, Archive archive) {
+    this.user = user;
+    this.title = title;
+    this.content = content;
+    this.archive = archive;
+    this.status = PostStatus.PUBLISHED;
+  }
+
+  public void updatePostMemo(String memo, LocalDateTime memoCreatedAt) {
+    this.memo = memo;
+    this.memoCreatedAt = memoCreatedAt;
   }
 }

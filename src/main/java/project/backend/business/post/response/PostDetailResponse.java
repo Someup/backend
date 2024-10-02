@@ -17,16 +17,6 @@ public class PostDetailResponse {
   private final String memoContent;
   private final String memoCreatedAt;
 
-  public PostDetailResponse(PostDetailDto postDetailDto) {
-    this.title = postDetailDto.getTitle();
-    this.content = postDetailDto.getContent();
-    this.url = postDetailDto.getUrl();
-    this.tagList = postDetailDto.getTagList();
-    this.createdAt = postDetailDto.getCreatedAt();
-    this.memoContent = postDetailDto.getMemoContent();
-    this.memoCreatedAt = postDetailDto.getMemoCreatedAt();
-  }
-
   public static PostDetailResponse from(PostDetailDto postDetailDto) {
     return PostDetailResponse.builder()
                              .title(postDetailDto.getTitle())
