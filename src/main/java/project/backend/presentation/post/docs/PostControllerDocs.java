@@ -9,7 +9,6 @@ import project.backend.business.post.response.CreateUpdatePostResponse;
 import project.backend.business.post.response.PostCountResponse;
 import project.backend.business.post.response.PostDetailResponse;
 import project.backend.business.post.response.PostListResponse;
-import project.backend.entity.post.PostStatus;
 import project.backend.presentation.post.request.SummaryUrlRequest;
 import project.backend.presentation.post.request.UpdatePostRequest;
 import project.backend.security.aop.CurrentUserInfo;
@@ -43,7 +42,7 @@ public interface PostControllerDocs {
   @Parameter(name = "userInfo", hidden = true)
   @Parameter(name = "id", description = "게시글 id")
   ResponseEntity<PostDetailResponse> getPostDetail(CurrentUserInfo userInfo, Long postId,
-      @Schema(name = "status", description = "게시글 게시 여부", implementation = PostStatus.class)
+      @Schema(name = "status", description = "게시글 게시 여부")
       String status);
 
   @Operation(summary = "게시글 수정 API", description = "게시글 관련 정보 수정")
