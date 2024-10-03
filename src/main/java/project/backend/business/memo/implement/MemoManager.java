@@ -15,14 +15,12 @@ public class MemoManager {
   private final PostRepository postRepository;
 
   public void createUpdateMemo(Post post, String content) {
-    post.setMemo(content);
-    post.setMemoCreatedAt(LocalDateTime.now());
+    post.updatePostMemo(content, LocalDateTime.now());
     postRepository.save(post);
   }
 
   public void deleteMemo(Post post) {
-    post.setMemo(null);
-    post.setMemoCreatedAt(null);
+    post.updatePostMemo(null, null);
     postRepository.save(post);
   }
 }

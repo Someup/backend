@@ -1,9 +1,11 @@
 package project.backend.presentation.post.request;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Getter;
-import project.backend.business.post.response.dto.PostDetailDto;
+import project.backend.business.post.request.UpdatePostServiceRequest;
 
 @Getter
 public class UpdatePostRequest {
@@ -20,19 +22,19 @@ public class UpdatePostRequest {
   @Size(max = 5, message = "해시태그는 최대 5개까지 입력할 수 있습니다.")
   private List<String> tagList;
 
-  private int archiveId;
+  private Long archiveId;
 
   @Size(max = 2000, message = "메모는 2000자를 초과할 수 없습니다.")
   private String memo;
 
-  public PostDetailDto toServiceRequest() {
-    return PostDetailDto.builder()
-                        .title(title)
-                        .content(content)
-                        .tagList(tagList)
-                        .archiveId(archiveId)
-                        .memoContent(memo)
-                        .build();
+  public UpdatePostServiceRequest toServiceRequest() {
+    return UpdatePostServiceRequest.builder()
+                                   .title(title)
+                                   .content(content)
+                                   .tagList(tagList)
+                                   .archiveId(archiveId)
+                                   .memo(memo)
+                                   .build();
 
   }
 }

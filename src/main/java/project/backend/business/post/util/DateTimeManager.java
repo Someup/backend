@@ -5,14 +5,10 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTimeManager {
 
-    public static String convertToStringPattern(LocalDateTime dateTime, String pattern) {
-        if (dateTime == null) {
-            return null;
-        }
-        return dateTime.format(DateTimeFormatter.ofPattern(pattern));
+  public static String convertToStringPattern(LocalDateTime dateTime, String pattern) {
+    if (dateTime == null) {
+      return null;
     }
-
-    public static String getCurrentDateTime(){
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
-    }
+    return dateTime.format(DateTimeFormatter.ofPattern(pattern));
+  }
 }

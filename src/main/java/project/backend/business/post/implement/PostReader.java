@@ -85,4 +85,8 @@ public class PostReader {
                                 "yy.MM.dd"))
                         .build();
   }
+
+  public int readActivatePostCountByUserId(Long userId) {
+    return postRepository.countPostsByUserIdAndStatusAndActivatedTrue(userId, PostStatus.PUBLISHED);
+  }
 }

@@ -11,15 +11,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
-import project.backend.business.post.implement.SummaryAIManager;
+import project.backend.business.post.implement.SummaryManager;
 import project.backend.business.post.request.CreatePostServiceRequest;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
+import project.backend.business.post.request.UpdatePostServiceRequest;
 import project.backend.business.post.response.CreateUpdatePostResponse;
-import project.backend.business.post.response.dto.PostDetailDto;
+import project.backend.business.post.response.PostCountResponse;
 import project.backend.business.post.response.PostDetailResponse;
-import project.backend.business.post.response.dto.PostListDto;
 import project.backend.business.post.response.PostListResponse;
+import project.backend.business.post.response.dto.PostDetailDto;
+import project.backend.business.post.response.dto.PostListDto;
+import project.backend.business.post.response.dto.SummaryResultDto;
 import project.backend.business.user.implement.UserReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
@@ -37,22 +40,29 @@ public class PostService {
   private final UserReader userReader;
   private final PostReader postReader;
   private final PostManager postManager;
-  private final SummaryAIManager summaryAIManager;
+  private final SummaryManager summaryManager;
 
   @Transactional(readOnly = true)
   public PostListResponse getPosts(Long userId, PostListServiceRequest postListServiceRequest) {
     Specification<Post> spec =
         Specification.where(PostSpecification.getUser(userId))
-                     .and(PostSpecification.getPublished())
+                     .and(PostSpecification.getArchive(postListServiceRequest.getArchiveId()))
                      .and(PostSpecification.getSearch(postListServiceRequest.getSearch()))
+                     .and(PostSpecification.getPublished())
                      .and(PostSpecification.getActivated());
 
     PageRequest pageRequest = PageRequest.of(postListServiceRequest.getPage(), PAGE_SIZE,
         Sort.by("id").descending());
 
-    List<PostListDto> posts = postReader.readPostsWithTags(spec, pageRequest);
+    List<PostListDto> postListDtos = postReader.readPostsWithTags(spec, pageRequest);
 
-    return new PostListResponse(posts);
+    return PostListResponse.from(postListDtos);
+  }
+
+  @Transactional(readOnly = true)
+  public PostCountResponse getTotalPostCount(Long userId) {
+    int count = postReader.readActivatePostCountByUserId(userId);
+    return PostCountResponse.from(count);
   }
 
   @Transactional(readOnly = true)
@@ -61,27 +71,27 @@ public class PostService {
     PostDetailDto postDetailDto = postReader.readPostDetailWithTags(userId,
         postDetailServiceRequest);
 
-    return new PostDetailResponse(postDetailDto);
+    return PostDetailResponse.from(postDetailDto);
   }
 
   @Transactional
-  public CreateUpdatePostResponse createNewPostDetail(Long userId,
+  public CreateUpdatePostResponse createPostDetail(Long userId,
       CreatePostServiceRequest createPostServiceRequest) {
-    String summary = summaryAIManager.getSummary(createPostServiceRequest);
-    User user = userReader.readUserById(userId);
-    Long postId = postManager.createTempPost(user, createPostServiceRequest.getUrl(), summary);
+    SummaryResultDto summaryResultDto = summaryManager.summarize(createPostServiceRequest);
+    User user = userReader.readUserByIdOrNull(userId);
+    Post post = postManager.createPost(user, createPostServiceRequest.getUrl(), summaryResultDto);
 
-    return new CreateUpdatePostResponse(postId);
+    return CreateUpdatePostResponse.from(post);
   }
 
   @Transactional
   public CreateUpdatePostResponse updatePostDetail(Long userId, Long postId,
-      PostDetailDto postDetailDto) {
-    Post post = postReader.readActivatedPost(userId, postId);
-    postManager.updatePost(post, postDetailDto);
-    Long id = post.getId();
+      UpdatePostServiceRequest updatePostServiceRequest) {
+    User user = userReader.readUserById(userId);
+    Post post = postReader.readActivatedPostAndWriter(postId);
+    Post updatedPost = postManager.updatePost(user, post, updatePostServiceRequest);
 
-    return new CreateUpdatePostResponse(id);
+    return CreateUpdatePostResponse.from(updatedPost);
   }
 
   @Transactional
@@ -95,13 +105,14 @@ public class PostService {
       CreatePostServiceRequest createPostServiceRequest) {
     Post post = postReader.readActivatedPostAndWriter(postId);
 
-    if (post.getUser() != null && !Objects.equals(post.getUser().getId(), userId)) {
+    if (!Objects.equals(post.getUser().getId(), userId)) {
       throw new CustomException(ErrorCode.BAD_REQUEST);
     }
 
-    String summary = summaryAIManager.getSummary(createPostServiceRequest);
-    postManager.updateSummary(post, createPostServiceRequest.getUrl(), summary);
+    SummaryResultDto summaryResultDto = summaryManager.summarize(createPostServiceRequest);
+    Post updatedPost = postManager.updateSummary(post, createPostServiceRequest.getUrl(),
+        summaryResultDto);
 
-    return new CreateUpdatePostResponse(post.getId());
+    return CreateUpdatePostResponse.from(updatedPost);
   }
 }

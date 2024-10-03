@@ -17,4 +17,12 @@ public class UserReader {
     return userRepository.findById(userId)
                          .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
   }
+
+  public User readUserByIdOrNull(Long userId) {
+    if (userId == null) {
+      return null;
+    }
+    return userRepository.findById(userId)
+                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+  }
 }

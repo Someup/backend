@@ -13,9 +13,8 @@ public class PostSpecification {
     return (root, query, criteriaBuilder) -> {
       if (userId == null) {
         return null;
-      } else {
-        return criteriaBuilder.equal(root.get("user").get("id"), userId);
       }
+      return criteriaBuilder.equal(root.get("user").get("id"), userId);
     };
   }
 
@@ -23,14 +22,22 @@ public class PostSpecification {
     return (root, query, criteriaBuilder) -> {
       if (search == null) {
         return null;
-      } else {
-        if (search.startsWith("#")) {
-          Join<Post, PostTag> postTagJoin = root.join("postTagList");
-          Join<PostTag, Tag> tagJoin = postTagJoin.join("tag");
-          return criteriaBuilder.like(tagJoin.get("name"), "%" + search.substring(1) + "%");
-        }
-        return criteriaBuilder.like(root.get("title"), "%" + search + "%");
       }
+      if (search.startsWith("#")) {
+        Join<Post, PostTag> postTagJoin = root.join("postTagList");
+        Join<PostTag, Tag> tagJoin = postTagJoin.join("tag");
+        return criteriaBuilder.like(tagJoin.get("name"), "%" + search.substring(1) + "%");
+      }
+      return criteriaBuilder.like(root.get("title"), "%" + search + "%");
+    };
+  }
+
+  public static Specification<Post> getArchive(Long archiveId) {
+    return (root, query, criteriaBuilder) -> {
+      if (archiveId == null) {
+        return null;
+      }
+      return criteriaBuilder.equal(root.get("archive").get("id"), archiveId);
     };
   }
 
