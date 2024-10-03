@@ -1,8 +1,11 @@
 package project.backend.business.post.implement;
 
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
@@ -12,6 +15,8 @@ import project.backend.business.post.request.CreatePostServiceRequest;
 import project.backend.business.post.request.summary.SummaryOption;
 import project.backend.business.post.response.dto.SummaryResultDto;
 import project.backend.business.post.util.JsonParser;
+import project.backend.common.error.CustomException;
+import project.backend.common.error.ErrorCode;
 
 @Slf4j
 @Component
@@ -27,11 +32,12 @@ public class SummaryAIManager {
                                      .getOutput()
                                      .getContent();
 
-    Map<String, String> result = JsonParser.convertString2Json(responseContent);
+    JSONObject jsonObject = JsonParser.parseJsonFromText(responseContent);
+    Map<String, String> summaryResult = extractSummaryDataFromJson(jsonObject);
 
     return SummaryResultDto.builder()
-                           .title(result.get("title"))
-                           .content(result.get("content"))
+                           .title(summaryResult.get("title"))
+                           .content(summaryResult.get("content"))
                            .build();
   }
 
@@ -53,5 +59,22 @@ public class SummaryAIManager {
         VertexAiGeminiChatOptions.builder()
                                  .withModel(VertexAiGeminiChatModel.ChatModel.GEMINI_1_5_FLASH)
                                  .build());
+  }
+
+  private Map<String, String> extractSummaryDataFromJson(JSONObject jsonObject) {
+    try {
+      String title = jsonObject.getString("title");
+      String content = jsonObject.getString("content");
+
+      Map<String, String> summaryDataMap = new HashMap<>();
+
+      summaryDataMap.put("title", title);
+      summaryDataMap.put("content", content);
+
+      return summaryDataMap;
+
+    } catch (JSONException e) {
+      throw new CustomException(ErrorCode.INVALID_SUMMARY);
+    }
   }
 }
