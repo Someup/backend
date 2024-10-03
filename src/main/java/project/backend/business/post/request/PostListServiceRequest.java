@@ -7,9 +7,9 @@ import lombok.Getter;
 @Builder
 public class PostListServiceRequest {
 
-  private Integer page;
-  private Long archiveId;
-  private String search;
+  private final Integer page;
+  private final Long archiveId;
+  private final String search;
 
   public static PostListServiceRequest of(Integer page, Long archiveId, String search) {
     if (page == null) {

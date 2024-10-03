@@ -87,8 +87,14 @@ public class Post extends BaseEntity {
 
   public static Post createPost(User user, String title, String content, PostStatus status,
       String url) {
-    Post post = Post.builder().title(title).content(content).type(PostType.PRIVATE).status(status)
-                    .url(url).activated(true).build();
+    Post post = Post.builder()
+                    .title(title)
+                    .content(content)
+                    .type(PostType.PRIVATE)
+                    .status(status)
+                    .url(url)
+                    .activated(true)
+                    .build();
 
     if (user != null) {
       post.setUser(user);

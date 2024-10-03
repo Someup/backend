@@ -14,5 +14,4 @@ public class PostCountResponse {
                             .totalCount(count)
                             .build();
   }
-
 }
