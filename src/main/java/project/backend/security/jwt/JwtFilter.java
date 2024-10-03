@@ -88,6 +88,12 @@ public class JwtFilter extends OncePerRequestFilter {
                                                            .equals(HttpMethod.POST.name())) {
       return true;
     }
+    // 요약본 조회하기
+    if (request.getRequestURI().matches("/posts/[0-9]+") && request.getMethod()
+                                                                   .equals(HttpMethod.GET.name())) {
+      return true;
+    }
+
     // 재요약하기
     if (request.getRequestURI().matches("/posts/[0-9]+/summary") && request.getMethod().equals(
         HttpMethod.PATCH.name())) {
