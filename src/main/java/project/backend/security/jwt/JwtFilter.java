@@ -84,12 +84,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
   private static boolean isRequestSummaryURI(HttpServletRequest request) {
     // 요약하기
-    if (request.getRequestURI().equals("/post") && request.getMethod()
-                                                          .equals(HttpMethod.POST.name())) {
+    if (request.getRequestURI().equals("/posts") && request.getMethod()
+                                                           .equals(HttpMethod.POST.name())) {
       return true;
     }
     // 재요약하기
-    if (request.getRequestURI().matches("/post/[0-9]+/summary") && request.getMethod().equals(
+    if (request.getRequestURI().matches("/posts/[0-9]+/summary") && request.getMethod().equals(
         HttpMethod.PATCH.name())) {
       return true;
     }

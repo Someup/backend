@@ -9,9 +9,11 @@ import io.swagger.v3.oas.models.servers.Server;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class SwaggerConfig {
+public class SwaggerConfig implements WebMvcConfigurer {
 
   private static final String BEARER_TOKEN_PREFIX = "Bearer";
 
@@ -44,5 +46,14 @@ public class SwaggerConfig {
         .title("Someup API Page") // API의 제목
         .description("스위프 6기 5팀 API") // API에 대한 설명
         .version("1.0.0"); // API의 버전
+  }
+
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("swagger-ui.html")
+            .addResourceLocations("classpath:/META-INF/resources/");
+
+    registry.addResourceHandler("/webjars/**")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/");
   }
 }
