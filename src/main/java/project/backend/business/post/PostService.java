@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.backend.business.post.implement.PostManager;
 import project.backend.business.post.implement.PostReader;
-import project.backend.business.post.implement.SummaryAIManager;
+import project.backend.business.post.implement.UrlSummaryManager;
 import project.backend.business.post.request.CreatePostServiceRequest;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.request.PostListServiceRequest;
@@ -40,7 +40,7 @@ public class PostService {
   private final UserReader userReader;
   private final PostReader postReader;
   private final PostManager postManager;
-  private final SummaryAIManager summaryAIManager;
+  private final UrlSummaryManager urlSummaryManager;
 
   @Transactional(readOnly = true)
   public PostListResponse getPosts(Long userId, PostListServiceRequest postListServiceRequest) {
@@ -77,7 +77,7 @@ public class PostService {
   @Transactional
   public CreateUpdatePostResponse createPostDetail(Long userId,
       CreatePostServiceRequest createPostServiceRequest) {
-    SummaryResultDto summaryResultDto = summaryAIManager.getSummary(createPostServiceRequest);
+    SummaryResultDto summaryResultDto = urlSummaryManager.summarizeUrl(createPostServiceRequest);
     User user = userReader.readUserByIdOrNull(userId);
     Post post = postManager.createPost(user, createPostServiceRequest.getUrl(), summaryResultDto);
 
@@ -109,7 +109,7 @@ public class PostService {
       throw new CustomException(ErrorCode.BAD_REQUEST);
     }
 
-    SummaryResultDto summaryResultDto = summaryAIManager.getSummary(createPostServiceRequest);
+    SummaryResultDto summaryResultDto = urlSummaryManager.summarizeUrl(createPostServiceRequest);
     Post updatedPost = postManager.updateSummary(post, createPostServiceRequest.getUrl(),
         summaryResultDto);
 

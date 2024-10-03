@@ -21,12 +21,12 @@ import project.backend.common.error.ErrorCode;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SummaryAIManager {
+public class UrlSummaryManager {
 
   private final VertexAiGeminiChatModel chatModel;
 
-  public SummaryResultDto getSummary(CreatePostServiceRequest createPostServiceRequest) {
-    Prompt prompt = getPrompt(createPostServiceRequest);
+  public SummaryResultDto summarizeUrl(CreatePostServiceRequest createPostServiceRequest) {
+    Prompt prompt = createPrompt(createPostServiceRequest);
     ChatResponse response = chatModel.call(prompt);
     String responseContent = response.getResult()
                                      .getOutput()
@@ -41,10 +41,10 @@ public class SummaryAIManager {
                            .build();
   }
 
-  private Prompt getPrompt(CreatePostServiceRequest createPostServiceRequest) {
+  private Prompt createPrompt(CreatePostServiceRequest createPostServiceRequest) {
     SummaryOption options = createPostServiceRequest.getOption();
 
-    String requestMessage = "URL: " + createPostServiceRequest.getUrl() + "\n" +
+    String promptMessage = "URL: " + createPostServiceRequest.getUrl() + "\n" +
         "Summarize the website corresponding to the URL below in a blog style according to the following summary conditions.\n"
         + "Please also recommend the title\n"
         + "The answer is given in json format string with title and content as keys.\n"
@@ -55,7 +55,7 @@ public class SummaryAIManager {
         + "Summary language: " + options.getLanguage().getValue() + "\n"
         + "Summary keywords: " + options.getKeywords();
 
-    return new Prompt(requestMessage,
+    return new Prompt(promptMessage,
         VertexAiGeminiChatOptions.builder()
                                  .withModel(VertexAiGeminiChatModel.ChatModel.GEMINI_1_5_FLASH)
                                  .build());
