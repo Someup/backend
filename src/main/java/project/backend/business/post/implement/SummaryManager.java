@@ -21,11 +21,11 @@ import project.backend.common.error.ErrorCode;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UrlSummaryManager {
+public class SummaryManager {
 
   private final VertexAiGeminiChatModel chatModel;
 
-  public SummaryResultDto summarizeUrl(CreatePostServiceRequest createPostServiceRequest) {
+  public SummaryResultDto summarize(CreatePostServiceRequest createPostServiceRequest) {
     Prompt prompt = createPrompt(createPostServiceRequest);
     ChatResponse response = chatModel.call(prompt);
     String responseContent = response.getResult()
