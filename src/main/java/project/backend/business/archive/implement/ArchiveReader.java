@@ -14,6 +14,14 @@ public class ArchiveReader {
 
   private final ArchiveRepository archiveRepository;
 
+  public Archive readActivatedArchiveByIdIfNotNull(Long archiveId) {
+    if (archiveId == null) {
+      return null;
+    }
+    return archiveRepository.findByIdAndActivatedTrue(archiveId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+  }
+
   public Archive readActivatedArchiveById(Long archiveId) {
     return archiveRepository.findByIdAndActivatedTrue(archiveId)
                             .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
