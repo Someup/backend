@@ -6,9 +6,6 @@ services:
       - 8080:8080
     environment:
       - SPRING_PROFILES_ACTIVE=dev-env # 사용할 profile
-      - GOOGLE_APPLICATION_CREDENTIALS=/path/in/container/application_default_credentials.json
-    volumes:
-      - ~/.config/gcloud/application_default_credentials.json:/path/in/container/application_default_credentials.json
     networks:
       - my_network
 
