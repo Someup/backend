@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,8 @@ import project.backend.business.auth.response.TokenServiceResponse;
 import project.backend.presentation.auth.docs.AuthControllerDocs;
 import project.backend.presentation.auth.util.TokenCookieManager;
 import project.backend.presentation.auth.util.TokenExtractor;
+import project.backend.security.aop.AssignCurrentUserInfo;
+import project.backend.security.aop.CurrentUserInfo;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class AuthController implements AuthControllerDocs {
   private final TokenExtractor tokenExtractor;
   private final TokenCookieManager tokenCookieManager;
 
-  @RequestMapping("/login/kakao")
+  @PostMapping("/login/kakao")
   public ResponseEntity<TokenServiceResponse> loginKakao(
       @RequestParam(name = "code") String code,
       HttpServletResponse response) throws JsonProcessingException {
@@ -58,6 +61,20 @@ public class AuthController implements AuthControllerDocs {
       HttpServletResponse response) {
     TokenServiceRequest tokenServiceRequest = tokenExtractor.extractTokenRequest(request);
     authService.logout(tokenServiceRequest);
+
+    tokenCookieManager.removeRefreshTokenCookie(response);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @AssignCurrentUserInfo
+  @DeleteMapping("/withdraw")
+  public ResponseEntity<Void> withdraw(
+      CurrentUserInfo userInfo,
+      HttpServletRequest request,
+      HttpServletResponse response) {
+    TokenServiceRequest tokenServiceRequest = tokenExtractor.extractTokenRequest(request);
+    authService.withdraw(userInfo.getUserId(), tokenServiceRequest);
 
     tokenCookieManager.removeRefreshTokenCookie(response);
 

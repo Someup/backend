@@ -19,7 +19,7 @@ import project.backend.security.oauth.KakaoUserDetails;
 @Component
 public class AssignCurrentUserInfoAspect {
 
-  // @AssignCurrentUserInfo 가 있는 메서드 실행 전에 현재 유저의 ID를 CurrentUserInfo 객체에 할당
+  // @AssignCurrentUserInfo가 있는 메서드 실행 전에 현재 유저의 ID를 CurrentUserInfo 객체에 할당
   @Before("@annotation(project.backend.security.aop.AssignCurrentUserInfo)")
   public void assignUserId(JoinPoint joinPoint) {
     log.info("Starting assignUserId before method execution.");
@@ -30,50 +30,40 @@ public class AssignCurrentUserInfoAspect {
 
       if (arg instanceof CurrentUserInfo) {
         log.info("Processing argument at index {}: {}", i, arg.getClass().getSimpleName());
-        getMethod(arg.getClass()).ifPresentOrElse(
-            setUserId -> {
-              Long userId = getCurrentUserId();
-              log.info("Setting userId: {}", userId);
-              invokeMethod(arg, setUserId, userId);
-            },
-            () -> log.warn("No setUserId method found for class: {}",
-                arg.getClass().getSimpleName())
-        );
+        getMethod(arg.getClass()).ifPresentOrElse(setUserId -> {
+          Long userId = getCurrentUserId();
+          log.info("Setting userId: {}", userId);
+          invokeMethod(arg, setUserId, userId);
+        }, () -> log.warn("No setUserId method found for class: {}", arg.getClass().getSimpleName()));
       } else {
         log.info("Skipping argument at index {}: Not a CurrentUserInfo instance", i);
       }
     }
   }
 
-  // Login 했을 경우 현재 유저의 ID를 CurrentUserInfo 객체에 할당
-  // Login 하지 않았을 경우 CurrentUserInfo 객체에 null 할당
+  // 로그인 했을 경우 현재 유저의 ID를 CurrentUserInfo 객체에 할당
+  // 로그인 하지 않았을 경우 CurrentUserInfo 객체에 null 할당
   @Before("@annotation(project.backend.security.aop.AssignOrNullCurrentUserInfo)")
   public void assignUserIdOrNull(JoinPoint joinPoint) {
     log.info("Starting assignUserIdOrNull before method execution.");
-    Arrays.stream(joinPoint.getArgs())
-          .forEach(arg -> {
-            if (arg == null) {
-              log.warn("Argument is null, skipping this argument.");
-            } else {
-              log.info("Processing argument: {}", arg.getClass().getSimpleName());
-              getMethod(arg.getClass()).ifPresentOrElse(
-                  setUserId -> {
-                    Long userId = getCurrentUserIdOrNull();
-                    log.info("Setting userId: {}", userId);
-                    invokeMethod(arg, setUserId, userId);
-                  },
-                  () -> log.warn("No setUserId method found for class: {}",
-                      arg.getClass().getSimpleName())
-              );
-            }
-          });
+    Arrays.stream(joinPoint.getArgs()).forEach(arg -> {
+      if (arg == null) {
+        log.warn("Argument is null, skipping this argument.");
+      } else {
+        log.info("Processing argument: {}", arg.getClass().getSimpleName());
+        getMethod(arg.getClass()).ifPresentOrElse(setUserId -> {
+          Long userId = getCurrentUserIdOrNull();
+          log.info("Setting userId: {}", userId);
+          invokeMethod(arg, setUserId, userId);
+        }, () -> log.warn("No setUserId method found for class: {}", arg.getClass().getSimpleName()));
+      }
+    });
   }
 
   // arg 객체의 setUserId 메서드를 호출하여 현재 유저의 ID를 할당
   private void invokeMethod(Object arg, Method method, Long currentUserId) {
     try {
-      log.info("Invoking method: {} on class: {} with userId: {}", method.getName(),
-          arg.getClass().getSimpleName(), currentUserId);
+      log.info("Invoking method: {} on class: {} with userId: {}", method.getName(), arg.getClass().getSimpleName(), currentUserId);
       method.invoke(arg, currentUserId);
     } catch (ReflectiveOperationException e) {
       log.error("Error invoking method: {}", method.getName(), e);
@@ -94,11 +84,10 @@ public class AssignCurrentUserInfoAspect {
   // 현재 유저의 ID를 반환
   private Long getCurrentUserId() {
     log.info("Retrieving current user ID.");
-    return getCurrentUserIdCheck()
-        .orElseThrow(() -> {
-          log.error("No current user ID found.");
-          return new RuntimeException("User ID not found.");
-        });
+    return getCurrentUserIdCheck().orElseThrow(() -> {
+      log.error("No current user ID found.");
+      return new RuntimeException("User ID not found.");
+    });
   }
 
   // 현재 유저의 ID가 존재한다면 ID 반환, 없다면 null 반환
@@ -108,7 +97,7 @@ public class AssignCurrentUserInfoAspect {
   }
 
   private Optional<Long> getCurrentUserIdCheck() {
-    // 현재 SecurityContext 에서 Authentication 객체를 가져옴
+    // 현재 SecurityContext에서 Authentication 객체를 가져옴
     final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication == null || authentication.getPrincipal() == null) {
@@ -119,19 +108,19 @@ public class AssignCurrentUserInfoAspect {
 
     Object principal = authentication.getPrincipal();
 
-    // principal 이 UserDetails 타입인 경우에만 ID 반환
+    // principal이 UserDetails 타입인 경우에만 ID 반환
     if (principal instanceof KakaoUserDetails kakaoUserDetails) {
       log.info("KakaoUserDetails found, user ID: {}", kakaoUserDetails.getId());
       return Optional.ofNullable(kakaoUserDetails.getId());
     }
 
-    // principal 이 UserDetails 가 아닌 경우 예외를 던짐
+    // principal이 UserDetails가 아닌 경우 예외를 던짐
     log.error("Principal is not an instance of KakaoUserDetails.");
     throw new CustomException(ErrorCode.NOT_AUTHENTICATED);
   }
 
   private Optional<Long> getCurrentUserIdCheckOrNull() {
-    // 현재 SecurityContext 에서 Authentication 객체를 가져옴
+    // 현재 SecurityContext에서 Authentication 객체를 가져옴
     final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication == null || authentication.getPrincipal() == null) {
@@ -142,7 +131,7 @@ public class AssignCurrentUserInfoAspect {
 
     Object principal = authentication.getPrincipal();
 
-    // principal 이 UserDetails 타입인 경우에만 ID 반환
+    // principal이 UserDetails 타입인 경우에만 ID 반환
     if (principal instanceof KakaoUserDetails kakaoUserDetails) {
       log.info("KakaoUserDetails found, user ID (or null): {}", kakaoUserDetails.getId());
       return Optional.ofNullable(kakaoUserDetails.getId());
