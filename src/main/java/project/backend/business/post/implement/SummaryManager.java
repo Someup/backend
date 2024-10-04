@@ -46,7 +46,8 @@ public class SummaryManager {
 
     String promptMessage = "URL: " + createPostServiceRequest.getUrl() + "\n" +
         "Summarize the website corresponding to the URL below in a blog style according to the following summary conditions.\n"
-        + "Please also recommend the title\n"
+        + "Please also recommend the title, composed only of English letters or Hangul, and "
+        + "ensure it is less than 30 characters, including spaces.\n"
         + "The answer is given in json format string with title and content as keys.\n"
         + "Translate the content into the summary language!\n"
         + "Summary conditions: \n"

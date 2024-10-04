@@ -30,7 +30,7 @@ public class PostManager {
   }
 
   public Post updatePost(User user, Post post, UpdatePostServiceRequest updatePostServiceRequest) {
-    Archive archive = archiveReader.readActivatedArchiveById(
+    Archive archive = archiveReader.readActivatedArchiveByIdIfNotNull(
         updatePostServiceRequest.getArchiveId());
 
     post.updatePost(user, updatePostServiceRequest.getTitle(),
