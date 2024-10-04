@@ -46,4 +46,9 @@ public class User extends BaseEntity {
                .profileImageUrl(profileImageUrl)
                .build();
   }
+
+  public void withdraw() {
+    this.setActivated(false);
+    this.email = null;
+  }
 }

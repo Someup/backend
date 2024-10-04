@@ -91,7 +91,7 @@ public class KakaoLoginManager {
       String name = kakaoUserInfo.getName();
       String profileImageUrl = kakaoUserInfo.getProfileImageUrl();
 
-      return userRepository.findByEmail(email)
+      return userRepository.findByEmailAndActivatedTrue(email)
                            .orElseGet(() -> userRepository.save(
                                User.createUser(email, name, profileImageUrl)
                            ));

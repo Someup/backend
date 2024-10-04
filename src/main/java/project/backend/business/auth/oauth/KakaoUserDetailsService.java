@@ -29,7 +29,7 @@ public class KakaoUserDetailsService extends DefaultOAuth2UserService {
     String name = kakaoUserInfo.getName();
     String profileImageUrl = kakaoUserInfo.getProfileImageUrl();
 
-    User user = userRepository.findByEmail(email)
+    User user = userRepository.findByEmailAndActivatedTrue(email)
                               .orElseGet(
                                   () -> userRepository.save(
                                   User.createUser(email, name, profileImageUrl)

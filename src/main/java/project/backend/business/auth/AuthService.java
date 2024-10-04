@@ -9,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.backend.business.auth.implement.KakaoLoginManager;
+import project.backend.business.user.implement.UserManager;
+import project.backend.business.user.implement.UserReader;
 import project.backend.entity.token.BlacklistToken;
 import project.backend.business.auth.request.TokenServiceRequest;
 import project.backend.common.error.CustomException;
@@ -25,8 +27,10 @@ import project.backend.business.auth.response.TokenServiceResponse;
 @RequiredArgsConstructor
 public class AuthService {
 
-  private final TokenProvider tokenProvider;
   private final KakaoLoginManager kakaoLoginManager;
+  private final UserManager userManager;
+  private final UserReader userReader;
+  private final TokenProvider tokenProvider;
   private final RefreshTokenRedisRepository refreshTokenRedisRepository;
   private final BlacklistTokenRedisRepository blacklistTokenRedisRepository;
 
@@ -45,22 +49,14 @@ public class AuthService {
 
   @Transactional
   public void logout(TokenServiceRequest tokenServiceRequest) {
-    String accessToken = tokenServiceRequest.getAccessToken();
-    String refreshToken = tokenServiceRequest.getRefreshToken();
+    invalidateTokens(tokenServiceRequest);
+  }
 
-    if (accessToken == null || !tokenProvider.validate(accessToken)) {
-      throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
-    }
-
-    long expiration = tokenProvider.getExpiration(accessToken);
-    blacklistTokenRedisRepository.save(BlacklistToken.builder()
-                                                     .token(accessToken)
-                                                     .expiration(expiration / 1000)
-                                                     .build());
-
-    refreshTokenRedisRepository.deleteById(refreshToken);
-
-    SecurityContextHolder.clearContext();
+  @Transactional
+  public void withdraw(Long userId, TokenServiceRequest tokenServiceRequest) {
+    User user = userReader.readUserById(userId);
+    userManager.withdrawUser(user);
+    invalidateTokens(tokenServiceRequest);
   }
 
   @Transactional
@@ -100,6 +96,25 @@ public class AuthService {
                          );
 
     return tokenServiceResponse;
+  }
+
+  private void invalidateTokens(TokenServiceRequest tokenServiceRequest) {
+    String accessToken = tokenServiceRequest.getAccessToken();
+    String refreshToken = tokenServiceRequest.getRefreshToken();
+
+    if (accessToken == null || !tokenProvider.validate(accessToken)) {
+      throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
+    }
+
+    long expiration = tokenProvider.getExpiration(accessToken);
+    blacklistTokenRedisRepository.save(BlacklistToken.builder()
+                                                     .token(accessToken)
+                                                     .expiration(expiration / 1000)
+                                                     .build());
+
+    refreshTokenRedisRepository.deleteById(refreshToken);
+
+    SecurityContextHolder.clearContext();
   }
 
   private void saveRefreshTokenOnRedis(User user, TokenServiceResponse response) {

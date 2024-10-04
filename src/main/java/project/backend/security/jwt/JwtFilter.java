@@ -107,6 +107,10 @@ public class JwtFilter extends OncePerRequestFilter {
       return true;
     }
 
+    if (request.getRequestURI().equals("/auth/withdraw")) {
+      return false; // 탈퇴는 필터를 거치도록 설정
+    }
+
     if (request.getRequestURI().startsWith("/auth")) {
       return true;
     }
