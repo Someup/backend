@@ -1,22 +1,21 @@
 services:
   springboot:
-    container_name: someup # ec2내에서 동작하는 컨테이너명
+    container_name: someup
     image: someupsite/someup:latest
     ports:
       - 8080:8080
     environment:
-      - SPRING_PROFILES_ACTIVE=dev-env # 사용할 profile
+      - SPRING_PROFILES_ACTIVE=dev-env
       - GOOGLE_APPLICATION_CREDENTIALS=/credentials/application_default_credentials.json
     volumes:
       - /home/ubuntu/.config/gcloud/application_default_credentials.json:/credentials/application_default_credentials.json
     networks:
       - my_network
 
-
   redis:
     image: redis
     container_name: redis-cache
-    command: [ "redis-server", "--port", "6379" ] # 비밀번호 설정 제거
+    command: ["redis-server", "--port", "6379"]
     ports:
       - 6379:6379
     networks:
