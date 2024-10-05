@@ -1,7 +1,6 @@
 package project.backend.presentation.post.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Getter;
@@ -12,7 +11,6 @@ public class UpdatePostRequest {
 
   @NotBlank(message = "제목은 필수 입력 값입니다.")
   @Size(max = 30, message = "제목은 30자를 초과할 수 없습니다.")
-  @Pattern(regexp = "^[a-zA-Z0-9가-힣 ]*$", message = "제목에 특수 문자를 사용할 수 없습니다.")
   private String title;
 
   @NotBlank(message = "내용은 필수 입력 값입니다.")
