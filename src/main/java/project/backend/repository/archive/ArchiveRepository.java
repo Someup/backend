@@ -10,5 +10,8 @@ import project.backend.entity.archive.Archive;
 public interface ArchiveRepository extends JpaRepository<Archive, Long> {
 
   List<Archive> findByUserIdAndActivatedTrue(Long userId);
+
   Optional<Archive> findByIdAndActivatedTrue(Long archiveId);
+
+  int countByUserIdAndActivatedTrue(Long userId);
 }

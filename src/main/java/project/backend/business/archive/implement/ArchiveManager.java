@@ -12,9 +12,12 @@ import project.backend.repository.archive.ArchiveRepository;
 @RequiredArgsConstructor
 public class ArchiveManager {
 
+  private static final int MAX_ARCHIVES = 20;
+
   private final ArchiveRepository archiveRepository;
 
   public Archive createArchive(User user, String name) {
+    validateArchiveCount(user);
     Archive newArchive = Archive.createArchive(user, name);
     return archiveRepository.save(newArchive);
   }
@@ -33,5 +36,11 @@ public class ArchiveManager {
   public void deleteArchive(Archive archive) {
     archive.setActivated(Boolean.FALSE);
     archiveRepository.save(archive);
+  }
+
+  private void validateArchiveCount(User user) {
+    if (archiveRepository.countByUserIdAndActivatedTrue(user.getId()) >= MAX_ARCHIVES) {
+      throw new CustomException(ErrorCode.BAD_REQUEST);
+    }
   }
 }
