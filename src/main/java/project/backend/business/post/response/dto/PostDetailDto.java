@@ -12,7 +12,8 @@ public class PostDetailDto {
   private final String content;
   private final String url;
   private final List<String> tagList;
-  private final int archiveId;
+  private final Long archiveId;
+  private final String archiveName;
   private final String createdAt;
   private final String memoContent;
   private final String memoCreatedAt;

@@ -18,4 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
 
   Optional<Post> findPostByIdAndUserIdAndStatusAndActivatedTrue(Long postId, Long userId,
       PostStatus status);
+
+  Optional<Post> findPostAndArchiveByIdAndUserIdAndStatusAndActivatedTrue(Long postId, Long userId,
+      PostStatus status);
 }

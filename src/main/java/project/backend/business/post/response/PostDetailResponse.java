@@ -16,6 +16,8 @@ public class PostDetailResponse {
   private final String createdAt;
   private final String memoContent;
   private final String memoCreatedAt;
+  private final Long archiveId;
+  private final String archiveName;
 
   public static PostDetailResponse from(PostDetailDto postDetailDto) {
     return PostDetailResponse.builder()
@@ -23,6 +25,8 @@ public class PostDetailResponse {
                              .content(postDetailDto.getContent())
                              .url(postDetailDto.getUrl())
                              .tagList(postDetailDto.getTagList())
+                             .archiveId(postDetailDto.getArchiveId())
+                             .archiveName(postDetailDto.getArchiveName())
                              .createdAt(postDetailDto.getCreatedAt())
                              .memoContent(postDetailDto.getMemoContent())
                              .memoCreatedAt(postDetailDto.getMemoCreatedAt())
