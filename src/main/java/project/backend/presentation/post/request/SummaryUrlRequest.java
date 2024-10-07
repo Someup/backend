@@ -11,7 +11,7 @@ import project.backend.business.post.request.summary.SummaryOption;
 public class SummaryUrlRequest {
 
   @NotBlank(message = "URL은 필수 값입니다.")
-  @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].\\S*$", message = "유효한 URL 형식이어야 합니다.")
+  @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#@].*\\S*$", message = "유효한 URL 형식이어야 합니다.")
   private String url;
 
   @NotNull(message = "요약 옵션은 필수 값입니다.")
