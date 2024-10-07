@@ -14,8 +14,11 @@ public class KakaoLoginRequestConverter {
   @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
   private String productionRedirectUri;
 
-  public KakaoLoginServiceRequest convert(HttpServletRequest request, String code) {
+  public KakaoLoginServiceRequest convertKakaoLoginRequest(HttpServletRequest request, String code) {
     String redirectUri = request.getServerName().equals("localhost") ? localRedirectUri : productionRedirectUri;
-    return new KakaoLoginServiceRequest(code, redirectUri);
+    return KakaoLoginServiceRequest.builder()
+                                   .code(code)
+                                   .redirectUri(redirectUri)
+                                   .build();
   }
 }

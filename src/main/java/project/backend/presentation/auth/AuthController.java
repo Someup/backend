@@ -38,8 +38,8 @@ public class AuthController implements AuthControllerDocs {
       @RequestParam(name = "code") String code,
       HttpServletRequest request,
       HttpServletResponse response) throws JsonProcessingException {
-    KakaoLoginServiceRequest serviceRequest = kakaoLoginRequestConverter.convert(request, code);
-    TokenServiceResponse tokenServiceResponse = authService.kakaoLogin(serviceRequest);
+    KakaoLoginServiceRequest kakaoLoginServiceRequest = kakaoLoginRequestConverter.convertKakaoLoginRequest(request, code);
+    TokenServiceResponse tokenServiceResponse = authService.kakaoLogin(kakaoLoginServiceRequest);
 
     tokenCookieManager.addRefreshTokenCookie(response, tokenServiceResponse.getRefreshToken());
 
