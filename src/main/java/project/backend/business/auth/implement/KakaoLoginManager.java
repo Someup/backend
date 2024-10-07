@@ -40,10 +40,7 @@ public class KakaoLoginManager {
   @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
   private String kakaoClientSecret;
 
-  @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-  private String redirectUri;
-
-  public String getKakaoToken(String code) throws JsonProcessingException {
+  public String getKakaoToken(String code, String redirectUri) throws JsonProcessingException {
     HttpHeaders headers = new HttpHeaders();
     headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 

@@ -12,7 +12,7 @@ import project.backend.business.auth.response.TokenServiceResponse;
 public interface AuthControllerDocs {
 
   @Operation(summary = "카카오 로그인 API", description = "카카오 계정을 이용하여 로그인.")
-  ResponseEntity<TokenServiceResponse> loginKakao(String code, HttpServletResponse response)
+  ResponseEntity<TokenServiceResponse> loginKakao(String code, HttpServletRequest request, HttpServletResponse response)
       throws JsonProcessingException;
 
   @Operation(summary = "토큰 갱신 API", description = "set-cookie에 있는 refresh token을 사용하여 Access "

@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.backend.business.auth.implement.KakaoLoginManager;
+import project.backend.business.auth.request.KakaoLoginServiceRequest;
 import project.backend.business.user.implement.UserManager;
 import project.backend.business.user.implement.UserReader;
 import project.backend.entity.token.BlacklistToken;
@@ -35,8 +36,8 @@ public class AuthService {
   private final BlacklistTokenRedisRepository blacklistTokenRedisRepository;
 
   @Transactional
-  public TokenServiceResponse kakaoLogin(String code) throws JsonProcessingException {
-    String token = kakaoLoginManager.getKakaoToken(code);
+  public TokenServiceResponse kakaoLogin(KakaoLoginServiceRequest serviceRequest) throws JsonProcessingException {
+    String token = kakaoLoginManager.getKakaoToken(serviceRequest.getCode(), serviceRequest.getRedirectUri());
     User user = kakaoLoginManager.getKakaoUser(token);
 
     TokenServiceResponse tokenServiceResponse = tokenProvider.createToken(

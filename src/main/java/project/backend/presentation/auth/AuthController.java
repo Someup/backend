@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.business.auth.AuthService;
+import project.backend.business.auth.request.KakaoLoginServiceRequest;
 import project.backend.business.auth.request.TokenServiceRequest;
 import project.backend.business.auth.response.TokenServiceResponse;
 import project.backend.presentation.auth.docs.AuthControllerDocs;
+import project.backend.presentation.auth.util.KakaoLoginRequestConverter;
 import project.backend.presentation.auth.util.TokenCookieManager;
 import project.backend.presentation.auth.util.TokenExtractor;
 import project.backend.security.aop.AssignCurrentUserInfo;
@@ -29,12 +31,15 @@ public class AuthController implements AuthControllerDocs {
   private final AuthService authService;
   private final TokenExtractor tokenExtractor;
   private final TokenCookieManager tokenCookieManager;
+  private final KakaoLoginRequestConverter kakaoLoginRequestConverter;
 
   @PostMapping("/login/kakao")
   public ResponseEntity<TokenServiceResponse> loginKakao(
       @RequestParam(name = "code") String code,
+      HttpServletRequest request,
       HttpServletResponse response) throws JsonProcessingException {
-    TokenServiceResponse tokenServiceResponse = authService.kakaoLogin(code);
+    KakaoLoginServiceRequest serviceRequest = kakaoLoginRequestConverter.convert(request, code);
+    TokenServiceResponse tokenServiceResponse = authService.kakaoLogin(serviceRequest);
 
     tokenCookieManager.addRefreshTokenCookie(response, tokenServiceResponse.getRefreshToken());
 
