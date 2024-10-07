@@ -15,7 +15,10 @@ public class KakaoLoginRequestConverter {
   private String productionRedirectUri;
 
   public KakaoLoginServiceRequest convertKakaoLoginRequest(HttpServletRequest request, String code) {
-    String redirectUri = request.getServerName().equals("localhost") ? localRedirectUri : productionRedirectUri;
+    String redirectUri = productionRedirectUri;
+    if (request.getServerName().equals("localhost")) {
+      redirectUri = localRedirectUri;
+    }
     return KakaoLoginServiceRequest.builder()
                                    .code(code)
                                    .redirectUri(redirectUri)
