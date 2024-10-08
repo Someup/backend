@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+import project.backend.business.archive.implement.ArchiveReader;
 import project.backend.business.post.request.PostDetailServiceRequest;
 import project.backend.business.post.response.dto.PostDetailDto;
 import project.backend.business.post.response.dto.PostListDto;
@@ -25,6 +26,7 @@ public class PostReader {
 
   private final PostRepository postRepository;
   private final TagReader tagReader;
+  private final ArchiveReader archiveReader;
 
   public Post readActivatedPost(Long userId, Long postId) {
     return postRepository.findByIdAndUserIdAndActivatedTrue(postId, userId)
@@ -34,8 +36,7 @@ public class PostReader {
   public Post readActivatedPublishedPost(Long userId, Long PostId) {
     return postRepository.findPostByIdAndUserIdAndStatusAndActivatedTrue(PostId, userId,
                              PostStatus.PUBLISHED)
-                         .orElseThrow(() -> new CustomException(
-                             ErrorCode.BAD_REQUEST));
+                         .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
   }
 
   public Post readActivatedPostAndWriter(Long postId) {
@@ -50,19 +51,19 @@ public class PostReader {
     Map<Long, List<String>> postTagMap = tagReader.getPostTagMap(postIdList);
 
     return postList.stream().map(
-        post -> PostListDto.builder()
-                           .id(post.getId())
-                           .title(post.getTitle())
-                           .createdAt(DateTimeManager.convertToStringPattern(
-                               post.getCreatedAt(), "yyyy.MM.dd"))
-                           .tagList(postTagMap.get(post.getId()))
-                           .build()
-    ).toList();
+                       post -> PostListDto.builder()
+                                          .id(post.getId())
+                                          .title(post.getTitle())
+                                          .createdAt(DateTimeManager.convertToStringPattern(
+                                              post.getCreatedAt(), "yyyy.MM.dd"))
+                                          .tagList(postTagMap.get(post.getId()))
+                                          .build())
+                   .toList();
   }
 
   public PostDetailDto readPostDetailWithTags(Long userId,
       PostDetailServiceRequest postDetailServiceRequest) {
-    Post postDetail = postRepository.findPostByIdAndUserIdAndStatusAndActivatedTrue(
+    Post postDetail = postRepository.findPostAndArchiveByIdAndUserIdAndStatusAndActivatedTrue(
                                         postDetailServiceRequest.getPostId(),
                                         userId,
                                         postDetailServiceRequest.getStatus())
@@ -74,15 +75,13 @@ public class PostReader {
                         .title(postDetail.getTitle())
                         .content(postDetail.getContent())
                         .url(postDetail.getUrl())
-                        .tagList(tagList)
-                        .createdAt(DateTimeManager.convertToStringPattern(
-                            postDetail.getCreatedAt(),
-                            "yyyy년 MM월 dd일"))
+                        .tagList(tagList).createdAt(DateTimeManager.convertToStringPattern(
+            postDetail.getCreatedAt(), "yyyy년 MM월 dd일"))
                         .memoContent(postDetail.getMemo())
-                        .memoCreatedAt(
-                            DateTimeManager.convertToStringPattern(
-                                postDetail.getMemoCreatedAt(),
-                                "yy.MM.dd"))
+                        .memoCreatedAt(DateTimeManager.convertToStringPattern(
+                            postDetail.getMemoCreatedAt(), "yy.MM.dd"))
+                        .archiveId(postDetail.getArchive().getId())
+                        .archiveName(postDetail.getArchive().getName())
                         .build();
   }
 
