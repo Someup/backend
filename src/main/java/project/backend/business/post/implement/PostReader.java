@@ -71,18 +71,23 @@ public class PostReader {
 
     List<String> tagList = tagReader.readTagNamesByPostId(postDetailServiceRequest.getPostId());
 
-    return PostDetailDto.builder()
-                        .title(postDetail.getTitle())
-                        .content(postDetail.getContent())
-                        .url(postDetail.getUrl())
-                        .tagList(tagList).createdAt(DateTimeManager.convertToStringPattern(
-            postDetail.getCreatedAt(), "yyyy년 MM월 dd일"))
-                        .memoContent(postDetail.getMemo())
-                        .memoCreatedAt(DateTimeManager.convertToStringPattern(
-                            postDetail.getMemoCreatedAt(), "yy.MM.dd"))
-                        .archiveId(postDetail.getArchive().getId())
-                        .archiveName(postDetail.getArchive().getName())
-                        .build();
+    PostDetailDto postDetailDto = PostDetailDto.builder()
+                                               .title(postDetail.getTitle())
+                                               .content(postDetail.getContent())
+                                               .url(postDetail.getUrl())
+                                               .tagList(tagList)
+                                               .createdAt(DateTimeManager.convertToStringPattern(
+                                                   postDetail.getCreatedAt(),
+                                                   "yyyy년 MM월 dd일"))
+                                               .memoContent(postDetail.getMemo())
+                                               .memoCreatedAt(
+                                                   DateTimeManager.convertToStringPattern(
+                                                       postDetail.getMemoCreatedAt(),
+                                                       "yy.MM.dd"))
+                                               .build();
+
+    postDetailDto.setArchive(postDetail.getArchive());
+    return postDetailDto;
   }
 
   public int readActivatePostCountByUserId(Long userId) {
