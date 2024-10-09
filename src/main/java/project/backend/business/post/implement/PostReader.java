@@ -2,6 +2,7 @@ package project.backend.business.post.implement;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import project.backend.business.post.util.DateTimeManager;
 import project.backend.business.tag.implement.TagReader;
 import project.backend.common.error.CustomException;
 import project.backend.common.error.ErrorCode;
+import project.backend.entity.archive.Archive;
 import project.backend.entity.post.Post;
 import project.backend.entity.post.PostStatus;
 import project.backend.repository.post.PostRepository;
@@ -71,23 +73,26 @@ public class PostReader {
 
     List<String> tagList = tagReader.readTagNamesByPostId(postDetailServiceRequest.getPostId());
 
-    PostDetailDto postDetailDto = PostDetailDto.builder()
-                                               .title(postDetail.getTitle())
-                                               .content(postDetail.getContent())
-                                               .url(postDetail.getUrl())
-                                               .tagList(tagList)
-                                               .createdAt(DateTimeManager.convertToStringPattern(
-                                                   postDetail.getCreatedAt(),
-                                                   "yyyy년 MM월 dd일"))
-                                               .memoContent(postDetail.getMemo())
-                                               .memoCreatedAt(
-                                                   DateTimeManager.convertToStringPattern(
-                                                       postDetail.getMemoCreatedAt(),
-                                                       "yy.MM.dd"))
-                                               .build();
-
-    postDetailDto.setArchive(postDetail.getArchive());
-    return postDetailDto;
+    return PostDetailDto.builder()
+                        .title(postDetail.getTitle())
+                        .content(postDetail.getContent())
+                        .url(postDetail.getUrl())
+                        .tagList(tagList)
+                        .createdAt(DateTimeManager.convertToStringPattern(
+                            postDetail.getCreatedAt(),
+                            "yyyy년 MM월 dd일"))
+                        .archiveId(Optional.ofNullable(postDetail.getArchive())
+                                           .map(Archive::getId)
+                                           .orElse(null))
+                        .archiveName(Optional.ofNullable(postDetail.getArchive())
+                                             .map(Archive::getName)
+                                             .orElse(null))
+                        .memoContent(postDetail.getMemo())
+                        .memoCreatedAt(
+                            DateTimeManager.convertToStringPattern(
+                                postDetail.getMemoCreatedAt(),
+                                "yy.MM.dd"))
+                        .build();
   }
 
   public int readActivatePostCountByUserId(Long userId) {
