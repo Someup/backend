@@ -37,8 +37,10 @@ public class PostManager {
         updatePostServiceRequest.getContent(), archive);
 
     // 메모 변경되었을 때만 업데이트
-    if (post.getMemo() == null || !post.getMemo()
-                                       .equals(updatePostServiceRequest.getMemo())) {
+    if (
+        (post.getMemo() == null && updatePostServiceRequest.getMemo() != null)
+            || post.getMemo() != null && !post.getMemo()
+                                              .equals(updatePostServiceRequest.getMemo())) {
       post.updatePostMemo(updatePostServiceRequest.getMemo(), LocalDateTime.now());
     }
 
